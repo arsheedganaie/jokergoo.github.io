@@ -1,7 +1,27 @@
-
+<!DOCTYPE html>
 <html>
 <head>
-<style>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+
+<title>test</title>
+
+<script type="text/javascript">
+window.onload = function() {
+  var imgs = document.getElementsByTagName('img'), i, img;
+  for (i = 0; i < imgs.length; i++) {
+    img = imgs[i];
+    // center an image if it is the only element of its parent
+    if (img.parentElement.childElementCount === 1)
+      img.parentElement.style.textAlign = 'center';
+  }
+};
+</script>
+
+
+
+
+
+<style type="text/css">
 body, td {
    font-family: sans-serif;
    background-color: white;
@@ -137,27 +157,16 @@ hr {
    }
 }
 </style>
+
+
+
 </head>
+
 <body>
-<p style='text-align:right'>
-<span><a href='index.html'>Home</a></span> | 
-<span><a href='blog.html'>Blog</a></span> | 
-<span><a href='software.html'>Software</a></span> | 
-<span><a href='publications.html'>Publications</a></span>
-</p>
-<hr />
+<h1>test</h1>
 
-<p>Hi there. My name is Zuguang Gu. Currently I am working at German Cancer Research Center (DKFZ) as a postdoc. 
-My major interest includes NGS data analysis and software development.
-</p>
-<p style='text-align:center'>
-<script type="text/javascript">
-          Math.random() < 0.5 ? document.write("<img style='width:500px' src='image/image1.jpg' />") 
-                              : document.write("<img style='width:500px' src='image/image2.jpg' />") ;
-</script>
-</p>
-
+<p>This is a test</p>
 
 </body>
-</html>
 
+</html>
