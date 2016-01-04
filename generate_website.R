@@ -119,7 +119,7 @@ html = c(header,
 	blog_list = "<ul>\n";
 	for(i in order(post_info$date, decreasing = TRUE)) {
 		title = post_info$title[i]
-		title_url = gsub(" +", "_", title)
+		title_url = gsub(" +", "-", title)
 		blog_list = c(blog_list, qq("<li><a href=\"blog/@{title_url}.html\">@{title}</a></li>"))
 	}
 	blog_list = c(blog_list, "</ul>\n")
