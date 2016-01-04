@@ -66,25 +66,17 @@ if(file.exists(".post_mtile.RData")) {
 	post_mtile = NULL
 }
 
-add_disqus = function(file) {
-	content = readLines(file)
-	content = c(content, "
+add_disqus = function(html, url) {
+	disqus = qq("
 <div id='disqus_thread'></div>
 <script>
-/**
-* RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
-* LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables
-*/
-/*
 var disqus_config = function () {
-this.page.url = PAGE_URL; // Replace PAGE_URL with your page's canonical URL variable
-this.page.identifier = PAGE_IDENTIFIER; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+this.page.url = \"http://jokergoo.github.io/blog/@{url}\";
 };
-*/
 (function() { // DON'T EDIT BELOW THIS LINE
 var d = document, s = d.createElement('script');
 
-s.src = '//jokergoogithub.disqus.com/embed.js';
+s.src = '../embed.js';
 
 s.setAttribute('data-timestamp', +new Date());
 (d.head || d.body).appendChild(s);
@@ -92,9 +84,8 @@ s.setAttribute('data-timestamp', +new Date());
 </script>
 <noscript>Please enable JavaScript to view the <a href='https://disqus.com/?ref_noscript' rel='nofollow'>comments powered by Disqus.</a></noscript>
 ")
-	temp_file = tempfile()
-	writeLines(content, temp_file)
-	return(temp_file)
+	html = gsub("</body>", qq("@{disqus}</body>"), html)
+	return(html)
 }
 
 md_files = dir(pattern = "md$")
@@ -102,14 +93,12 @@ md_files = unique(gsub("\\.R?md$", "", md_files))
 post_info = list(title = NULL, date = NULL)
 for(mf in md_files) {
 	if(file.exists(qq("@{mf}.Rmd"))) {
-		rmd = add_disqus(qq("@{mf}.Rmd"))
-		knit(rmd, qq("@{mf}.md"), quiet = TRUE)
+		knit(qq("@{mf}.Rmd"), qq("@{mf}.md"), quiet = TRUE)
 		html = markdownToHTML(qq("@{mf}.md"))
 		title = gsub("^.*<title>(.*?)</title>.*$", "\\1", html)[1]
 		date = file.info(qq("@{mf}.Rmd"))$mtime
 	} else {
-		md = add_disqus(qq("@{mf}.md"))
-		html = markdownToHTML(md)
+		html = markdownToHTML(qq("@{mf}.md"))
 		title = gsub("^.*<title>(.*?)</title>.*$", "\\1", html)[1]
 		date = file.info(qq("@{mf}.md"))$mtime
 	}
@@ -117,7 +106,8 @@ for(mf in md_files) {
 	post_info$title = c(post_info$title, title)
 	post_info$date = c(post_info$date, date)
 
-	title_url = gsub(" +", "_", title)
+	title_url = gsub(" +", "-", title)
+	html = add_disqus(html, url = title_url)
 	writeLines(html, qq("@{title_url}.html"), useBytes = TRUE)
 }
 setwd("..")
