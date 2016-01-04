@@ -1,7 +1,14 @@
-rmarkdown
-===========
+rmarkdown test
+==================
 
+This is a test for a post in **rmarkdown** format.
 
 ```{r}
 hist(rnorm(100))
+```
+
+## Session Info
+
+```{r}
+sessionInfo()
 ```
