@@ -66,17 +66,50 @@ if(file.exists(".post_mtile.RData")) {
 	post_mtile = NULL
 }
 
+add_disqus = function(file) {
+	content = readLines(file)
+	content = c(content, "
+	<div id='disqus_thread'></div>
+<script>
+/**
+* RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+* LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables
+*/
+/*
+var disqus_config = function () {
+this.page.url = PAGE_URL; // Replace PAGE_URL with your page's canonical URL variable
+this.page.identifier = PAGE_IDENTIFIER; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+};
+*/
+(function() { // DON'T EDIT BELOW THIS LINE
+var d = document, s = d.createElement('script');
+
+s.src = '//jokergoo.disqus.com/embed.js';
+
+s.setAttribute('data-timestamp', +new Date());
+(d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href='https://disqus.com/?ref_noscript' rel='nofollow'>comments powered by Disqus.</a></noscript>
+	")
+	temp_file = tempfile()
+	writeLines(content, temp_file)
+	return(temp_file)
+}
+
 md_files = dir(pattern = "md$")
 md_files = unique(gsub("\\.R?md$", "", md_files))
 post_info = list(title = NULL, date = NULL)
 for(mf in md_files) {
 	if(file.exists(qq("@{mf}.Rmd"))) {
-		knit(qq("@{mf}.Rmd"), qq("@{mf}.md"), quiet = TRUE)
+		rmd = add_disqus(qq("@{mf}.Rmd"))
+		knit(rmd, qq("@{mf}.md"), quiet = TRUE)
 		html = markdownToHTML(qq("@{mf}.md"))
 		title = gsub("^.*<title>(.*?)</title>.*$", "\\1", html)[1]
 		date = file.info(qq("@{mf}.Rmd"))$mtime
 	} else {
-		html = markdownToHTML(qq("@{mf}.md"))
+		md = add_disqus(qq("@{mf}.md"))
+		html = markdownToHTML(md)
 		title = gsub("^.*<title>(.*?)</title>.*$", "\\1", html)[1]
 		date = file.info(qq("@{mf}.md"))$mtime
 	}
