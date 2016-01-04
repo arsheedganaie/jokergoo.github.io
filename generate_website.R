@@ -2,6 +2,17 @@ suppressPackageStartupMessages(library(knitr))
 suppressPackageStartupMessages(library(markdown))
 suppressPackageStartupMessages(library(GetoptLong))
 
+
+list = "
+<p style='text-align:right'>
+<span><a href='index.html'>Home</a></span> | 
+<span><a href='blog.html'>Blog</a></span> | 
+<span><a href='software.html'>Software</a></span> | 
+<span><a href='publications.html'>Publications</a></span>
+</p>
+<hr />
+"
+
 header = qq("
 <html>
 <head>
@@ -10,13 +21,7 @@ header = qq("
 </style>
 </head>
 <body>
-<p style='text-align:right'>
-<span><a href='index.html'>Home</a></span> | 
-<span><a href='blog.html'>Blog</a></span> | 
-<span><a href='software.html'>Software</a></span> | 
-<span><a href='publications.html'>Publications</a></span>
-</p>
-<hr />
+@{list}
 ")
 
 footer = "
@@ -88,6 +93,10 @@ s.setAttribute('data-timestamp', +new Date());
 	return(html)
 }
 
+add_list = function(html) {
+	gsub("<body>", qq("<body>@{list}"), html)
+}
+
 md_files = dir(pattern = "md$")
 md_files = unique(gsub("\\.R?md$", "", md_files))
 post_info = list(title = NULL, date = NULL)
@@ -108,6 +117,7 @@ for(mf in md_files) {
 
 	title_url = gsub(" +", "-", title)
 	html = add_disqus(html, url = title_url)
+	html = add_list(html)
 	writeLines(html, qq("@{title_url}.html"), useBytes = TRUE)
 }
 setwd("..")
