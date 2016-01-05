@@ -32,7 +32,7 @@ footer = "
 ## index.html
 
 html = c(header,
-markdownToHTML("index.md", useBytes = TRUE),
+markdownToHTML("index.md", fragment.only = TRUE),
 footer)
 
 writeLines(html, "index.html", useBytes = TRUE)
