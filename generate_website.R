@@ -8,7 +8,8 @@ list = "
 <span><a href='http://jokergoo.github.io/index.html'>Home</a></span> | 
 <span><a href='http://jokergoo.github.io/blog.html'>Blog</a></span> | 
 <span><a href='http://jokergoo.github.io/software.html'>Software</a></span> | 
-<span><a href='http://jokergoo.github.io/publications.html'>Publications</a></span>
+<span><a href='http://jokergoo.github.io/publications.html'>Publications</a></span> |
+<span><a href='https://github.com/jokergoo/'>GitHub</a></span>
 </p>
 <hr />
 "
