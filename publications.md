@@ -1,32 +1,13 @@
 ## Publications
 
-```{r, result = "asis"}
-suppressPackageStartupMessages(library(GetoptLong))
-suppressPackageStartupMessages(library(easyPubMed))
-pubmed <- getPubmedIds("Zuguang Gu[AU]")
-papers <- fetchPubmedData(pubmed)
-author_list = xpathApply(papers, "//AuthorList", function(x) xmlParse(saveXML(x)))
-author_list = sapply(author_list, function(x) {
-	last_name = xpathApply(x, "//LastName", xmlValue)
-	first_name = xpathApply(x, "//ForeName", xmlValue)
-	name = paste(first_name, last_name, sep = " ")
-	name[name == "Zuguang Gu"] = "<strong>Zuguang Gu</strong>"
-	#if(length(name) > 10) name = name[1:10]
-	paste0(name, collapse = ", ")
-})
-titles = unlist(xpathApply(papers, "//ArticleTitle", xmlValue))
-journal = xpathApply(papers, "//Journal", function(x) xmlParse(saveXML(x)))
-journal_title = sapply(seq_len(length(journal)), function(i) {
-	x = xpathApply(journal[[i]], "//Title", xmlValue)[[1]]
-	if(length(x)) x[1] else ""
-})
-publish_year = sapply(seq_len(length(journal)), function(i) {
-	x = xpathApply(journal[[i]], "//Year", xmlValue)[[1]]
-	if(length(x)) x[1] else ""
-})
+1. Jenny Wegert, Naveed Ishaque, Romina Vardapour, Christina Geörg, <strong>Zuguang Gu</strong>, Matthias Bieg, Barbara Ziegler, Sabrina Bausenwein, Nasenien Nourkami, Nicole Ludwig, Andreas Keller, Clemens Grimm, Susanne Kneitz, Richard D Williams, Tas Chagtai, Kathy Pritchard-Jones, Peter van Sluis, Richard Volckmann, Jan Koster, Rogier Versteeg, Tomas Acha, Maureen J O'Sullivan, Peter K Bode, Felix Niggli, Godelieve A Tytgat, Harm van Tinteren, Marry M van den Heuvel-Eibrink, Eckart Meese, Christian Vokuhl, Ivo Leuschner, Norbert Graf, Roland Eils, Stefan M Pfister, Marcel Kool, Manfred Gessler, Mutations in the SIX1/2 pathway and the DROSHA/DGCR8 miRNA microprocessor complex underlie high-risk blastemal type Wilms tumors., <i>Cancer cell</i> 2015. <a href='http://www.ncbi.nlm.nih.gov/pubmed/25670083'>PubMed</a>.</li>
+2. Lei Gu, Sandra C Frommel, Christopher C Oakes, Ronald Simon, Katharina Grupp, Cristina Y Gerig, Dominik Bär, Mark D Robinson, Constance Baer, Melanie Weiss, <strong>Zuguang Gu</strong>, Matthieu Schapira, Ruprecht Kuner, Holger Sültmann, Maurizio Provenzano, Marie-Laure Yaspo, Benedikt Brors, Jan Korbel, Thorsten Schlomm, Guido Sauter, Roland Eils, Christoph Plass, Raffaella Santoro, BAZ2A (TIP5) is involved in epigenetic alterations in prostate cancer and its overexpression predicts disease recurrence., <i>Nature genetics</i> 2015. <a href='http://www.ncbi.nlm.nih.gov/pubmed/25485837'>PubMed</a>.</li>
+3. <strong>Zuguang Gu</strong>, Lei Gu, Roland Eils, Matthias Schlesner, Benedikt Brors, circlize Implements and enhances circular visualization in R., <i>Bioinformatics (Oxford, England)</i> 2014. <a href='http://www.ncbi.nlm.nih.gov/pubmed/24930139'>PubMed</a>.</li>
+4. <strong>Zuguang Gu</strong>, Jin Wang, CePa: an R package for finding significant pathways weighted by multiple network centralities., <i>Bioinformatics (Oxford, England)</i> 2013. <a href='http://www.ncbi.nlm.nih.gov/pubmed/23314125'>PubMed</a>.</li>
+5. Chenfeng He, Ying-Xin Li, Guangxin Zhang, <strong>Zuguang Gu</strong>, Rong Yang, Jie Li, Zhi John Lu, Zhi-Hua Zhou, Chenyu Zhang, Jin Wang, MiRmat: mature microRNA sequence prediction., <i>PloS one</i> 2012. <a href='http://www.ncbi.nlm.nih.gov/pubmed/23300555'>PubMed</a>.</li>
+6. <strong>Zuguang Gu</strong>, Jialin Liu, Kunming Cao, Junfeng Zhang, Jin Wang, Centrality-based pathway enrichment: a systematic approach for finding significant pathways dominated by key genes., <i>BMC systems biology</i> 2012. <a href='http://www.ncbi.nlm.nih.gov/pubmed/22672776'>PubMed</a>.</li>
+7. <strong>Zuguang Gu</strong>, Chenyu Zhang, Jin Wang, Gene regulation is governed by a core network in hepatocellular carcinoma., <i>BMC systems biology</i> 2012. <a href='http://www.ncbi.nlm.nih.gov/pubmed/22548756'>PubMed</a>.</li>
+8. <strong>Zuguang Gu</strong>, Jie Li, Song Gao, Ming Gong, Junling Wang, Hua Xu, Chenyu Zhang, Jin Wang, InterMitoBase: an annotated database and analysis platform of protein-protein interactions for human mitochondria., <i>BMC genomics</i> 2011. <a href='http://www.ncbi.nlm.nih.gov/pubmed/21718467'>PubMed</a>.</li>
+9. Lingyun Zhu, Qiang Wang, Lin Zhang, Zhixiang Fang, Fang Zhao, Zhiyuan Lv, <strong>Zuguang Gu</strong>, Junfeng Zhang, Jin Wang, Ke Zen, Yang Xiang, Dongjin Wang, Chen-Yu Zhang, Hypoxia induces PGC-1α expression and mitochondrial biogenesis in the myocardium of TOF patients., <i>Cell research</i> 2010. <a href='http://www.ncbi.nlm.nih.gov/pubmed/20368732'>PubMed</a>.</li>
 
-qqcat("<ol>\n")
-qqcat("<li>@{author_list}, @{titles}, <i>@{journal_title}</i>, @{publish_year}. <a href='http://www.ncbi.nlm.nih.gov/pubmed/@{unlist(pubmed$IdList)}'>PubMed</a>.</li>\n")
-qqcat("</ol>")
-qqcat("<p style='border-top:#CCCCCC dashed 1px;text-align:right;margin-top:10px;font-color:#CCCCCC'>Recodes were automatically retrieved from PubMed by <a href='https://cran.r-project.org/web/packages/easyPubMed/index.html'>easyPubMed</a> and <a href='https://cran.r-project.org/web/packages/XML/index.html'>XML</a> packages.</p>")
-```
+<p style='border-top:1px dotted #CCCCCC;text-align:right;margin-top:10px;color:#CCCCCC;font-style:normal;font-weight:normal;'>Recodes were automatically retrieved from PubMed by <a href='https://cran.r-project.org/web/packages/easyPubMed/index.html'>easyPubMed</a> and <a href='https://cran.r-project.org/web/packages/XML/index.html'>XML</a> packages.</p>
