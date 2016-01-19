@@ -1,10 +1,32 @@
 ## Publications
 
-1. Jenny Wegert, Naveed Ishaque, Romina Vardapour, Christina Geoerg, **Zuguang Gu**, Matthias Bieg, Barbara Ziegler, Sabrina Bausenwein, Nasenien Nourkami, Nicole Ludwig, *et al*, Harm van Tinteren, Marry M van den Heuvel-Eibrink, Eckart Meese, Christian Vokuhl, Ivo Leuschner, Norbert Graf, Roland Eils, Stefan M Pfister, Marcel Kool, Manfred Gessler, Mutations in the SIX1/2 Pathway and the DROSHA/DGCR8 miRNA Microprocessor Complex Underlie High-Risk Blastemal Type Wilms Tumors. Cancer cell 02/2015; 27(2):298-311. [PubMed](http://www.ncbi.nlm.nih.gov/pubmed/25670083)
-2. **Zuguang Gu**, Lei Gu, Roland Eils, Matthias Schlesner, Benedikt Brors, circlize implements and enhances circular visualization in R. Bioinformatics 2014 Oct;30(19):2811-2. [PubMed](http://www.ncbi.nlm.nih.gov/pubmed/24930139)
-3. **Zuguang Gu**, Jin Wang, CePa: an R package for finding significant pathways weighted by multiple network centralities. Bioinformatics 2013 Jan 30. [PubMed](http://www.ncbi.nlm.nih.gov/pubmed/23314125)
-4. Chenfeng He, Ying-Xin Li, Guangxin Zhang, Zuguang Gu, Rong Yang, Jie Li, Zhi John Lu, Zhi-Hua Zhou, Chenyu Zhang and Jin Wang, MiRmat: Mature microRNA Sequence Prediction, PLoS ONE 2012, 7(12): e51673. [PubMed](http://www.ncbi.nlm.nih.gov/pmc/articles/PMC3531441/)
-5. **Zuguang Gu**, Jialin Liu, Kunming Cao, Junfeng Zhang, Jin Wang. Centrality-based Pathway Enrichment: a Systematic Approach for Finding Signicant Pathways Dominated by Key Genes. BMC Systems Biology 2012, 6:56. [PubMed](http://www.ncbi.nlm.nih.gov/pubmed/22672776)
-6. **Zuguang Gu**, Chenyu Zhang, Jin Wang. Gene Regulation is Governed by a Core Network in Hepatocellular Carcinoma. BMC Systems Biology 2012, 6:32. [PubMed](http://www.ncbi.nlm.nih.gov/pubmed/22548756)
-7. **Zuguang Gu**, Jie Li, Song Gao, Ming Gong, Junling Wang, Hua Xu, Chenyu Zhang, Jin Wang. InterMitoBase: An annotated database and analysis platform of protein-protein interactions for human mitochondria. BMC Genomics. 2011, 12:335. [PubMed](http://www.ncbi.nlm.nih.gov/pubmed/21718467)
-8. **Zuguang Gu**, Chenfeng He, Jin Wang. Finding Significant Gene Sets with Weighted Distribution of Gene Expression. Bioinformatics and Biomedical Engineering, (iCBBE) 2011 5th International Conference, pp.1-5, 10-12 May 2011.
+```{r, result = "asis"}
+suppressPackageStartupMessages(library(GetoptLong))
+suppressPackageStartupMessages(library(easyPubMed))
+pubmed <- getPubmedIds("Zuguang Gu[AU]")
+papers <- fetchPubmedData(pubmed)
+author_list = xpathApply(papers, "//AuthorList", function(x) xmlParse(saveXML(x)))
+author_list = sapply(author_list, function(x) {
+	last_name = xpathApply(x, "//LastName", xmlValue)
+	first_name = xpathApply(x, "//ForeName", xmlValue)
+	name = paste(first_name, last_name, sep = " ")
+	name[name == "Zuguang Gu"] = "<strong>Zuguang Gu</strong>"
+	#if(length(name) > 10) name = name[1:10]
+	paste0(name, collapse = ", ")
+})
+titles = unlist(xpathApply(papers, "//ArticleTitle", xmlValue))
+journal = xpathApply(papers, "//Journal", function(x) xmlParse(saveXML(x)))
+journal_title = sapply(seq_len(length(journal)), function(i) {
+	x = xpathApply(journal[[i]], "//Title", xmlValue)[[1]]
+	if(length(x)) x[1] else ""
+})
+publish_year = sapply(seq_len(length(journal)), function(i) {
+	x = xpathApply(journal[[i]], "//Year", xmlValue)[[1]]
+	if(length(x)) x[1] else ""
+})
+
+qqcat("<ol>\n")
+qqcat("<li>@{author_list}, @{titles}, <i>@{journal_title}</i>, @{publish_year}. <a href='http://www.ncbi.nlm.nih.gov/pubmed/@{unlist(pubmed$IdList)}'>PubMed</a>.</li>\n")
+qqcat("</ol>")
+qqcat("<p style='border-top:#CCCCCC dashed 1px;text-align:right;margin-top:10px;font-color:#CCCCCC'>Recodes were automatically retrieved from PubMed by <a href='https://cran.r-project.org/web/packages/easyPubMed/index.html'>easyPubMed</a> and <a href='https://cran.r-project.org/web/packages/XML/index.html'>XML</a> packages.</p>")
+```
