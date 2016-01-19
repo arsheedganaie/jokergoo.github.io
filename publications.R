@@ -25,6 +25,6 @@ publish_year = sapply(seq_len(length(journal)), function(i) {
 
 con = file("publications.md", "w")
 qqcat("## Publications\n\n", file = con)
-qqcat("@{seq_along(author_list)}. @{author_list}, @{titles}, <i>@{journal_title}</i> @{publish_year}. <a href='http://www.ncbi.nlm.nih.gov/pubmed/@{unlist(pubmed$IdList)}'>PubMed</a>.</li>\n", file = con)
+qqcat("@{seq_along(author_list)}. @{author_list}, @{titles} <i>@{journal_title}</i> @{publish_year}. <a href='http://www.ncbi.nlm.nih.gov/pubmed/@{unlist(pubmed$IdList)}'>PubMed</a>.</li>\n", file = con)
 qqcat("\n<p style='border-top:1px dotted #CCCCCC;text-align:right;margin-top:10px;color:#CCCCCC;font-style:normal;font-weight:normal;'>Recodes were automatically retrieved from PubMed by <a href='https://cran.r-project.org/web/packages/easyPubMed/index.html'>easyPubMed</a> and <a href='https://cran.r-project.org/web/packages/XML/index.html'>XML</a> packages.</p>\n", file = con)
 close(con)
