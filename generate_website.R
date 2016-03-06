@@ -1,6 +1,7 @@
 suppressPackageStartupMessages(library(knitr))
 suppressPackageStartupMessages(library(markdown))
 suppressPackageStartupMessages(library(GetoptLong))
+suppressPackageStartupMessages(library(htmltools))
 
 
 list = "
@@ -134,4 +135,40 @@ html = c(header,
 footer)
 
 writeLines(html, "blog.html", useBytes = TRUE)
+
+
+## rss.xml
+header = "<?xml version='1.0' encoding='UTF-8' ?>
+<rss version='2.0'>
+<channel>
+  <title>Zuguang Gu's blog</title>
+  <link>http://jokergoo.github.io/blog.html</link>
+  <description>Zuguang Gu's blog</description>
+"
+
+footer = "
+</channel>
+</rss>
+"
+
+html = c(header,
+{
+	blog_list = "<item>\n";
+	for(i in order(post_info$date, decreasing = TRUE)) {
+		title = post_info$title[i]
+		title_url = gsub(" +", "-", title)
+
+		blog_html = paste(readLines(qq("blog/@{title_url}.html")), collapse = "\n")
+		blog_body = gsub("^.*?<span><a href='https://github.com/jokergoo/'>GitHub</a></span>\n</p>\n<hr />\n(.*?)<div id='disqus_thread'></div>.*$", "\\1", blog_html)
+		blog_body = htmlEscape(blog_body)
+
+		blog_list = c(blog_list, blog_body)
+		
+		if(i > 20) break()
+	}
+	blog_list = c(blog_list, "</item>\n")
+},
+footer)
+
+writeLines(html, "rss.xml", useBytes = TRUE)
 
