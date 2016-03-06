@@ -141,7 +141,7 @@ writeLines(html, "blog.html", useBytes = TRUE)
 header = "<?xml version='1.0' encoding='UTF-8' ?>
 <rss version='2.0'>
 <channel>
-  <title>Zuguang Gu's blog</title>
+  <title>Bioinformagician</title>
   <link>http://jokergoo.github.io/blog.html</link>
   <description>Zuguang Gu's blog</description>
 "
