@@ -176,9 +176,8 @@ hr {
 
 <p>There is already very nice solutions to build a static website and blog
 based on <a href="https://help.github.com/articles/using-jekyll-with-pages/">Jekyll</a> and host on <a href="http://github.com">GitHub</a>.
-However, mostly due to my personal problem (that I am not patient enough), I still have
-problems to make a real functional website by learning those online tutorials. However,
-it is actually not that difficult to write my own scripts to generate static HTML pages.
+However, I still have problems to make a real functional website by learning those online tutorials. Actually
+it is not that difficult to write my own scripts to generate static HTML pages.
 Also it is easy to support <strong>knitr</strong> package to automatically generate a HTML document with
 executing R code on the fly.</p>
 
@@ -186,13 +185,13 @@ executing R code on the fly.</p>
 are converted from <a href="https://raw.githubusercontent.com/jokergoo/jokergoo.github.io/master/index.md"><code>index.md</code></a>, 
 <a href="https://raw.githubusercontent.com/jokergoo/jokergoo.github.io/master/software.md"><code>software.md</code></a>, 
 <a href="https://raw.githubusercontent.com/jokergoo/jokergoo.github.io/master/publications.md"><code>publications.md</code></a> respectively. 
-A general script takes
+<a href="https://github.com/jokergoo/jokergoo.github.io/blob/master/generate_website.R">A general script</a> takes
 care of the common HTML head and foot for each HTML document, reads the <code>.md</code> files and convert to the HTML fragment.</p>
 
 <p>For the blog part, there is a sub-folder called <code>blog/</code> and posts in <code>.md</code> or <code>.Rmd</code> format are put in.
-If the file name of the post ends with <code>.Rmd</code>, <code>knit()</code> is first called and converts into HTML by <code>markdownToHTML()</code>
+If the file name of the post ends with <code>.Rmd</code>, <code>knit()</code> is first called and converts into HTML fragment by <code>markdownToHTML()</code>
 afterwards, while if the file name of the post ends with <code>.md</code>, <code>markdownToHTML()</code> is simply called to convert
-to HTML.</p>
+to HTML fragment.</p>
 
 <p>After all posts are generated, title for each post is extracted as well as the last modification time,
 which will be used to generate <code>blog.html</code>.</p>

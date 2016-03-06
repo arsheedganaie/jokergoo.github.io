@@ -63,11 +63,11 @@ writeLines(html, "publications.html", useBytes = TRUE)
 setwd("blog")
 
 # need to test both file name and post title
-if(file.exists(".post_mtile.RData")) {
-	load(".post_mtime.RData")
-} else {
-	post_mtile = NULL
-}
+# if(file.exists(".post_mtile.RData")) {
+# 	load(".post_mtime.RData")
+# } else {
+# 	post_mtile = NULL
+# }
 
 add_disqus = function(html, url) {
 	disqus = qq("
@@ -154,18 +154,26 @@ footer = "
 html = c(header,
 {
 	blog_list = NULL
+	i_rss = 0
 	for(i in order(post_info$date, decreasing = TRUE)) {
 		title = post_info$title[i]
 		title_url = gsub(" +", "-", title)
 
 		blog_html = paste(readLines(qq("blog/@{title_url}.html")), collapse = "\n")
 		blog_body = gsub("^.*?<span><a href='https://github.com/jokergoo/'>GitHub</a></span>\n</p>\n<hr />\n(.*?)<div id='disqus_thread'></div>.*$", "\\1", blog_html)
+
+		if(grepl("<!--\\s*?rss\\s*?=\\s*?FALSE\\s*?-->", blog_body)) {
+			next()
+		}
+
+		i_rss = i_rss + 1
+
 		blog_body = htmlEscape(blog_body)
 		blog_body = qq("<item>\n<title>@{title}</title>\n<link>blog/@{title_url}.html</link>\n<description>@{blog_body}</description>\n</item>\n")
 
 		blog_list = c(blog_list, blog_body)
 		
-		if(i > 20) break()
+		if(i_rss > 20) break()
 	}
 	blog_list
 	
