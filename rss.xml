@@ -9,7 +9,7 @@
 <title>Build a static website and blog by knitr and rmarkdown</title>
 <link>blog/Build-a-static-website-and-blog-by-knitr-and-rmarkdown.html</link>
 <description>
-&lt;h1&gt;Build a static website and blog by knitr and rmarkdown&lt;/h1&gt;
+
 
 &lt;p&gt;There is already very nice solutions to build a static website and blog
 based on &lt;a href="https://help.github.com/articles/using-jekyll-with-pages/"&gt;Jekyll&lt;/a&gt; and host on &lt;a href="http://github.com"&gt;GitHub&lt;/a&gt;.

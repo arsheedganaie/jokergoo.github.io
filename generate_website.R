@@ -166,6 +166,8 @@ html = c(header,
 			next()
 		}
 
+		blog_body = gsub(qq("<h1>@{title}</h1>"), "", blog_body)
+
 		i_rss = i_rss + 1
 
 		blog_body = htmlEscape(blog_body)
