@@ -101,7 +101,7 @@ post_info = list(title = NULL, date = NULL)
 for(mf in md_files) {
 	if(file.exists(qq("@{mf}.Rmd"))) {
 		knit(qq("@{mf}.Rmd"), qq("@{mf}.md"), quiet = TRUE)
-		html = markdownToHTML(qq("@{mf}.md"))
+		html = markdownToHTML(qq("@{mf}.md")); file.remove(qq("@{mf}.md"))
 		title = gsub("^.*<title>(.*?)</title>.*$", "\\1", html)[1]
 		date = file.info(qq("@{mf}.Rmd"))$mtime
 	} else {
