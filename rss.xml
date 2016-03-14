@@ -6,8 +6,78 @@
   <description>Zuguang Gu's blog</description>
 
 <item>
+<title>rmarkdown test with a plot</title>
+<link>blog/html/f085f205491c97284f4c5145c45012b1.html</link>
+<description>
+&lt;h1&gt;Build a static website and blog by knitr and rmarkdown&lt;/h1&gt;
+
+&lt;p&gt;There is already very nice solutions to build a static website and blog
+based on &lt;a href="https://help.github.com/articles/using-jekyll-with-pages/"&gt;Jekyll&lt;/a&gt; and host on &lt;a href="http://github.com"&gt;GitHub&lt;/a&gt;.
+However, I still have problems to make a real functional website by learning those online tutorials. Actually
+it is not that difficult to write my own scripts to generate static HTML pages.
+Also it is easy to support &lt;strong&gt;knitr&lt;/strong&gt; package to automatically generate a HTML document with
+executing R code on the fly.&lt;/p&gt;
+
+&lt;p&gt;Take my website for example, there are &lt;code&gt;index.html&lt;/code&gt;, &lt;code&gt;software.html&lt;/code&gt;, &lt;code&gt;publications.html&lt;/code&gt; which
+are converted from &lt;a href="https://raw.githubusercontent.com/jokergoo/jokergoo.github.io/master/index.md"&gt;&lt;code&gt;index.md&lt;/code&gt;&lt;/a&gt;, 
+&lt;a href="https://raw.githubusercontent.com/jokergoo/jokergoo.github.io/master/software.md"&gt;&lt;code&gt;software.md&lt;/code&gt;&lt;/a&gt;, 
+&lt;a href="https://raw.githubusercontent.com/jokergoo/jokergoo.github.io/master/publications.md"&gt;&lt;code&gt;publications.md&lt;/code&gt;&lt;/a&gt; respectively. 
+&lt;a href="https://github.com/jokergoo/jokergoo.github.io/blob/master/generate_website.R"&gt;A general script&lt;/a&gt; takes
+care of the common HTML head and foot for each HTML document, reads the &lt;code&gt;.md&lt;/code&gt; files and convert to the HTML fragment.&lt;/p&gt;
+
+&lt;p&gt;For the blog part, there is a sub-folder called &lt;code&gt;blog/&lt;/code&gt; and posts in &lt;code&gt;.md&lt;/code&gt; or &lt;code&gt;.Rmd&lt;/code&gt; format are put in.
+If the file name of the post ends with &lt;code&gt;.Rmd&lt;/code&gt;, &lt;code&gt;knit()&lt;/code&gt; is first called and converts into HTML fragment by &lt;code&gt;markdownToHTML()&lt;/code&gt;
+afterwards, while if the file name of the post ends with &lt;code&gt;.md&lt;/code&gt;, &lt;code&gt;markdownToHTML()&lt;/code&gt; is simply called to convert
+to HTML fragment.&lt;/p&gt;
+
+&lt;p&gt;After all posts are generated, title for each post is extracted as well as the last modification time,
+which will be used to generate &lt;code&gt;blog.html&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;If comments system is to be supported, after the HTML generation of each post, the Javascript fragment of &lt;a href="https://disqus.com/home/"&gt;Disqus&lt;/a&gt;
+can be inserted before &lt;code&gt;&amp;lt;/body&amp;gt;&lt;/code&gt;.&lt;/p&gt;
+
+
+</description>
+</item>
+
+<item>
+<title>markdown test</title>
+<link>blog/html/f085f205491c97284f4c5145c45012b1.html</link>
+<description>
+&lt;h1&gt;Build a static website and blog by knitr and rmarkdown&lt;/h1&gt;
+
+&lt;p&gt;There is already very nice solutions to build a static website and blog
+based on &lt;a href="https://help.github.com/articles/using-jekyll-with-pages/"&gt;Jekyll&lt;/a&gt; and host on &lt;a href="http://github.com"&gt;GitHub&lt;/a&gt;.
+However, I still have problems to make a real functional website by learning those online tutorials. Actually
+it is not that difficult to write my own scripts to generate static HTML pages.
+Also it is easy to support &lt;strong&gt;knitr&lt;/strong&gt; package to automatically generate a HTML document with
+executing R code on the fly.&lt;/p&gt;
+
+&lt;p&gt;Take my website for example, there are &lt;code&gt;index.html&lt;/code&gt;, &lt;code&gt;software.html&lt;/code&gt;, &lt;code&gt;publications.html&lt;/code&gt; which
+are converted from &lt;a href="https://raw.githubusercontent.com/jokergoo/jokergoo.github.io/master/index.md"&gt;&lt;code&gt;index.md&lt;/code&gt;&lt;/a&gt;, 
+&lt;a href="https://raw.githubusercontent.com/jokergoo/jokergoo.github.io/master/software.md"&gt;&lt;code&gt;software.md&lt;/code&gt;&lt;/a&gt;, 
+&lt;a href="https://raw.githubusercontent.com/jokergoo/jokergoo.github.io/master/publications.md"&gt;&lt;code&gt;publications.md&lt;/code&gt;&lt;/a&gt; respectively. 
+&lt;a href="https://github.com/jokergoo/jokergoo.github.io/blob/master/generate_website.R"&gt;A general script&lt;/a&gt; takes
+care of the common HTML head and foot for each HTML document, reads the &lt;code&gt;.md&lt;/code&gt; files and convert to the HTML fragment.&lt;/p&gt;
+
+&lt;p&gt;For the blog part, there is a sub-folder called &lt;code&gt;blog/&lt;/code&gt; and posts in &lt;code&gt;.md&lt;/code&gt; or &lt;code&gt;.Rmd&lt;/code&gt; format are put in.
+If the file name of the post ends with &lt;code&gt;.Rmd&lt;/code&gt;, &lt;code&gt;knit()&lt;/code&gt; is first called and converts into HTML fragment by &lt;code&gt;markdownToHTML()&lt;/code&gt;
+afterwards, while if the file name of the post ends with &lt;code&gt;.md&lt;/code&gt;, &lt;code&gt;markdownToHTML()&lt;/code&gt; is simply called to convert
+to HTML fragment.&lt;/p&gt;
+
+&lt;p&gt;After all posts are generated, title for each post is extracted as well as the last modification time,
+which will be used to generate &lt;code&gt;blog.html&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;If comments system is to be supported, after the HTML generation of each post, the Javascript fragment of &lt;a href="https://disqus.com/home/"&gt;Disqus&lt;/a&gt;
+can be inserted before &lt;code&gt;&amp;lt;/body&amp;gt;&lt;/code&gt;.&lt;/p&gt;
+
+
+</description>
+</item>
+
+<item>
 <title>Build a static website and blog by knitr and rmarkdown</title>
-<link>blog/Build-a-static-website-and-blog-by-knitr-and-rmarkdown.html</link>
+<link>blog/html/f085f205491c97284f4c5145c45012b1.html</link>
 <description>
 
 
