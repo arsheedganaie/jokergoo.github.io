@@ -20,7 +20,13 @@ If the file name of the post ends with `.Rmd`, `knit()` is first called and conv
 afterwards, while if the file name of the post ends with `.md`, `markdownToHTML()` is simply called to convert
 to HTML fragment.
 
-After all posts are generated, title for each post is extracted as well as the last modification time,
+There is a tiny "database" (`post_info`) which records some basic information for a post, e.g. create time, last
+modified time so that post without changes does not need to be re-generated. 
+
+[Inode](https://en.wikipedia.org/wiki/Inode) is used as the unique identifier of files. The drawback is 
+the HTML pages can only be generated in a same computer.
+
+After all posts are generated, title for each post is extracted as well as the creating time,
 which will be used to generate `blog.html`.
 
 If comments system is to be supported, after the HTML generation of each post, the Javascript fragment of [Disqus](https://disqus.com/home/)

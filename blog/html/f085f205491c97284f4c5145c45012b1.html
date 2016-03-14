@@ -193,7 +193,13 @@ If the file name of the post ends with <code>.Rmd</code>, <code>knit()</code> is
 afterwards, while if the file name of the post ends with <code>.md</code>, <code>markdownToHTML()</code> is simply called to convert
 to HTML fragment.</p>
 
-<p>After all posts are generated, title for each post is extracted as well as the last modification time,
+<p>There is a tiny &ldquo;database&rdquo; (<code>post_info</code>) which records some basic information for a post, e.g. create time, last
+modified time so that post without changes does not need to be re-generated. </p>
+
+<p><a href="https://en.wikipedia.org/wiki/Inode">Inode</a> is used as the unique identifier of files. The drawback is 
+the HTML pages can only be generated in a same computer.</p>
+
+<p>After all posts are generated, title for each post is extracted as well as the creating time,
 which will be used to generate <code>blog.html</code>.</p>
 
 <p>If comments system is to be supported, after the HTML generation of each post, the Javascript fragment of <a href="https://disqus.com/home/">Disqus</a>

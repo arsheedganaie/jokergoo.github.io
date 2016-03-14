@@ -30,7 +30,13 @@ If the file name of the post ends with &lt;code&gt;.Rmd&lt;/code&gt;, &lt;code&g
 afterwards, while if the file name of the post ends with &lt;code&gt;.md&lt;/code&gt;, &lt;code&gt;markdownToHTML()&lt;/code&gt; is simply called to convert
 to HTML fragment.&lt;/p&gt;
 
-&lt;p&gt;After all posts are generated, title for each post is extracted as well as the last modification time,
+&lt;p&gt;There is a tiny &amp;ldquo;database&amp;rdquo; (&lt;code&gt;post_info&lt;/code&gt;) which records some basic information for a post, e.g. create time, last
+modified time so that post without changes does not need to be re-generated. &lt;/p&gt;
+
+&lt;p&gt;&lt;a href="https://en.wikipedia.org/wiki/Inode"&gt;Inode&lt;/a&gt; is used as the unique identifier of files. The drawback is 
+the HTML pages can only be generated in a same computer.&lt;/p&gt;
+
+&lt;p&gt;After all posts are generated, title for each post is extracted as well as the creating time,
 which will be used to generate &lt;code&gt;blog.html&lt;/code&gt;.&lt;/p&gt;
 
 &lt;p&gt;If comments system is to be supported, after the HTML generation of each post, the Javascript fragment of &lt;a href="https://disqus.com/home/"&gt;Disqus&lt;/a&gt;
@@ -65,7 +71,13 @@ If the file name of the post ends with &lt;code&gt;.Rmd&lt;/code&gt;, &lt;code&g
 afterwards, while if the file name of the post ends with &lt;code&gt;.md&lt;/code&gt;, &lt;code&gt;markdownToHTML()&lt;/code&gt; is simply called to convert
 to HTML fragment.&lt;/p&gt;
 
-&lt;p&gt;After all posts are generated, title for each post is extracted as well as the last modification time,
+&lt;p&gt;There is a tiny &amp;ldquo;database&amp;rdquo; (&lt;code&gt;post_info&lt;/code&gt;) which records some basic information for a post, e.g. create time, last
+modified time so that post without changes does not need to be re-generated. &lt;/p&gt;
+
+&lt;p&gt;&lt;a href="https://en.wikipedia.org/wiki/Inode"&gt;Inode&lt;/a&gt; is used as the unique identifier of files. The drawback is 
+the HTML pages can only be generated in a same computer.&lt;/p&gt;
+
+&lt;p&gt;After all posts are generated, title for each post is extracted as well as the creating time,
 which will be used to generate &lt;code&gt;blog.html&lt;/code&gt;.&lt;/p&gt;
 
 &lt;p&gt;If comments system is to be supported, after the HTML generation of each post, the Javascript fragment of &lt;a href="https://disqus.com/home/"&gt;Disqus&lt;/a&gt;
@@ -100,7 +112,13 @@ If the file name of the post ends with &lt;code&gt;.Rmd&lt;/code&gt;, &lt;code&g
 afterwards, while if the file name of the post ends with &lt;code&gt;.md&lt;/code&gt;, &lt;code&gt;markdownToHTML()&lt;/code&gt; is simply called to convert
 to HTML fragment.&lt;/p&gt;
 
-&lt;p&gt;After all posts are generated, title for each post is extracted as well as the last modification time,
+&lt;p&gt;There is a tiny &amp;ldquo;database&amp;rdquo; (&lt;code&gt;post_info&lt;/code&gt;) which records some basic information for a post, e.g. create time, last
+modified time so that post without changes does not need to be re-generated. &lt;/p&gt;
+
+&lt;p&gt;&lt;a href="https://en.wikipedia.org/wiki/Inode"&gt;Inode&lt;/a&gt; is used as the unique identifier of files. The drawback is 
+the HTML pages can only be generated in a same computer.&lt;/p&gt;
+
+&lt;p&gt;After all posts are generated, title for each post is extracted as well as the creating time,
 which will be used to generate &lt;code&gt;blog.html&lt;/code&gt;.&lt;/p&gt;
 
 &lt;p&gt;If comments system is to be supported, after the HTML generation of each post, the Javascript fragment of &lt;a href="https://disqus.com/home/"&gt;Disqus&lt;/a&gt;
