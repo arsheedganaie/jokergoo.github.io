@@ -113,8 +113,16 @@ for(i in seq_along(md_files)) {
 	if(!md_inode[i] %in% post_info$inode) {
 
 		post_info$inode = c(post_info$inode, md_inode[i])
-		post_info$create_time = c(post_info$create_time, md_last_modified[i])
-		post_info$last_modified_time = c(post_info$last_modified_time, md_last_modified[i])
+		if(length(post_info$create_time) == 0) {
+			post_info$create_time = md_last_modified[i]
+		} else {
+			post_info$create_time = c(post_info$create_time, md_last_modified[i])
+		}
+		if(length(post_info$last_modified_time) == 0) {
+			post_info$last_modified_time = md_last_modified[i]
+		} else {
+			post_info$last_modified_time = c(post_info$last_modified_time, md_last_modified[i])
+		}
 
 		if(grepl("\\.Rmd$", md_files[i])) {
 			knit(md_files[i], qq("md_files[i].md"), quiet = TRUE)
@@ -135,14 +143,14 @@ for(i in seq_along(md_files)) {
 		qqcat("create post: @{title}.\n")
 
 	} else {
-		k = which(md_inode[i] %in% post_info$inode)
+		k = which(post_info$inode %in% md_inode[i])
 		# if it is modified since last time
-		if(md_last_modified[i] > post_info$last_modified_time) {
+		if(md_last_modified[i] > post_info$last_modified_time[k]) {
 
-			post_info$last_modified_time[k] = post_info$last_modified_time[i]
+			post_info$last_modified_time[k] = md_last_modified[i]
 
 			title_url = gsub(" +", "-", post_info$title[k])
-			file.remove(title_url)
+			file.remove(qq("@{title_url}.html"))
 
 			if(grepl("\\.Rmd$", md_files[i])) {
 				knit(md_files[i], qq("md_files[i].md"), quiet = TRUE)
@@ -164,8 +172,14 @@ for(i in seq_along(md_files)) {
 		}
 	}
 }
-setwd("..")
+
+deleted_md_inode = setdiff(post_info$inode, md_inode)
+if(length(deleted_md_inode) > 0) {
+	l = deleted_md_inode %in% post_info$inode
+	post_info = lapply(post_info, function(x) x[!l])
+}
 save(post_info, file = ".post_info.RData")
+setwd("..")
 
 ## blog.html
 
@@ -175,7 +189,7 @@ html = c(header,
 	for(i in order(post_info$create_time, decreasing = TRUE)) {
 		title = post_info$title[i]
 		title_url = gsub(" +", "-", title)
-		blog_list = c(blog_list, qq("<li><a href=\"blog/@{title_url}.html\">@{title}</a></li>"))
+		blog_list = c(blog_list, qq("<li><a href=\"blog/@{title_url}.html\">@{title}</a> (@{format(post_info$create_time[i], '%m/%d/%Y')})</li>"))
 	}
 	blog_list = c(blog_list, "</ul>\n")
 },

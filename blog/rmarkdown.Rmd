@@ -1,4 +1,4 @@
-rmarkdown test
+rmarkdown test with a plot
 ==================
 
 <!-- rss=FALSE -->
@@ -8,6 +8,8 @@ This is a test for a post in **rmarkdown** format.
 ```{r}
 hist(rnorm(100))
 ```
+
+$a = 1$
 
 ## Session Info
 
