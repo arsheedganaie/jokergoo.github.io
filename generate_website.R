@@ -219,7 +219,7 @@ html = c(header,
 	i_rss = 0
 	for(i in order(post_info$create_time, decreasing = TRUE)) {
 		title = post_info$title[i]
-		paste0("html/", digest(post_info$inode[i], algo = "md5"))
+		title_url = paste0("html/", digest(post_info$inode[i], algo = "md5"))
 
 		blog_html = paste(readLines(qq("blog/@{title_url}.html")), collapse = "\n")
 		blog_body = gsub("^.*?<span><a href='https://github.com/jokergoo/'>GitHub</a></span>\n</p>\n<hr />\n(.*?)<div id='disqus_thread'></div>.*$", "\\1", blog_html)
