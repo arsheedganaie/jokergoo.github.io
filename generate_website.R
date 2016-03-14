@@ -95,37 +95,84 @@ add_list = function(html) {
 	gsub("<body>", qq("<body>@{list}"), html)
 }
 
-md_files = dir(pattern = "md$")
-md_files = unique(gsub("\\.R?md$", "", md_files))
-post_info = list(title = NULL, date = NULL)
-for(mf in md_files) {
-	if(file.exists(qq("@{mf}.Rmd"))) {
-		knit(qq("@{mf}.Rmd"), qq("@{mf}.md"), quiet = TRUE)
-		html = markdownToHTML(qq("@{mf}.md")); file.remove(qq("@{mf}.md"))
-		title = gsub("^.*<title>(.*?)</title>.*$", "\\1", html)[1]
-		date = file.info(qq("@{mf}.Rmd"))$mtime
-	} else {
-		html = markdownToHTML(qq("@{mf}.md"))
-		title = gsub("^.*<title>(.*?)</title>.*$", "\\1", html)[1]
-		date = file.info(qq("@{mf}.md"))$mtime
-	}
-	
-	post_info$title = c(post_info$title, title)
-	post_info$date = c(post_info$date, date)
+if(!file.exists(".post_info.RData")) {
+	post_info = list(inode = NULL, title = NULL, create_time = NULL, last_modified_time = NULL)
+} else {
+	load(".post_info.RData")	
+}
 
-	title_url = gsub(" +", "-", title)
-	html = add_disqus(html, url = title_url)
-	html = add_list(html)
-	writeLines(html, qq("@{title_url}.html"), useBytes = TRUE)
+md_files = dir(pattern = "\\.R?md$")
+md_inode = read.table(pipe("ls -i"), stringsAsFactors = FALSE)
+md_inode = structure(md_inode[[1]], names = md_inode[[2]])
+md_inode = md_inode[md_files]
+md_last_modified = file.info(md_files)$mtime
+
+for(i in seq_along(md_files)) {
+	
+	# if it is a new file
+	if(!md_inode[i] %in% post_info$inode) {
+
+		post_info$inode = c(post_info$inode, md_inode[i])
+		post_info$create_time = c(post_info$create_time, md_last_modified[i])
+		post_info$last_modified_time = c(post_info$last_modified_time, md_last_modified[i])
+
+		if(grepl("\\.Rmd$", md_files[i])) {
+			knit(md_files[i], qq("md_files[i].md"), quiet = TRUE)
+			html = markdownToHTML(qq("md_files[i].md")); file.remove(qq("md_files[i].md"))
+			title = gsub("^.*<title>(.*?)</title>.*$", "\\1", html)[1]
+		} else {
+			html = markdownToHTML(md_files[i])
+			title = gsub("^.*<title>(.*?)</title>.*$", "\\1", html)[1]
+		}
+
+		post_info$title = c(post_info$title, title)
+		
+		title_url = gsub(" +", "-", title)
+		html = add_disqus(html, url = title_url)
+		html = add_list(html)
+		writeLines(html, qq("@{title_url}.html"), useBytes = TRUE)
+
+		qqcat("create post: @{title}.\n")
+
+	} else {
+		k = which(md_inode[i] %in% post_info$inode)
+		# if it is modified since last time
+		if(md_last_modified[i] > post_info$last_modified_time) {
+
+			post_info$last_modified_time[k] = post_info$last_modified_time[i]
+
+			title_url = gsub(" +", "-", post_info$title[k])
+			file.remove(title_url)
+
+			if(grepl("\\.Rmd$", md_files[i])) {
+				knit(md_files[i], qq("md_files[i].md"), quiet = TRUE)
+				html = markdownToHTML(qq("md_files[i].md")); file.remove(qq("md_files[i].md"))
+				title = gsub("^.*<title>(.*?)</title>.*$", "\\1", html)[1]
+			} else {
+				html = markdownToHTML(md_files[i])
+				title = gsub("^.*<title>(.*?)</title>.*$", "\\1", html)[1]
+			}
+
+			post_info$title[k] = title
+			
+			title_url = gsub(" +", "-", title)
+			html = add_disqus(html, url = title_url)
+			html = add_list(html)
+			writeLines(html, qq("@{title_url}.html"), useBytes = TRUE)
+
+			qqcat("update post: @{title}.\n")
+		}
+	}
 }
 setwd("..")
+save(post_info, file = ".post_info.RData")
 
 ## blog.html
 
 html = c(header,
 {
 	blog_list = "<ul>\n";
-	for(i in order(post_info$date, decreasing = TRUE)) {
+	for(i in order(post_info$create_time, decreasing = TRUE)) {
 		title = post_info$title[i]
 		title_url = gsub(" +", "-", title)
 		blog_list = c(blog_list, qq("<li><a href=\"blog/@{title_url}.html\">@{title}</a></li>"))
@@ -155,7 +202,7 @@ html = c(header,
 {
 	blog_list = NULL
 	i_rss = 0
-	for(i in order(post_info$date, decreasing = TRUE)) {
+	for(i in order(post_info$create_time, decreasing = TRUE)) {
 		title = post_info$title[i]
 		title_url = gsub(" +", "-", title)
 
@@ -167,6 +214,7 @@ html = c(header,
 		}
 
 		blog_body = gsub(qq("<h1>@{title}</h1>"), "", blog_body)
+		blog_body = gsub("<img src=\"data:image.*?>", "Please see the figure in the original post.", blog_body)
 
 		i_rss = i_rss + 1
 
