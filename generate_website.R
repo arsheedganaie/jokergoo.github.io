@@ -234,7 +234,7 @@ html = c(header,
 		i_rss = i_rss + 1
 
 		blog_body = htmlEscape(blog_body)
-		blog_body = qq("<item>\n<title>@{title}</title>\n<link>blog/@{title_url}.html</link>\n<description>@{blog_body}</description>\n</item>\n")
+		blog_body = qq("<item>\n<title>@{title}</title>\n<link>http://jokergoo.github.io/blog/@{title_url}.html</link>\n<description>@{blog_body}</description>\n</item>\n")
 
 		blog_list = c(blog_list, blog_body)
 		
