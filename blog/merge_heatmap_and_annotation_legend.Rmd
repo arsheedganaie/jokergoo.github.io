@@ -32,7 +32,6 @@ ha = HeatmapAnnotation(df = df,
 
 Color mapping information is stored in `ha` and we can extract legends from `ha` object.
 
-
 ```{r}
 all_annotation_name = sapply(ha@anno_list, function(anno) anno@name)
 # in case not all annotations are simple annotations

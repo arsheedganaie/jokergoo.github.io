@@ -127,10 +127,10 @@ for(i in seq_along(md_files)) {
 
 		if(grepl("\\.Rmd$", md_files[i])) {
 			knit(md_files[i], qq("md_files[i].md"), quiet = TRUE)
-			html = markdownToHTML(qq("md_files[i].md")); file.remove(qq("md_files[i].md"))
+			html = markdownToHTML(qq("md_files[i].md"), stylesheet = "../markdown.css"); file.remove(qq("md_files[i].md"))
 			title = gsub("^.*<title>(.*?)</title>.*$", "\\1", html)[1]
 		} else {
-			html = markdownToHTML(md_files[i])
+			html = markdownToHTML(md_files[i], stylesheet = "../markdown.css")
 			title = gsub("^.*<title>(.*?)</title>.*$", "\\1", html)[1]
 		}
 
@@ -155,10 +155,10 @@ for(i in seq_along(md_files)) {
 
 			if(grepl("\\.Rmd$", md_files[i])) {
 				knit(md_files[i], qq("md_files[i].md"), quiet = TRUE)
-				html = markdownToHTML(qq("md_files[i].md")); file.remove(qq("md_files[i].md"))
+				html = markdownToHTML(qq("md_files[i].md"), stylesheet = "../markdown.css"); file.remove(qq("md_files[i].md"))
 				title = gsub("^.*<title>(.*?)</title>.*$", "\\1", html)[1]
 			} else {
-				html = markdownToHTML(md_files[i])
+				html = markdownToHTML(md_files[i], stylesheet = "../markdown.css")
 				title = gsub("^.*<title>(.*?)</title>.*$", "\\1", html)[1]
 			}
 
