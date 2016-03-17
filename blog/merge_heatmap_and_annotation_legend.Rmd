@@ -1,0 +1,63 @@
+Merge heatmap and annotation legends into a same column
+=======================================================
+
+In **ComplexHeatmap** package, legends for heatmap and annotations are differently treated
+and they will be put in different places. However, if there are not too many heatmaps and annotations,
+separating these two types of legends will be kind of waste of spaces.
+
+In `draw()` method of `HeatmapList` class, there is an option `heatmap_legend_list` (or `annotation_legend_list`) which accepts
+additional self-defined legends (in a form of `grob` objects). Thus, one strategy to merge
+heatmap legends and annotation legends is to extract the legends first and suppress plotting legends, 
+later we construct a list of legends and send to `heatmap_legend_list` argument.
+
+In following example, there is only one heatmap and two simple column annotations.
+When constructing column annotaiton `ha`, `show_legend` is set to `FALSE` to suppress annotation legends.
+
+```{r, echo = FALSE, message = FALSE}
+suppressWarnings(suppressPackageStartupMessages(library(ComplexHeatmap)))
+```
+
+```{r}
+library(ComplexHeatmap)
+library(circlize)
+df = data.frame(type = c(rep("a", 5), rep("b", 5)),
+                age = sample(1:20, 10))
+
+ha = HeatmapAnnotation(df = df,
+    col = list(type = c("a" = "red", "b" = "blue"),
+               age = colorRamp2(c(0, 20), c("white", "red"))),
+    show_legend = FALSE
+)
+```
+
+Color mapping information is stored in `ha` and we can extract legends from `ha` object.
+
+
+```{r}
+all_annotation_name = sapply(ha@anno_list, function(anno) anno@name)
+# in case not all annotations are simple annotations
+l = all_annotation_name %in% c("type", "age")
+anno_legend_list = lapply(ha@anno_list[l], function(anno) color_mapping_legend(anno@color_mapping, plot = FALSE))
+anno_legend_list
+```
+
+Similar, `show_heatmap_legend` is set to `FALSE` when creating `ht` and legend object is extracted afterwards.
+
+```{r}
+mat = matrix(rnorm(80, 2), 8, 10)
+ht = Heatmap(mat, name = "ht", top_annotation = ha, show_heatmap_legend = FALSE)
+heatmap_legend = color_mapping_legend(ht@matrix_color_mapping, plot = FALSE)
+```
+
+Finally, `draw()` is called explicitely and a list of both heatmap legend and annotation legends are sent to
+`heatmap_legend_list` option.
+
+```{r}
+draw(ht, heatmap_legend_list = c(anno_legend_list, list(heatmap_legend)))
+```
+
+## Session Info
+
+```{r}
+sessionInfo()
+```

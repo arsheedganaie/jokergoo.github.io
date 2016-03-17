@@ -6,6 +6,100 @@
   <description>Zuguang Gu's blog</description>
 
 <item>
+<title>Merge heatmap and annotation legends into a same column</title>
+<link>blog/html/ed8209ec0c73bd19d66a99054783b89f.html</link>
+<description>
+
+
+&lt;p&gt;In &lt;strong&gt;ComplexHeatmap&lt;/strong&gt; package, legends for heatmap and annotations are differently treated
+and they will be put in different places. However, if there are not too many heatmaps and annotations,
+separating these two types of legends will be kind of waste of spaces.&lt;/p&gt;
+
+&lt;p&gt;In &lt;code&gt;draw()&lt;/code&gt; method of &lt;code&gt;HeatmapList&lt;/code&gt; class, there is an option &lt;code&gt;heatmap_legend_list&lt;/code&gt; (or &lt;code&gt;annotation_legend_list&lt;/code&gt;) which accepts
+additional self-defined legends (in a form of &lt;code&gt;grob&lt;/code&gt; objects). Thus, one strategy to merge
+heatmap legends and annotation legends is to extract the legends first and suppress plotting legends, 
+later we construct a list of legends and send to &lt;code&gt;heatmap_legend_list&lt;/code&gt; argument.&lt;/p&gt;
+
+&lt;p&gt;In following example, there is only one heatmap and two simple column annotations.
+When constructing column annotaiton &lt;code&gt;ha&lt;/code&gt;, &lt;code&gt;show_legend&lt;/code&gt; is set to &lt;code&gt;FALSE&lt;/code&gt; to suppress annotation legends.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="r"&gt;library(ComplexHeatmap)
+library(circlize)
+df = data.frame(type = c(rep(&amp;quot;a&amp;quot;, 5), rep(&amp;quot;b&amp;quot;, 5)),
+                age = sample(1:20, 10))
+
+ha = HeatmapAnnotation(df = df,
+    col = list(type = c(&amp;quot;a&amp;quot; = &amp;quot;red&amp;quot;, &amp;quot;b&amp;quot; = &amp;quot;blue&amp;quot;),
+               age = colorRamp2(c(0, 20), c(&amp;quot;white&amp;quot;, &amp;quot;red&amp;quot;))),
+    show_legend = FALSE
+)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Color mapping information is stored in &lt;code&gt;ha&lt;/code&gt; and we can extract legends from &lt;code&gt;ha&lt;/code&gt; object.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="r"&gt;all_annotation_name = sapply(ha@anno_list, function(anno) anno@name)
+# in case not all annotations are simple annotations
+l = all_annotation_name %in% c(&amp;quot;type&amp;quot;, &amp;quot;age&amp;quot;)
+anno_legend_list = lapply(ha@anno_list[l], function(anno) color_mapping_legend(anno@color_mapping, plot = FALSE))
+anno_legend_list
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code&gt;## [[1]]
+## frame[GRID.frame.7] 
+## 
+## [[2]]
+## frame[GRID.frame.17]
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Similar, &lt;code&gt;show_heatmap_legend&lt;/code&gt; is set to &lt;code&gt;FALSE&lt;/code&gt; when creating &lt;code&gt;ht&lt;/code&gt; and legend object is extracted afterwards.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="r"&gt;mat = matrix(rnorm(80, 2), 8, 10)
+ht = Heatmap(mat, name = &amp;quot;ht&amp;quot;, top_annotation = ha, show_heatmap_legend = FALSE)
+heatmap_legend = color_mapping_legend(ht@matrix_color_mapping, plot = FALSE)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Finally, &lt;code&gt;draw()&lt;/code&gt; is called explicitely and a list of both heatmap legend and annotation legends are sent to
+&lt;code&gt;heatmap_legend_list&lt;/code&gt; option.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="r"&gt;draw(ht, heatmap_legend_list = c(anno_legend_list, list(heatmap_legend)))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Please see the figure in the original post.&lt;/p&gt;
+
+&lt;h2&gt;Session Info&lt;/h2&gt;
+
+&lt;pre&gt;&lt;code class="r"&gt;sessionInfo()
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code&gt;## R version 3.2.3 (2015-12-10)
+## Platform: x86_64-apple-darwin13.4.0 (64-bit)
+## Running under: OS X 10.11.3 (El Capitan)
+## 
+## locale:
+## [1] C/en_US.UTF-8/C/C/C/C
+## 
+## attached base packages:
+## [1] grid      methods   stats     graphics  grDevices utils     datasets 
+## [8] base     
+## 
+## other attached packages:
+## [1] circlize_0.3.5       ComplexHeatmap_1.9.3 digest_0.6.9        
+## [4] htmltools_0.3        GetoptLong_0.1.1     markdown_0.7.7      
+## [7] knitr_1.12.3        
+## 
+## loaded via a namespace (and not attached):
+##  [1] dendextend_1.1.8    formatR_1.3         magrittr_1.5       
+##  [4] evaluate_0.8.3      stringi_1.0-1       GlobalOptions_0.0.9
+##  [7] whisker_0.3-2       RColorBrewer_1.1-2  rjson_0.2.15       
+## [10] tools_3.2.3         stringr_1.0.0       colorspace_1.2-6   
+## [13] shape_1.4.2
+&lt;/code&gt;&lt;/pre&gt;
+
+
+</description>
+</item>
+
+<item>
 <title>Build a static website and blog by knitr and rmarkdown</title>
 <link>blog/html/f085f205491c97284f4c5145c45012b1.html</link>
 <description>
