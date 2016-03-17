@@ -40,15 +40,16 @@ ha = HeatmapAnnotation(df = df,
 &lt;pre&gt;&lt;code class="r"&gt;all_annotation_name = sapply(ha@anno_list, function(anno) anno@name)
 # in case not all annotations are simple annotations
 l = all_annotation_name %in% c(&amp;quot;type&amp;quot;, &amp;quot;age&amp;quot;)
-anno_legend_list = lapply(ha@anno_list[l], function(anno) color_mapping_legend(anno@color_mapping, plot = FALSE))
-anno_legend_list
+anno_legend_list = lapply(ha@anno_list[c(&amp;quot;type&amp;quot;, &amp;quot;age&amp;quot;)], function(anno) color_mapping_legend(anno@color_mapping, plot = FALSE))
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;pre&gt;&lt;code&gt;## [[1]]
-## frame[GRID.frame.7] 
-## 
-## [[2]]
-## frame[GRID.frame.17]
+&lt;pre&gt;&lt;code&gt;## Error in color_mapping_legend(anno@color_mapping, plot = FALSE): error in evaluating the argument &amp;#39;object&amp;#39; in selecting a method for function &amp;#39;color_mapping_legend&amp;#39;: Error: trying to get slot &amp;quot;color_mapping&amp;quot; from an object of a basic class (&amp;quot;NULL&amp;quot;) with no slots
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code class="r"&gt;anno_legend_list
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code&gt;## Error in eval(expr, envir, enclos): object &amp;#39;anno_legend_list&amp;#39; not found
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;Similar, &lt;code&gt;show_heatmap_legend&lt;/code&gt; is set to &lt;code&gt;FALSE&lt;/code&gt; when creating &lt;code&gt;ht&lt;/code&gt; and legend object is extracted afterwards.&lt;/p&gt;
@@ -61,10 +62,11 @@ heatmap_legend = color_mapping_legend(ht@matrix_color_mapping, plot = FALSE)
 &lt;p&gt;Finally, &lt;code&gt;draw()&lt;/code&gt; is called explicitely and a list of both heatmap legend and annotation legends are sent to
 &lt;code&gt;heatmap_legend_list&lt;/code&gt; option.&lt;/p&gt;
 
-&lt;pre&gt;&lt;code class="r"&gt;draw(ht, heatmap_legend_list = c(anno_legend_list, list(heatmap_legend)))
+&lt;pre&gt;&lt;code class="r"&gt;draw(ht, heatmap_legend_list = c(anno_legend_list[2:1], list(heatmap_legend)))
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;Please see the figure in the original post.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;## Error in .local(object, ...): object &amp;#39;anno_legend_list&amp;#39; not found
+&lt;/code&gt;&lt;/pre&gt;
 
 &lt;h2&gt;Session Info&lt;/h2&gt;
 
