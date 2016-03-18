@@ -36,7 +36,7 @@ Color mapping information is stored in `ha` and we can extract legends from `ha`
 all_annotation_name = sapply(ha@anno_list, function(anno) anno@name)
 # in case not all annotations are simple annotations
 l = all_annotation_name %in% c("type", "age")
-anno_legend_list = lapply(ha@anno_list[c("type", "age")], function(anno) color_mapping_legend(anno@color_mapping, plot = FALSE))
+anno_legend_list = lapply(ha@anno_list[l], function(anno) color_mapping_legend(anno@color_mapping, plot = FALSE))
 anno_legend_list
 ```
 

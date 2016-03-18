@@ -4,6 +4,8 @@ suppressPackageStartupMessages(library(GetoptLong))
 suppressPackageStartupMessages(library(htmltools))
 library(digest)
 
+all = FALSE
+GetoptLong(c("all", "whether refresh all"))
 
 list = "
 <p style='text-align:right'>
@@ -146,7 +148,7 @@ for(i in seq_along(md_files)) {
 	} else {
 		k = which(post_info$inode %in% md_inode[i])
 		# if it is modified since last time
-		if(md_last_modified[i] > post_info$last_modified_time[k]) {
+		if(md_last_modified[i] > post_info$last_modified_time[k] || all) {
 
 			post_info$last_modified_time[k] = md_last_modified[i]
 
