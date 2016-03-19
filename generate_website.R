@@ -187,7 +187,7 @@ setwd("..")
 ## blog.html
 
 html = c(header,
-"<div style='min-height:600px'>",
+"<div style='min-height:400px'>",
 {
 	blog_list = "<ul>\n";
 	for(i in order(post_info$create_time, decreasing = TRUE)) {
@@ -198,7 +198,7 @@ html = c(header,
 	blog_list = c(blog_list, "</ul>\n")
 },
 "</div>\n",
-"\n<p style='border-top:1px dotted #CCCCCC;text-align:right;margin-top:10px;color:#CCCCCC;font-style:normal;font-weight:normal;'><a href='rss.xml'>RSS</a></p>\n",
+"\n<p style='border-top:1px dotted #CCCCCC;text-align:right;margin-top:10px'><a href='rss.xml' style='color:#CCCCCC;font-weight:normal'>RSS</a></p>\n",
 footer)
 
 writeLines(html, "blog.html", useBytes = TRUE)
