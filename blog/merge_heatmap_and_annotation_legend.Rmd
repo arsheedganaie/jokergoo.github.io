@@ -33,10 +33,8 @@ ha = HeatmapAnnotation(df = df,
 Color mapping information is stored in `ha` and we can extract legends from `ha` object.
 
 ```{r}
-all_annotation_name = sapply(ha@anno_list, function(anno) anno@name)
-# in case not all annotations are simple annotations
-l = all_annotation_name %in% c("type", "age")
-anno_legend_list = lapply(ha@anno_list[l], function(anno) color_mapping_legend(anno@color_mapping, plot = FALSE))
+anno_legend_list = lapply(ha@anno_list[c("type", "age")], 
+	function(anno) color_mapping_legend(anno@color_mapping, plot = FALSE))
 anno_legend_list
 ```
 
@@ -49,10 +47,10 @@ heatmap_legend = color_mapping_legend(ht@matrix_color_mapping, plot = FALSE)
 ```
 
 Finally, `draw()` is called explicitely and a list of both heatmap legend and annotation legends are sent to
-`heatmap_legend_list` option.
+`heatmap_legend_list` argument.
 
 ```{r}
-draw(ht, heatmap_legend_list = c(anno_legend_list[2:1], list(heatmap_legend)))
+draw(ht, heatmap_legend_list = c(anno_legend_list, list(heatmap_legend)))
 ```
 
 ## Session Info

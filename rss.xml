@@ -6,6 +6,266 @@
   <description>Zuguang Gu's blog</description>
 
 <item>
+<title>Circular visualization of DMRs from tagmentation-based WGBS</title>
+<link>http://jokergoo.github.io/blog/html/1989c2e26c01e7740fd25764abfa747e.html</link>
+<description>
+
+
+&lt;p&gt;&lt;a href="http://www.nature.com/nprot/journal/v8/n10/full/nprot.2013.118.html"&gt;Tagmentation-based whole-genome bisulfite sequencing&lt;/a&gt; 
+(T-WGBS) is a technology which can examine only a minor fraction of methylome of interest.
+Circular plot can be used to &lt;a href="http://jokergoo.github.io/circlize/example/railfallplot.html"&gt;visualize genome-wide distribution of differentially methylation
+regions (DMRs)&lt;/a&gt;. 
+In this post, we demonstrate how to visualize DMRs which are detected from T-WGBS data in a circular plot by &lt;strong&gt;circlize&lt;/strong&gt; package.&lt;/p&gt;
+
+&lt;p&gt;In &lt;a href="../../data/tagments_WGBS_DMR.RData"&gt;&lt;code&gt;tagments_WGBS_DMR.RData&lt;/code&gt;&lt;/a&gt;, &lt;code&gt;tagments&lt;/code&gt; contains regions which are sequenced, 
+&lt;code&gt;DMR1&lt;/code&gt; and &lt;code&gt;DMR2&lt;/code&gt; contain DMRs for two patients detectd in tagment regions. Correspondance between tagment regions
+and DMRs can be checked by row names of &lt;code&gt;tagments&lt;/code&gt; and &lt;code&gt;tagment&lt;/code&gt; column in &lt;code&gt;DMR1&lt;/code&gt; or &lt;code&gt;DMR2&lt;/code&gt;.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="r"&gt;load(&amp;quot;../data/tagments_WGBS_DMR.RData&amp;quot;)
+tagments[1:2, ]
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code&gt;##                         chr    start      end
+## chr1-44876009-45016546 chr1 44876009 45016546
+## chr1-90460304-90761641 chr1 90460304 90761641
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code class="r"&gt;DMR1[1:2, ]
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code&gt;##    chr    start      end   methDiff                tagment
+## 1 chr1 44894352 44894643 -0.2812889 chr1-44876009-45016546
+## 2 chr1 44902069 44902966 -0.3331170 chr1-44876009-45016546
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code class="r"&gt;DMR2[1:2, ]
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code&gt;##    chr    start      end   methDiff                tagment
+## 1 chr2 64979958 64980308 -0.2151918 chr2-64897317-65173964
+## 2 chr2 65038093 65039051 -0.2082847 chr2-64897317-65173964
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Chromosomes (e.g. &lt;code&gt;chr1&lt;/code&gt;, &lt;code&gt;chr2&lt;/code&gt;) and tagments (e.g. &lt;code&gt;chr1-44876009-45016546&lt;/code&gt;, &lt;code&gt;chr1-90460304-90761641&lt;/code&gt;)
+are actually different types of categories and &lt;strong&gt;circlize&lt;/strong&gt; can only deal with one type at a time.
+In order to merge chromosomes and tagment regions into one same plot, the strategy is to create two independent
+circular plot but overlay the second one directly to the first one by specifying &lt;code&gt;par(new = TRUE)&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;First we draw the ideograms as well as the chromosome names and we call it &amp;#39;the first circular plot&amp;#39;.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="r"&gt;library(circlize)
+
+circos.par(gap.degree = 2, start.degree = 90)
+circos.initializeWithIdeogram(chromosome.index = paste0(&amp;quot;chr&amp;quot;, 1:22), plotType = &amp;quot;ideogram&amp;quot;,
+    ideogram.height = 0.03)
+
+# add labels of chromosomes
+for(chr in get.all.sector.index()) {
+    xlim = get.cell.meta.data(&amp;quot;cell.xlim&amp;quot;, sector.index = chr)
+    ylim = get.cell.meta.data(&amp;quot;cell.ylim&amp;quot;, sector.index = chr)
+    circos.text(mean(xlim), ylim[2], gsub(&amp;quot;chr&amp;quot;, &amp;quot;&amp;quot;, chr), niceFacing = TRUE, cex = 0.8, 
+        adj = c(0.5, -0.5), sector.index = chr)
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Please see the figure in the original post.&lt;/p&gt;
+
+&lt;p&gt;To make the correspondance between two circular plots, we need mapping of a same genomic position
+between two circular plots. Here the key solution is the polar coordinate system because all circular
+plot created by &lt;strong&gt;circlize&lt;/strong&gt; are in a same polar coordinate system. With using &lt;code&gt;circlize()&lt;/code&gt; function, we can transform
+genomic positions in one circular plot into polar coordinates and we can apply &lt;code&gt;reverse.circlize()&lt;/code&gt; to get 
+the new genomic positions in the second circualr plot.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="r"&gt;# calculate position of each tagment measured in the polar coordinate system
+for(i in seq_len(nrow(tagments))) {
+    tagments[i, &amp;quot;theta1&amp;quot;] = circlize(tagments[i, 2], 1, sector.index = tagments[i, 1])[1, 1]
+    tagments[i, &amp;quot;theta2&amp;quot;] = circlize(tagments[i, 3], 1, sector.index = tagments[i, 1])[1, 1]
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Since the second circular plot which visualizes DMRs will be put inside the ideograms, we need to know
+the radius which inside the ideogram. Since the ideogram in the first circular plot is the last track, we can
+use &lt;code&gt;circlize:::get_most_inside_radius()&lt;/code&gt; to get the position.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="r"&gt;r = circlize:::get_most_inside_radius()
+circos.clear()
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Now we make the second circular plot which visualizes DMRs. Here &lt;code&gt;par(new = TRUE)&lt;/code&gt; is set to directly overlay
+to the first plot. &lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;chr_bg_color&lt;/code&gt; is defined here to enhance discrimination of different chromosomes.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="r"&gt;par(new = TRUE)
+
+set.seed(123)
+chr_bg_color = rand_color(22, transparency = 0.8)
+names(chr_bg_color) = paste0(&amp;quot;chr&amp;quot;, 1:22)
+
+circos.par(cell.padding = c(0.02, 0, 0.02, 0), gap.degree = c(rep(1, nrow(tagments)-1), 10), 
+    start.degree = 75, points.overflow.warning = FALSE)
+circos.initialize(factors = factor(rownames(tagments), levels = rownames(tagments)), 
+    xlim = as.matrix(tagments[, 2:3]))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;In the first track of the second circular plot, we need to draw kind of connections between two circular
+plots. Since we know the coordinates of tagment regions in the polar coordinate system, here we use 
+&lt;code&gt;reverse.circlize()&lt;/code&gt; to transform back to the corresponding genomic positions (or coordinate in the data coordinate system).&lt;/p&gt;
+
+&lt;p&gt;Since the second plot is drawn inside the ideograms, &lt;code&gt;r&lt;/code&gt; is set as the outter margin of the second plot.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="r"&gt;circos.track(ylim = c(0, 1), panel.fun = function(x, y) {
+
+    si = get.cell.meta.data(&amp;quot;sector.index&amp;quot;)
+    chr = gsub(&amp;quot;^(chr.*?)-.*$&amp;quot;, &amp;quot;\\1&amp;quot;, si)
+    theta1 = tagments[si, &amp;quot;theta1&amp;quot;]
+    theta2 = tagments[si, &amp;quot;theta2&amp;quot;]
+
+    xlim = get.cell.meta.data(&amp;quot;cell.xlim&amp;quot;)
+    ylim = get.cell.meta.data(&amp;quot;cell.ylim&amp;quot;)
+
+    cell.top.radius = get.cell.meta.data(&amp;quot;cell.top.radius&amp;quot;)
+
+    # map from polar coordinate system to data coordinate system
+    df = reverse.circlize(c(theta1, theta2), c(cell.top.radius, cell.top.radius))
+
+    x21 = df[1, 1]
+    x22 = df[2, 1]
+    y21 = df[1, 2]
+    y22 = df[2, 2]
+    x11 = xlim[1]
+    x12 = xlim[2]
+    y11 = ylim[1]
+    y12 = ylim[1]
+    circos.polygon(c(x11, x11, x21, x21, x22, x22, x12, x12, x11),
+                   c(y11, (y21 - y11)/3, (y21 - y11)/3*2, y21, y22, (y22 - y12)/3*2, (y22 - y12)/3, y12, y11), 
+                   col = chr_bg_color[chr])
+
+}, track.margin = c(0, 1 - r), cell.padding = c(0, 0, 0, 0), bg.border = NA, track.height = 0.1)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Please see the figure in the original post.&lt;/p&gt;
+
+&lt;p&gt;Now we add DMR tracks. In each cell (plotting region), we added the background with colors,
+reference lines and points.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="r"&gt;max_abs = max(abs(c(DMR1$methDiff, DMR2$methDiff)))
+max_abs = ceiling(max_abs*10)/10
+circos.track(ylim = c(-max_abs, max_abs), panel.fun = function(x, y) {
+    si = get.cell.meta.data(&amp;quot;sector.index&amp;quot;)
+    chr = gsub(&amp;quot;^(chr\\d+).*$&amp;quot;, &amp;quot;\\1&amp;quot;, si)
+    xlim = get.cell.meta.data(&amp;quot;cell.xlim&amp;quot;)
+    ylim = get.cell.meta.data(&amp;quot;cell.ylim&amp;quot;)
+
+    circos.rect(xlim[1], ylim[1], xlim[2], ylim[2], col = chr_bg_color[[chr]])
+    for(h in seq(-max_abs, max_abs, by = 0.3)) {
+        circos.lines(xlim, c(h, h), lty = 3, col = &amp;quot;#AAAAAA&amp;quot;)
+    }
+
+    circos.lines(xlim, c(0, 0), lty = 3, col = &amp;quot;#888888&amp;quot;)
+
+    subset = DMR1[DMR1$tagment == si, , drop = FALSE]
+    if(nrow(subset) &amp;gt; 0) {
+        circos.points((subset[[2]] + subset[[3]])/2, subset$methDiff, 
+            col = ifelse(subset$methDiff &amp;gt; 0, &amp;quot;#E41A1C&amp;quot;, &amp;quot;#377EB8&amp;quot;), pch = 16, cex = 0.5)
+    }
+
+}, bg.border = 1, track.height = 0.15)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Also we add y-axis and labels on the left of the first tagment.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="r"&gt;first_sector = get.all.sector.index()[1]
+circos.yaxis(side = &amp;quot;left&amp;quot;, at = seq(-0.6, 0.6, by = 0.3), sector.index = first_sector,
+    labels.cex = 0.4)
+xlim = get.cell.meta.data(&amp;quot;cell.xlim&amp;quot;, sector.index = first_sector)
+ylim = get.cell.meta.data(&amp;quot;cell.ylim&amp;quot;, sector.index = first_sector)
+circos.text(xlim[1], mean(ylim), &amp;quot;d1&amp;quot;, facing = &amp;quot;clockwise&amp;quot;, niceFacing = TRUE, cex = 0.8, 
+    adj = c(0.5, degree(6)), sector.index = first_sector)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Please see the figure in the original post.&lt;/p&gt;
+
+&lt;p&gt;Add the DMRs for the second patient.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="r"&gt;circos.track(ylim = c(-max_abs, max_abs), panel.fun = function(x, y) {
+    si = get.cell.meta.data(&amp;quot;sector.index&amp;quot;)
+    chr = gsub(&amp;quot;^(chr\\d+).*$&amp;quot;, &amp;quot;\\1&amp;quot;, si)
+    xlim = get.cell.meta.data(&amp;quot;cell.xlim&amp;quot;)
+    ylim = get.cell.meta.data(&amp;quot;cell.ylim&amp;quot;)
+    circos.rect(xlim[1], ylim[1], xlim[2], ylim[2], col = chr_bg_color[[chr]])
+    for(h in seq(-max_abs, max_abs, by = 0.3)) {
+        circos.lines(xlim, c(h, h), lty = 3, col = &amp;quot;#AAAAAA&amp;quot;)
+    }
+    circos.lines(xlim, c(0, 0), lty = 3, col = &amp;quot;#888888&amp;quot;)
+    subset = DMR2[DMR2$tagment == si, , drop = FALSE]
+    if(nrow(subset) &amp;gt; 0) {
+        circos.points((subset[[2]] + subset[[3]])/2, subset$methDiff, 
+            col = ifelse(subset$methDiff &amp;gt; 0, &amp;quot;#E41A1C&amp;quot;, &amp;quot;#377EB8&amp;quot;), pch = 16, cex = 0.5)
+    }
+}, bg.border = 1, track.height = 0.15)
+circos.yaxis(side = &amp;quot;left&amp;quot;, at = seq(-0.6, 0.6, by = 0.3), sector.index = first_sector,
+    labels.cex = 0.4)
+xlim = get.cell.meta.data(&amp;quot;cell.xlim&amp;quot;, sector.index = first_sector)
+ylim = get.cell.meta.data(&amp;quot;cell.ylim&amp;quot;, sector.index = first_sector)
+circos.text(xlim[1], mean(ylim), &amp;quot;d2&amp;quot;, facing = &amp;quot;clockwise&amp;quot;, niceFacing = TRUE, cex = 0.8, 
+    adj = c(0.5, degree(6)), sector.index = first_sector)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;For the most inside track, we explicitely show the color of chromosomes to make it easier to correspond
+between target regions to chromosomes.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="r"&gt;circos.track(ylim = c(0, 1), panel.fun = function(x, y) {
+    cate = get.cell.meta.data(&amp;quot;sector.index&amp;quot;)
+    chr = gsub(&amp;quot;^(chr\\d+).*$&amp;quot;, &amp;quot;\\1&amp;quot;, cate)
+    xlim = get.cell.meta.data(&amp;quot;cell.xlim&amp;quot;)
+    ylim = get.cell.meta.data(&amp;quot;cell.ylim&amp;quot;)
+    circos.rect(xlim[1], ylim[1], xlim[2], ylim[2], col = gsub(&amp;quot;\\d\\d$&amp;quot;, &amp;quot;&amp;quot;, chr_bg_color[[chr]]))
+}, track.height = 0.02, cell.padding = c(0, 0, 0, 0))
+
+circos.clear()
+
+legend(&amp;quot;center&amp;quot;, pch = 16, legend = c(&amp;quot;Hyper-DMR&amp;quot;, &amp;quot;Hypo-DMR&amp;quot;), col = c(&amp;quot;#E41A1C&amp;quot;, &amp;quot;#377EB8&amp;quot;))
+
+par(new = FALSE)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Please see the figure in the original post.&lt;/p&gt;
+
+&lt;h2&gt;Session info&lt;/h2&gt;
+
+&lt;pre&gt;&lt;code class="r"&gt;sessionInfo()
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code&gt;## R version 3.2.3 (2015-12-10)
+## Platform: x86_64-apple-darwin13.4.0 (64-bit)
+## Running under: OS X 10.11.3 (El Capitan)
+## 
+## locale:
+## [1] C/en_US.UTF-8/C/C/C/C
+## 
+## attached base packages:
+## [1] grid      methods   stats     graphics  grDevices utils     datasets 
+## [8] base     
+## 
+## other attached packages:
+## [1] circlize_0.3.5       ComplexHeatmap_1.9.3 digest_0.6.9        
+## [4] htmltools_0.3        GetoptLong_0.1.1     markdown_0.7.7      
+## [7] knitr_1.12.3        
+## 
+## loaded via a namespace (and not attached):
+##  [1] dendextend_1.1.8    mime_0.4            formatR_1.3        
+##  [4] magrittr_1.5        evaluate_0.8.3      stringi_1.0-1      
+##  [7] GlobalOptions_0.0.9 whisker_0.3-2       RColorBrewer_1.1-2 
+## [10] rjson_0.2.15        tools_3.2.3         stringr_1.0.0      
+## [13] colorspace_1.2-6    shape_1.4.2
+&lt;/code&gt;&lt;/pre&gt;
+
+
+</description>
+</item>
+
+<item>
 <title>Merge heatmap and annotation legends into a same column</title>
 <link>http://jokergoo.github.io/blog/html/ed8209ec0c73bd19d66a99054783b89f.html</link>
 <description>
@@ -37,17 +297,15 @@ ha = HeatmapAnnotation(df = df,
 
 &lt;p&gt;Color mapping information is stored in &lt;code&gt;ha&lt;/code&gt; and we can extract legends from &lt;code&gt;ha&lt;/code&gt; object.&lt;/p&gt;
 
-&lt;pre&gt;&lt;code class="r"&gt;all_annotation_name = sapply(ha@anno_list, function(anno) anno@name)
-# in case not all annotations are simple annotations
-l = all_annotation_name %in% c(&amp;quot;type&amp;quot;, &amp;quot;age&amp;quot;)
-anno_legend_list = lapply(ha@anno_list[l], function(anno) color_mapping_legend(anno@color_mapping, plot = FALSE))
+&lt;pre&gt;&lt;code class="r"&gt;anno_legend_list = lapply(ha@anno_list[c(&amp;quot;type&amp;quot;, &amp;quot;age&amp;quot;)], 
+    function(anno) color_mapping_legend(anno@color_mapping, plot = FALSE))
 anno_legend_list
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;pre&gt;&lt;code&gt;## [[1]]
-## frame[GRID.frame.7] 
+&lt;pre&gt;&lt;code&gt;## $type
+## frame[GRID.frame.4] 
 ## 
-## [[2]]
+## $age
 ## frame[GRID.frame.17]
 &lt;/code&gt;&lt;/pre&gt;
 
@@ -59,9 +317,9 @@ heatmap_legend = color_mapping_legend(ht@matrix_color_mapping, plot = FALSE)
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;Finally, &lt;code&gt;draw()&lt;/code&gt; is called explicitely and a list of both heatmap legend and annotation legends are sent to
-&lt;code&gt;heatmap_legend_list&lt;/code&gt; option.&lt;/p&gt;
+&lt;code&gt;heatmap_legend_list&lt;/code&gt; argument.&lt;/p&gt;
 
-&lt;pre&gt;&lt;code class="r"&gt;draw(ht, heatmap_legend_list = c(anno_legend_list[2:1], list(heatmap_legend)))
+&lt;pre&gt;&lt;code class="r"&gt;draw(ht, heatmap_legend_list = c(anno_legend_list, list(heatmap_legend)))
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;Please see the figure in the original post.&lt;/p&gt;
