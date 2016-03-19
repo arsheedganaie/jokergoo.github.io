@@ -234,12 +234,12 @@ html = c(header,
 		}
 
 		blog_body = gsub(qq("<h1>@{title}</h1>"), "", blog_body)
-		blog_body = gsub("<img src=\"data:image.*?>", "<span style='color:red'>Please see the figure in the original post.</span>", blog_body)
+		blog_body = gsub("<img src=\"data:image.*?>", "Please see the figure in the original post.", blog_body)
 
 		i_rss = i_rss + 1
 
 		blog_body = htmlEscape(blog_body)
-		blog_body = qq("<item>\n<title>@{title}</title>\n<link>http://jokergoo.github.io/blog/@{title_url}.html</link>\n<description>@{blog_body}</description>\n</item>\n")
+		blog_body = qq("<item>\n<title>@{title}</title>\n<link>http://jokergoo.github.io/blog/@{title_url}.html</link>\n<pubDate>@{format(post_info$create_time[i], \"%a, %d %h %Y %H:%M:%S CET\")}</pubDate>\n<description>@{blog_body}</description>\n</item>\n")
 
 		blog_list = c(blog_list, blog_body)
 		
