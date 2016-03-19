@@ -69,7 +69,7 @@ for(chr in get.all.sector.index()) {
 }
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;&lt;i&gt;Please see the figure in the original post.&lt;/i&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Please see the figure in the original post.&lt;/strong&gt;&lt;/p&gt;
 
 &lt;p&gt;To make the correspondance between two circular plots, we need mapping of a same genomic position
 between two circular plots. Here the key solution is the polar coordinate system because all circular
@@ -145,7 +145,7 @@ plots. Since we know the coordinates of tagment regions in the polar coordinate 
 }, track.margin = c(0, 1 - r), cell.padding = c(0, 0, 0, 0), bg.border = NA, track.height = 0.1)
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;&lt;i&gt;Please see the figure in the original post.&lt;/i&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Please see the figure in the original post.&lt;/strong&gt;&lt;/p&gt;
 
 &lt;p&gt;Now we add DMR tracks. In each cell (plotting region), we added the background with colors,
 reference lines and points.&lt;/p&gt;
@@ -185,7 +185,7 @@ circos.text(xlim[1], mean(ylim), &amp;quot;d1&amp;quot;, facing = &amp;quot;cloc
     adj = c(0.5, degree(6)), sector.index = first_sector)
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;&lt;i&gt;Please see the figure in the original post.&lt;/i&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Please see the figure in the original post.&lt;/strong&gt;&lt;/p&gt;
 
 &lt;p&gt;Add the DMRs for the second patient.&lt;/p&gt;
 
@@ -231,7 +231,7 @@ legend(&amp;quot;center&amp;quot;, pch = 16, legend = c(&amp;quot;Hyper-DMR&amp;
 par(new = FALSE)
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;&lt;i&gt;Please see the figure in the original post.&lt;/i&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Please see the figure in the original post.&lt;/strong&gt;&lt;/p&gt;
 
 &lt;h2&gt;Session info&lt;/h2&gt;
 
@@ -324,7 +324,7 @@ heatmap_legend = color_mapping_legend(ht@matrix_color_mapping, plot = FALSE)
 &lt;pre&gt;&lt;code class="r"&gt;draw(ht, heatmap_legend_list = c(anno_legend_list, list(heatmap_legend)))
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;&lt;i&gt;Please see the figure in the original post.&lt;/i&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Please see the figure in the original post.&lt;/strong&gt;&lt;/p&gt;
 
 &lt;h2&gt;Session Info&lt;/h2&gt;
 

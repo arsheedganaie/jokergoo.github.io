@@ -234,7 +234,7 @@ html = c(header,
 		}
 
 		blog_body = gsub(qq("<h1>@{title}</h1>"), "", blog_body)
-		blog_body = gsub("<img src=\"data:image.*?>", "<i>Please see the figure in the original post.</i>", blog_body)
+		blog_body = gsub("<img src=\"data:image.*?>", "<strong>Please see the figure in the original post.</strong>", blog_body)
 
 		i_rss = i_rss + 1
 
