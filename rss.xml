@@ -21,9 +21,7 @@ In this post, we demonstrate how to visualize DMRs which are detected from T-WGB
 &lt;code&gt;DMR1&lt;/code&gt; and &lt;code&gt;DMR2&lt;/code&gt; contain DMRs for two patients detectd in tagment regions. Correspondance between tagment regions
 and DMRs can be checked by row names of &lt;code&gt;tagments&lt;/code&gt; and &lt;code&gt;tagment&lt;/code&gt; column in &lt;code&gt;DMR1&lt;/code&gt; or &lt;code&gt;DMR2&lt;/code&gt;.&lt;/p&gt;
 
-&lt;pre&gt;&lt;code class="r"&gt;set.seed(123)
-
-load(&amp;quot;../data/tagments_WGBS_DMR.RData&amp;quot;)
+&lt;pre&gt;&lt;code class="r"&gt;load(&amp;quot;../data/tagments_WGBS_DMR.RData&amp;quot;)
 tagments[1:2, ]
 &lt;/code&gt;&lt;/pre&gt;
 
@@ -100,6 +98,7 @@ to the first plot. &lt;/p&gt;
 
 &lt;pre&gt;&lt;code class="r"&gt;par(new = TRUE)
 
+set.seed(123)
 chr_bg_color = rand_color(22, transparency = 0.8)
 names(chr_bg_color) = paste0(&amp;quot;chr&amp;quot;, 1:22)
 
