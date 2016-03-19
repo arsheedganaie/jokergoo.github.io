@@ -21,7 +21,9 @@ In this post, we demonstrate how to visualize DMRs which are detected from T-WGB
 &lt;code&gt;DMR1&lt;/code&gt; and &lt;code&gt;DMR2&lt;/code&gt; contain DMRs for two patients detectd in tagment regions. Correspondance between tagment regions
 and DMRs can be checked by row names of &lt;code&gt;tagments&lt;/code&gt; and &lt;code&gt;tagment&lt;/code&gt; column in &lt;code&gt;DMR1&lt;/code&gt; or &lt;code&gt;DMR2&lt;/code&gt;.&lt;/p&gt;
 
-&lt;pre&gt;&lt;code class="r"&gt;load(&amp;quot;../data/tagments_WGBS_DMR.RData&amp;quot;)
+&lt;pre&gt;&lt;code class="r"&gt;set.seed(123)
+
+load(&amp;quot;../data/tagments_WGBS_DMR.RData&amp;quot;)
 tagments[1:2, ]
 &lt;/code&gt;&lt;/pre&gt;
 
@@ -98,7 +100,6 @@ to the first plot. &lt;/p&gt;
 
 &lt;pre&gt;&lt;code class="r"&gt;par(new = TRUE)
 
-set.seed(123)
 chr_bg_color = rand_color(22, transparency = 0.8)
 names(chr_bg_color) = paste0(&amp;quot;chr&amp;quot;, 1:22)
 
@@ -245,20 +246,17 @@ par(new = FALSE)
 ## [1] C/en_US.UTF-8/C/C/C/C
 ## 
 ## attached base packages:
-## [1] grid      methods   stats     graphics  grDevices utils     datasets 
-## [8] base     
+## [1] methods   stats     graphics  grDevices utils     datasets  base     
 ## 
 ## other attached packages:
-## [1] circlize_0.3.5       ComplexHeatmap_1.9.3 digest_0.6.9        
-## [4] htmltools_0.3        GetoptLong_0.1.1     markdown_0.7.7      
-## [7] knitr_1.12.3        
+## [1] circlize_0.3.5   digest_0.6.9     htmltools_0.3    GetoptLong_0.1.1
+## [5] markdown_0.7.7   knitr_1.12.3    
 ## 
 ## loaded via a namespace (and not attached):
-##  [1] dendextend_1.1.8    mime_0.4            formatR_1.3        
-##  [4] magrittr_1.5        evaluate_0.8.3      stringi_1.0-1      
-##  [7] GlobalOptions_0.0.9 whisker_0.3-2       RColorBrewer_1.1-2 
-## [10] rjson_0.2.15        tools_3.2.3         stringr_1.0.0      
-## [13] colorspace_1.2-6    shape_1.4.2
+##  [1] colorspace_1.2-6    rjson_0.2.15        magrittr_1.5       
+##  [4] formatR_1.3         tools_3.2.3         GlobalOptions_0.0.9
+##  [7] stringi_1.0-1       grid_3.2.3          stringr_1.0.0      
+## [10] shape_1.4.2         evaluate_0.8.3
 &lt;/code&gt;&lt;/pre&gt;
 
 

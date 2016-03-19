@@ -12,6 +12,8 @@ In [`tagments_WGBS_DMR.RData`](../../data/tagments_WGBS_DMR.RData), `tagments` c
 and DMRs can be checked by row names of `tagments` and `tagment` column in `DMR1` or `DMR2`.
 
 ```{r}
+set.seed(123)
+
 load("../data/tagments_WGBS_DMR.RData")
 tagments[1:2, ]
 DMR1[1:2, ]
@@ -82,7 +84,6 @@ to the first plot.
 ```{r second_plot_1, eval = FALSE}
 par(new = TRUE)
 
-set.seed(123)
 chr_bg_color = rand_color(22, transparency = 0.8)
 names(chr_bg_color) = paste0("chr", 1:22)
 
