@@ -198,7 +198,7 @@ html = c(header,
 	blog_list = c(blog_list, "</ul>\n")
 },
 "</div>\n",
-"\n<p style='border-top:1px dotted #CCCCCC;text-align:right;margin-top:10px'><a href='rss.xml' style='color:#CCCCCC;font-weight:normal'>RSS</a></p>\n",
+"\n<p style='border-top:1px dotted #CCCCCC;text-align:right;margin-top:10px;fontsize:0.8em'><a href='rss.xml' style='color:#CCCCCC;font-weight:normal'>RSS</a></p>\n",
 footer)
 
 writeLines(html, "blog.html", useBytes = TRUE)
