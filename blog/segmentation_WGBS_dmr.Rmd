@@ -69,6 +69,9 @@ eval(parse(text = chunks[["first_plot_3"]]))
 Now we make the second circular plot which visualizes DMRs. Here `par(new = TRUE)` is set to directly overlay
 to the first plot. 
 
+in `circos.par()`, `start.degree` can be adjusted to rotate the second circular plot to make better correspondance
+between two circular plots.
+
 `chr_bg_color` is defined here to enhance discrimination of different chromosomes.
 
 ```{r second_plot_1, eval = FALSE}
