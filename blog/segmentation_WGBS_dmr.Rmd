@@ -29,16 +29,8 @@ First we draw the ideograms as well as the chromosome names and we call it 'the 
 library(circlize)
 
 circos.par(gap.degree = 2, start.degree = 90)
-circos.initializeWithIdeogram(chromosome.index = paste0("chr", 1:22), plotType = "ideogram",
+circos.initializeWithIdeogram(chromosome.index = paste0("chr", 1:22), plotType = c("ideogram", "labels"),
 	ideogram.height = 0.03)
-
-# add labels of chromosomes
-for(chr in get.all.sector.index()) {
-	xlim = get.cell.meta.data("cell.xlim", sector.index = chr)
-	ylim = get.cell.meta.data("cell.ylim", sector.index = chr)
-	circos.text(mean(xlim), ylim[2], gsub("chr", "", chr), niceFacing = TRUE, cex = 0.8, 
-		adj = c(0.5, -0.5), sector.index = chr)
-}
 ```
 
 ```{r, echo = FALSE}
