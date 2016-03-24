@@ -1,0 +1,84 @@
+Summarize mean signals across rows in k-
+==============================================
+
+First we load the packages and generate the random matrix.
+
+```{r}
+library(ComplexHeatmap)
+library(circlize)
+library(RColorBrewer)
+
+set.seed(123)
+
+mat = cbind(rbind(matrix(rnorm(64, -1), 8), matrix(rnorm(64, 1), 8), matrix(rnorm(64, -1), 8)),
+            rbind(matrix(rnorm(64, 1), 8), matrix(rnorm(64, -2), 8), matrix(rnorm(64, -1), 8)),
+            rbind(matrix(rnorm(64, -0.5), 8), matrix(rnorm(64, -1), 8), matrix(rnorm(64, 1), 8)))
+```
+
+The random matrix contains three distinct subgroups by rows and following is how it looks by means of heatmap.
+
+```{r}
+Heatmap(mat)
+```
+
+Next we are going to do little bit more to enhance the visual effect the row clusters:
+
+1. split the heatmap by rows to separate row clusters.
+2. show and compare mean signals in row clusters. 
+
+We apply k-means clustering on rows. Although you can specify it by `km` in `Heatmap()` function, since
+the partitioning information wil be used in several places, we calculate it in the first place.
+
+```{r}
+km = 3
+colors = brewer.pal(km, "Set1")
+partition = kmeans(dist(mat), centers = km)$cluster
+```
+
+We will put the mean signals in row clusters as a column annotation put on top of the heatmap.
+This can be done by constructing a self-defined annotation function. The only input of this function
+is `index` which is the index of columns that will be automatically adjusted by column clustering or column reordering.
+
+In following code, the basic logic is:
+
+1. calculate mean value in different row cluster,
+2. push a viewport to put graphics,
+3. add polygons which show the mean signals,
+4. add y-axis.
+
+```{r}
+anno_col_mean = function(index) {
+    col_means = lapply(1:km, function(i) colMeans(mat[partition == i, index]))
+    n = length(index)
+    rg = range(unlist(col_means))
+    pushViewport(viewport(xscale = c(0.5, n + 0.5), yscale = rg))
+    grid.rect(gp = gpar(fill = "transparent"))
+    for(i in seq_along(col_means)) {
+        grid.polygon(c(1:n, n:1), c(col_means[[i]], rep(rg[1], n)), 
+        	gp = gpar(fill = paste0(colors[i], "40"), col = NA), default.units = "native")
+    }
+    grid.yaxis(gp = gpar(fontsize = 8))
+    upViewport()
+}
+
+ha = HeatmapAnnotation(col_mean = anno_col_mean)
+```
+
+Now we can put everything to make the new heatmap. In the heatmap, we specified `split = partition` to
+split the heatmap by k-means partition which has already be calculated. To make the correspondance
+between signal lines and row clusters, we add a color bar on the right of the main heatmap.
+
+```{r}
+Heatmap(mat, name = "foo", column_dend_side = "bottom", top_annotation = ha, 
+    top_annotation_height = unit(2, "cm"), split = partition, show_row_names = FALSE) +
+Heatmap(partition, col = structure(colors, names = as.character(1:km)), show_row_names = FALSE, 
+    show_heatmap_legend = FALSE, name = "")
+
+decorate_annotation("col_mean", {grid.text("mean\nsignal", unit(-8, "mm"), rot = 90, just = "bottom")})
+```
+
+== Session Info
+
+```{r}
+sessionInfo()
+```
