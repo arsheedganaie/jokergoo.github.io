@@ -1,5 +1,7 @@
-Summarize mean signals across rows in k-
+Visualize mean signals in row clusters by ComplexHeatmap
 ==============================================
+
+In this post, we will demonstrate how to visualize mean signals in row clusters by **ComplexHeatmap** pacakge.
 
 First we load the packages and generate the random matrix.
 
