@@ -288,6 +288,9 @@ circos.clear()
 <p>Now we make the second circular plot which visualizes DMRs. Here <code>par(new = TRUE)</code> is set to directly overlay
 to the first plot. </p>
 
+<p>in <code>circos.par()</code>, <code>start.degree</code> can be adjusted to rotate the second circular plot to make better correspondance
+between two circular plots.</p>
+
 <p><code>chr_bg_color</code> is defined here to enhance discrimination of different chromosomes.</p>
 
 <pre><code class="r">par(new = TRUE)
@@ -439,24 +442,27 @@ par(new = FALSE)
 ## [1] C/en_US.UTF-8/C/C/C/C
 ## 
 ## attached base packages:
-## [1] methods   stats     graphics  grDevices utils     datasets  base     
+## [1] grid      methods   stats     graphics  grDevices utils     datasets 
+## [8] base     
 ## 
 ## other attached packages:
-## [1] circlize_0.3.5   digest_0.6.9     htmltools_0.3    GetoptLong_0.1.1
-## [5] markdown_0.7.7   knitr_1.12.3    
+## [1] circlize_0.3.5       ComplexHeatmap_1.9.3 digest_0.6.9        
+## [4] htmltools_0.3        GetoptLong_0.1.1     markdown_0.7.7      
+## [7] knitr_1.12.3        
 ## 
 ## loaded via a namespace (and not attached):
-##  [1] colorspace_1.2-6    rjson_0.2.15        magrittr_1.5       
-##  [4] formatR_1.3         tools_3.2.3         GlobalOptions_0.0.9
-##  [7] stringi_1.0-1       grid_3.2.3          stringr_1.0.0      
-## [10] shape_1.4.2         evaluate_0.8.3
+##  [1] dendextend_1.1.8    mime_0.4            formatR_1.3        
+##  [4] magrittr_1.5        evaluate_0.8.3      stringi_1.0-1      
+##  [7] GlobalOptions_0.0.9 whisker_0.3-2       RColorBrewer_1.1-2 
+## [10] rjson_0.2.15        tools_3.2.3         stringr_1.0.0      
+## [13] colorspace_1.2-6    shape_1.4.2
 </code></pre>
 
 
 <div id='disqus_thread'></div>
 <script>
 var disqus_config = function () {
-this.page.url = "http://jokergoo.github.io/blog/html/1989c2e26c01e7740fd25764abfa747e";
+this.page.url = "http://jokergoo.github.io/blog/html/179f20c97f68d2a32beaf89d6a925963";
 };
 (function() { // DON'T EDIT BELOW THIS LINE
 var d = document, s = d.createElement('script');

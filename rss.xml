@@ -7,8 +7,8 @@
 
 <item>
 <title>Circular visualization of DMRs from tagmentation-based WGBS</title>
-<link>http://jokergoo.github.io/blog/html/1989c2e26c01e7740fd25764abfa747e.html</link>
-<pubDate>Fri, 18 Mar 2016 15:46:15 CET</pubDate>
+<link>http://jokergoo.github.io/blog/html/179f20c97f68d2a32beaf89d6a925963.html</link>
+<pubDate>Fri, 25 Mar 2016 11:38:22 CET</pubDate>
 <description>
 
 
@@ -86,6 +86,9 @@ circos.clear()
 
 &lt;p&gt;Now we make the second circular plot which visualizes DMRs. Here &lt;code&gt;par(new = TRUE)&lt;/code&gt; is set to directly overlay
 to the first plot. &lt;/p&gt;
+
+&lt;p&gt;in &lt;code&gt;circos.par()&lt;/code&gt;, &lt;code&gt;start.degree&lt;/code&gt; can be adjusted to rotate the second circular plot to make better correspondance
+between two circular plots.&lt;/p&gt;
 
 &lt;p&gt;&lt;code&gt;chr_bg_color&lt;/code&gt; is defined here to enhance discrimination of different chromosomes.&lt;/p&gt;
 
@@ -238,17 +241,145 @@ par(new = FALSE)
 ## [1] C/en_US.UTF-8/C/C/C/C
 ## 
 ## attached base packages:
-## [1] methods   stats     graphics  grDevices utils     datasets  base     
+## [1] grid      methods   stats     graphics  grDevices utils     datasets 
+## [8] base     
 ## 
 ## other attached packages:
-## [1] circlize_0.3.5   digest_0.6.9     htmltools_0.3    GetoptLong_0.1.1
-## [5] markdown_0.7.7   knitr_1.12.3    
+## [1] circlize_0.3.5       ComplexHeatmap_1.9.3 digest_0.6.9        
+## [4] htmltools_0.3        GetoptLong_0.1.1     markdown_0.7.7      
+## [7] knitr_1.12.3        
 ## 
 ## loaded via a namespace (and not attached):
-##  [1] colorspace_1.2-6    rjson_0.2.15        magrittr_1.5       
-##  [4] formatR_1.3         tools_3.2.3         GlobalOptions_0.0.9
-##  [7] stringi_1.0-1       grid_3.2.3          stringr_1.0.0      
-## [10] shape_1.4.2         evaluate_0.8.3
+##  [1] dendextend_1.1.8    mime_0.4            formatR_1.3        
+##  [4] magrittr_1.5        evaluate_0.8.3      stringi_1.0-1      
+##  [7] GlobalOptions_0.0.9 whisker_0.3-2       RColorBrewer_1.1-2 
+## [10] rjson_0.2.15        tools_3.2.3         stringr_1.0.0      
+## [13] colorspace_1.2-6    shape_1.4.2
+&lt;/code&gt;&lt;/pre&gt;
+
+
+</description>
+</item>
+
+<item>
+<title>Visualize mean signals in row clusters by ComplexHeatmap</title>
+<link>http://jokergoo.github.io/blog/html/91ca5112777739c320613e649b48671d.html</link>
+<pubDate>Fri, 25 Mar 2016 11:38:22 CET</pubDate>
+<description>
+
+
+&lt;p&gt;In this post, we will demonstrate how to visualize mean signals in row clusters by &lt;strong&gt;ComplexHeatmap&lt;/strong&gt; pacakge.&lt;/p&gt;
+
+&lt;p&gt;First we load the packages and generate the random matrix.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="r"&gt;library(ComplexHeatmap)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code&gt;## Loading required package: grid
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code class="r"&gt;library(circlize)
+library(RColorBrewer)
+
+set.seed(123)
+
+mat = cbind(rbind(matrix(rnorm(64, -1), 8), matrix(rnorm(64, 1), 8), matrix(rnorm(64, -1), 8)),
+            rbind(matrix(rnorm(64, 1), 8), matrix(rnorm(64, -2), 8), matrix(rnorm(64, -1), 8)),
+            rbind(matrix(rnorm(64, -0.5), 8), matrix(rnorm(64, -1), 8), matrix(rnorm(64, 1), 8)))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;The random matrix contains three distinct subgroups by rows and following is how it looks by means of heatmap.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="r"&gt;Heatmap(mat)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;strong&gt;Please see the figure in the original post.&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;Next we are going to do little bit more to enhance the visual effect on the row clusters:&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;split the heatmap by rows to separate row clusters.&lt;/li&gt;
+&lt;li&gt;show and compare mean signals in row clusters. &lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;We apply k-means clustering on rows. Although you can specify it by &lt;code&gt;km&lt;/code&gt; in &lt;code&gt;Heatmap()&lt;/code&gt; function, since
+the partitioning information wil be used in several places, we calculate it in the first place.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="r"&gt;km = 3
+colors = brewer.pal(km, &amp;quot;Set1&amp;quot;)
+partition = kmeans(dist(mat), centers = km)$cluster
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;We will put the mean signals in row clusters as a column annotation put on top of the heatmap.
+This can be done by constructing a self-defined annotation function. The only input of this function
+is &lt;code&gt;index&lt;/code&gt; which is the index of columns that will be automatically adjusted by column clustering or column reordering.&lt;/p&gt;
+
+&lt;p&gt;In following code, the basic logic is:&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;calculate mean value in different row cluster,&lt;/li&gt;
+&lt;li&gt;push a viewport to put graphics,&lt;/li&gt;
+&lt;li&gt;add polygons which show the mean signals,&lt;/li&gt;
+&lt;li&gt;add y-axis.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;pre&gt;&lt;code class="r"&gt;anno_col_mean = function(index) {
+    col_means = lapply(1:km, function(i) colMeans(mat[partition == i, index]))
+    n = length(index)
+    rg = range(unlist(col_means))
+    pushViewport(viewport(xscale = c(0.5, n + 0.5), yscale = rg))
+    grid.rect(gp = gpar(fill = &amp;quot;transparent&amp;quot;))
+    for(i in seq_along(col_means)) {
+        grid.polygon(c(1:n, n:1), c(col_means[[i]], rep(rg[1], n)), 
+            gp = gpar(fill = paste0(colors[i], &amp;quot;80&amp;quot;), col = NA), default.units = &amp;quot;native&amp;quot;)
+    }
+    grid.yaxis(gp = gpar(fontsize = 8))
+    upViewport()
+}
+
+ha = HeatmapAnnotation(col_mean = anno_col_mean)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Now we can put everything to make the new heatmap. In the heatmap, we specified &lt;code&gt;split = partition&lt;/code&gt; to
+split the heatmap by k-means partition which has already be calculated. To make the correspondance
+between signal lines and row clusters, we add a color bar on the right of the main heatmap.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="r"&gt;Heatmap(mat, name = &amp;quot;foo&amp;quot;, column_dend_side = &amp;quot;bottom&amp;quot;, top_annotation = ha, 
+    top_annotation_height = unit(2, &amp;quot;cm&amp;quot;), split = partition, show_row_names = FALSE) +
+Heatmap(partition, col = structure(colors, names = as.character(1:km)), show_row_names = FALSE, 
+    show_heatmap_legend = FALSE, name = &amp;quot;&amp;quot;)
+
+decorate_annotation(&amp;quot;col_mean&amp;quot;, {grid.text(&amp;quot;mean\nsignal&amp;quot;, unit(-10, &amp;quot;mm&amp;quot;), rot = 90, just = &amp;quot;bottom&amp;quot;)})
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;strong&gt;Please see the figure in the original post.&lt;/strong&gt;&lt;/p&gt;
+
+&lt;h2&gt;Session Info&lt;/h2&gt;
+
+&lt;pre&gt;&lt;code class="r"&gt;sessionInfo()
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code&gt;## R version 3.2.3 (2015-12-10)
+## Platform: x86_64-apple-darwin13.4.0 (64-bit)
+## Running under: OS X 10.11.3 (El Capitan)
+## 
+## locale:
+## [1] C/en_US.UTF-8/C/C/C/C
+## 
+## attached base packages:
+## [1] grid      methods   stats     graphics  grDevices utils     datasets 
+## [8] base     
+## 
+## other attached packages:
+## [1] RColorBrewer_1.1-2   circlize_0.3.5       ComplexHeatmap_1.9.3
+## [4] digest_0.6.9         htmltools_0.3        GetoptLong_0.1.1    
+## [7] markdown_0.7.7       knitr_1.12.3        
+## 
+## loaded via a namespace (and not attached):
+##  [1] dendextend_1.1.8    magrittr_1.5        evaluate_0.8.3     
+##  [4] stringi_1.0-1       GlobalOptions_0.0.9 whisker_0.3-2      
+##  [7] rjson_0.2.15        tools_3.2.3         stringr_1.0.0      
+## [10] colorspace_1.2-6    shape_1.4.2
 &lt;/code&gt;&lt;/pre&gt;
 
 
@@ -258,7 +389,7 @@ par(new = FALSE)
 <item>
 <title>Merge heatmap and annotation legends into a same column</title>
 <link>http://jokergoo.github.io/blog/html/ed8209ec0c73bd19d66a99054783b89f.html</link>
-<pubDate>Thu, 17 Mar 2016 21:46:39 CET</pubDate>
+<pubDate>Sat, 19 Mar 2016 17:09:33 CET</pubDate>
 <description>
 
 
@@ -351,7 +482,7 @@ heatmap_legend = color_mapping_legend(ht@matrix_color_mapping, plot = FALSE)
 <item>
 <title>Build a static website and blog by knitr and rmarkdown</title>
 <link>http://jokergoo.github.io/blog/html/f085f205491c97284f4c5145c45012b1.html</link>
-<pubDate>Mon, 14 Mar 2016 16:52:20 CET</pubDate>
+<pubDate>Mon, 14 Mar 2016 17:43:13 CET</pubDate>
 <description>
 
 

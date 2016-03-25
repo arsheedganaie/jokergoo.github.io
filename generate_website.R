@@ -99,7 +99,7 @@ add_list = function(html) {
 }
 
 if(!file.exists(".post_info.RData")) {
-	post_info = list(inode = NULL, title = NULL, create_time = NULL, last_modified_time = NULL)
+	post_info = list(inode = NULL, title = NULL, create_time = NULL, last_modified_time = NULL, file_name = NULL)
 } else {
 	load(".post_info.RData")	
 }
@@ -116,6 +116,8 @@ for(i in seq_along(md_files)) {
 	if(!md_inode[i] %in% post_info$inode) {
 
 		post_info$inode = c(post_info$inode, md_inode[i])
+		fn = digest(md_inode[i], algo = "md5")
+		post_info$file_name = c(post_info$file_name, fn)
 		if(length(post_info$create_time) == 0) {
 			post_info$create_time = md_last_modified[i]
 		} else {
@@ -138,7 +140,7 @@ for(i in seq_along(md_files)) {
 
 		post_info$title = c(post_info$title, title)
 		
-		title_url = paste0("html/", digest(md_inode[i], algo = "md5"))
+		title_url = paste0("html/", fn)
 		html = add_disqus(html, url = title_url)
 		html = add_list(html)
 		writeLines(html, qq("@{title_url}.html"), useBytes = TRUE)
@@ -152,7 +154,7 @@ for(i in seq_along(md_files)) {
 
 			post_info$last_modified_time[k] = md_last_modified[i]
 
-			title_url = paste0("html/", digest(post_info$inode[k], algo = "md5"))
+			title_url = paste0("html/", post_info$file_name[k])
 			file.remove(qq("@{title_url}.html"))
 
 			if(grepl("\\.Rmd$", md_files[i])) {
@@ -166,7 +168,7 @@ for(i in seq_along(md_files)) {
 
 			post_info$title[k] = title
 			
-			title_url = paste0("html/", digest(post_info$inode[k], algo = "md5"))
+			title_url = paste0("html/", post_info$file_name[k])
 			html = add_disqus(html, url = title_url)
 			html = add_list(html)
 			writeLines(html, qq("@{title_url}.html"), useBytes = TRUE)
@@ -192,7 +194,7 @@ html = c(header,
 	blog_list = "<ul>\n";
 	for(i in order(post_info$create_time, decreasing = TRUE)) {
 		title = post_info$title[i]
-		title_url = paste0("html/", digest(post_info$inode[i], algo = "md5"))
+		title_url = paste0("html/", post_info$file_name[i])
 		blog_list = c(blog_list, qq("<li><a href=\"blog/@{title_url}.html\">@{title}</a> (@{format(post_info$create_time[i], '%m/%d/%Y')})</li>"))
 	}
 	blog_list = c(blog_list, "</ul>\n")
@@ -224,7 +226,7 @@ html = c(header,
 	i_rss = 0
 	for(i in order(post_info$create_time, decreasing = TRUE)) {
 		title = post_info$title[i]
-		title_url = paste0("html/", digest(post_info$inode[i], algo = "md5"))
+		title_url = paste0("html/", post_info$file_name[i])
 
 		blog_html = paste(readLines(qq("blog/@{title_url}.html")), collapse = "\n")
 		blog_body = gsub("^.*?<span><a href='https://github.com/jokergoo/'>GitHub</a></span>\n</p>\n<hr />\n(.*?)<div id='disqus_thread'></div>.*$", "\\1", blog_html)

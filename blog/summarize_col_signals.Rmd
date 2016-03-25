@@ -23,7 +23,7 @@ The random matrix contains three distinct subgroups by rows and following is how
 Heatmap(mat)
 ```
 
-Next we are going to do little bit more to enhance the visual effect the row clusters:
+Next we are going to do little bit more to enhance the visual effect on the row clusters:
 
 1. split the heatmap by rows to separate row clusters.
 2. show and compare mean signals in row clusters. 
@@ -57,7 +57,7 @@ anno_col_mean = function(index) {
     grid.rect(gp = gpar(fill = "transparent"))
     for(i in seq_along(col_means)) {
         grid.polygon(c(1:n, n:1), c(col_means[[i]], rep(rg[1], n)), 
-        	gp = gpar(fill = paste0(colors[i], "40"), col = NA), default.units = "native")
+        	gp = gpar(fill = paste0(colors[i], "80"), col = NA), default.units = "native")
     }
     grid.yaxis(gp = gpar(fontsize = 8))
     upViewport()
@@ -76,10 +76,10 @@ Heatmap(mat, name = "foo", column_dend_side = "bottom", top_annotation = ha,
 Heatmap(partition, col = structure(colors, names = as.character(1:km)), show_row_names = FALSE, 
     show_heatmap_legend = FALSE, name = "")
 
-decorate_annotation("col_mean", {grid.text("mean\nsignal", unit(-8, "mm"), rot = 90, just = "bottom")})
+decorate_annotation("col_mean", {grid.text("mean\nsignal", unit(-10, "mm"), rot = 90, just = "bottom")})
 ```
 
-== Session Info
+## Session Info
 
 ```{r}
 sessionInfo()
