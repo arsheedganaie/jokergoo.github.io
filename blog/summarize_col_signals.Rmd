@@ -39,7 +39,7 @@ the partitioning information wil be used in several places, we calculate it in t
 ```{r}
 km = 3
 colors = brewer.pal(km, "Set1")
-partition = kmeans(dist(mat), centers = km)$cluster
+partition = kmeans(mat, centers = km)$cluster
 ```
 
 We will put the mean signals in row clusters as a column annotation put on top of the heatmap.
