@@ -5,6 +5,11 @@ In this post, we will demonstrate how to visualize mean signals in row clusters 
 
 First we load the packages and generate the random matrix.
 
+
+```{r, echo = FALSE, message = FALSE}
+suppressWarnings(suppressPackageStartupMessages(library(ComplexHeatmap)))
+```
+
 ```{r}
 library(ComplexHeatmap)
 library(circlize)

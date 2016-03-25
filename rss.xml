@@ -273,12 +273,7 @@ par(new = FALSE)
 &lt;p&gt;First we load the packages and generate the random matrix.&lt;/p&gt;
 
 &lt;pre&gt;&lt;code class="r"&gt;library(ComplexHeatmap)
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;pre&gt;&lt;code&gt;## Loading required package: grid
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;pre&gt;&lt;code class="r"&gt;library(circlize)
+library(circlize)
 library(RColorBrewer)
 
 set.seed(123)
@@ -376,10 +371,10 @@ decorate_annotation(&amp;quot;col_mean&amp;quot;, {grid.text(&amp;quot;mean\nsig
 ## [7] markdown_0.7.7       knitr_1.12.3        
 ## 
 ## loaded via a namespace (and not attached):
-##  [1] dendextend_1.1.8    magrittr_1.5        evaluate_0.8.3     
-##  [4] stringi_1.0-1       GlobalOptions_0.0.9 whisker_0.3-2      
-##  [7] rjson_0.2.15        tools_3.2.3         stringr_1.0.0      
-## [10] colorspace_1.2-6    shape_1.4.2
+##  [1] dendextend_1.1.8    formatR_1.3         magrittr_1.5       
+##  [4] evaluate_0.8.3      stringi_1.0-1       GlobalOptions_0.0.9
+##  [7] whisker_0.3-2       rjson_0.2.15        tools_3.2.3        
+## [10] stringr_1.0.0       colorspace_1.2-6    shape_1.4.2
 &lt;/code&gt;&lt;/pre&gt;
 
 
