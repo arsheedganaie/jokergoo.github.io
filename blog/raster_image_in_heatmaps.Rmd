@@ -9,7 +9,7 @@ Rendering heatmaps as raster images will effectively reduce
 the file size. In `Heatmap()` function, there are four options which control how to generate
 the raster image: `use_raster`, `raster_device`, `raster_quality`, `raster_device_param`. 
 
-```{r}
+```{r matrix}
 set.seed(123)
 mat = matrix(rnorm(10000*100), ncol = 100)
 ```
@@ -44,7 +44,10 @@ dev.off()
 ```
 
 ```{r, message = FALSE, results = "hide", echo = FALSE}
+chunks <- knitr:::knit_code$get()
+writeLines(c(chunk[["matrix"]], chunk[["code"]]), file = "raster_image_in_heatmaps.R")
 system("Rscript raster_image_in_heatmaps.R")
+file.remove("raster_image_in_heatmaps.R")
 ```
 
 And the difference between these PDF files:

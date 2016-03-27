@@ -52,6 +52,9 @@ Heatmap(mat, cluster_rows = FALSE, cluster_columns = FALSE, use_raster = TRUE, r
 dev.off()
 &lt;/code&gt;&lt;/pre&gt;
 
+&lt;pre&gt;&lt;code&gt;## Error in writeLines(c(chunk[[&amp;quot;matrix&amp;quot;]], chunk[[&amp;quot;code&amp;quot;]]), file = &amp;quot;raster_image_in_heatmaps.R&amp;quot;): unused argument (file = &amp;quot;raster_image_in_heatmaps.R&amp;quot;)
+&lt;/code&gt;&lt;/pre&gt;
+
 &lt;p&gt;And the difference between these PDF files:&lt;/p&gt;
 
 &lt;pre&gt;&lt;code class="r"&gt;all_files = c(&amp;quot;heatmap.pdf&amp;quot;, &amp;quot;heatmap_raster_by_png.pdf&amp;quot;, 
