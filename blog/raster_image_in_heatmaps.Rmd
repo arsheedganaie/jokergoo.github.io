@@ -45,7 +45,7 @@ dev.off()
 
 ```{r, message = FALSE, results = "hide", echo = FALSE}
 chunks <- knitr:::knit_code$get()
-writeLines(c(chunk[["matrix"]], chunk[["code"]]), "raster_image_in_heatmaps.R")
+writeLines(c(chunks[["matrix"]], chunks[["code"]]), "raster_image_in_heatmaps.R")
 system("Rscript raster_image_in_heatmaps.R")
 file.remove("raster_image_in_heatmaps.R")
 ```

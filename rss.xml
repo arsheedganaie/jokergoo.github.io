@@ -52,9 +52,6 @@ Heatmap(mat, cluster_rows = FALSE, cluster_columns = FALSE, use_raster = TRUE, r
 dev.off()
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;pre&gt;&lt;code&gt;## Error in writeLines(c(chunk[[&amp;quot;matrix&amp;quot;]], chunk[[&amp;quot;code&amp;quot;]]), &amp;quot;raster_image_in_heatmaps.R&amp;quot;): object &amp;#39;chunk&amp;#39; not found
-&lt;/code&gt;&lt;/pre&gt;
-
 &lt;p&gt;And the difference between these PDF files:&lt;/p&gt;
 
 &lt;pre&gt;&lt;code class="r"&gt;all_files = c(&amp;quot;heatmap.pdf&amp;quot;, &amp;quot;heatmap_raster_by_png.pdf&amp;quot;, 
@@ -66,11 +63,11 @@ sapply(fs, function(x) paste(round(x/1024), &amp;quot;KB&amp;quot;))
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;pre&gt;&lt;code&gt;##                     heatmap.pdf       heatmap_raster_by_png.pdf 
-##                         &amp;quot;NA KB&amp;quot;                         &amp;quot;NA KB&amp;quot; 
+##                       &amp;quot;6652 KB&amp;quot;                        &amp;quot;192 KB&amp;quot; 
 ##      heatmap_raster_by_jpeg.pdf      heatmap_raster_by_tiff.pdf 
-##                         &amp;quot;NA KB&amp;quot;                         &amp;quot;NA KB&amp;quot; 
+##                        &amp;quot;779 KB&amp;quot;                        &amp;quot;192 KB&amp;quot; 
 ##  heatmap_raster_by_CairoPNG.pdf heatmap_raster_by_CairoJPEG.pdf 
-##                         &amp;quot;NA KB&amp;quot;                         &amp;quot;NA KB&amp;quot;
+##                        &amp;quot;141 KB&amp;quot;                        &amp;quot;765 KB&amp;quot;
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;The ratio to &lt;code&gt;heatmap.pdf&lt;/code&gt;:&lt;/p&gt;
@@ -79,35 +76,11 @@ sapply(fs, function(x) paste(round(x/1024), &amp;quot;KB&amp;quot;))
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;pre&gt;&lt;code&gt;##       heatmap_raster_by_png.pdf      heatmap_raster_by_jpeg.pdf 
-##                              NA                              NA 
+##                      0.02882870                      0.11711975 
 ##      heatmap_raster_by_tiff.pdf  heatmap_raster_by_CairoPNG.pdf 
-##                              NA                              NA 
+##                      0.02882855                      0.02112871 
 ## heatmap_raster_by_CairoJPEG.pdf 
-##                              NA
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;pre&gt;&lt;code&gt;## Warning in file.remove(all_files): cannot remove file &amp;#39;heatmap.pdf&amp;#39;, reason
-## &amp;#39;No such file or directory&amp;#39;
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;pre&gt;&lt;code&gt;## Warning in file.remove(all_files): cannot remove file
-## &amp;#39;heatmap_raster_by_png.pdf&amp;#39;, reason &amp;#39;No such file or directory&amp;#39;
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;pre&gt;&lt;code&gt;## Warning in file.remove(all_files): cannot remove file
-## &amp;#39;heatmap_raster_by_jpeg.pdf&amp;#39;, reason &amp;#39;No such file or directory&amp;#39;
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;pre&gt;&lt;code&gt;## Warning in file.remove(all_files): cannot remove file
-## &amp;#39;heatmap_raster_by_tiff.pdf&amp;#39;, reason &amp;#39;No such file or directory&amp;#39;
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;pre&gt;&lt;code&gt;## Warning in file.remove(all_files): cannot remove file
-## &amp;#39;heatmap_raster_by_CairoPNG.pdf&amp;#39;, reason &amp;#39;No such file or directory&amp;#39;
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;pre&gt;&lt;code&gt;## Warning in file.remove(all_files): cannot remove file
-## &amp;#39;heatmap_raster_by_CairoJPEG.pdf&amp;#39;, reason &amp;#39;No such file or directory&amp;#39;
+##                      0.11499668
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;h2&gt;Session Info&lt;/h2&gt;
