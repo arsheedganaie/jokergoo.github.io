@@ -6,6 +6,113 @@
   <description>Zuguang Gu's blog</description>
 
 <item>
+<title>Support raster image in heatmaps</title>
+<link>http://jokergoo.github.io/blog/html/d3aa6e2b289514ecddded64a467d1961.html</link>
+<pubDate>Sun, 27 Mar 2016 17:25:04 CET</pubDate>
+<description>
+
+
+&lt;p&gt;Saving heatmaps in PDF format is kind of best parctice to preserve the quality. However,
+when there are too many rows (say, &amp;gt; 10000), the output PDF file size would be huge and it takes
+time and memory to read the plot.&lt;/p&gt;
+
+&lt;p&gt;Rendering heatmaps as raster images will effectively reduce
+the file size. In &lt;code&gt;Heatmap()&lt;/code&gt; function, there are four options which control how to generate
+the raster image: &lt;code&gt;use_raster&lt;/code&gt;, &lt;code&gt;raster_device&lt;/code&gt;, &lt;code&gt;raster_quality&lt;/code&gt;, &lt;code&gt;raster_device_param&lt;/code&gt;. &lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="r"&gt;set.seed(123)
+mat = matrix(rnorm(10000*100), ncol = 100)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Following make the heatmap with and without raster images.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="r"&gt;library(ComplexHeatmap)
+pdf(&amp;quot;heatmap.pdf&amp;quot;, width = 8, height = 8)
+Heatmap(mat, cluster_rows = FALSE, cluster_columns = FALSE)
+dev.off()
+
+pdf(&amp;quot;heatmap_raster_by_png.pdf&amp;quot;, width = 8, height = 8)
+Heatmap(mat, cluster_rows = FALSE, cluster_columns = FALSE, use_raster = TRUE, raster_device = &amp;quot;png&amp;quot;)
+dev.off()
+
+pdf(&amp;quot;heatmap_raster_by_jpeg.pdf&amp;quot;, width = 8, height = 8)
+Heatmap(mat, cluster_rows = FALSE, cluster_columns = FALSE, use_raster = TRUE, raster_device = &amp;quot;jpeg&amp;quot;)
+dev.off()
+
+pdf(&amp;quot;heatmap_raster_by_tiff.pdf&amp;quot;, width = 8, height = 8)
+Heatmap(mat, cluster_rows = FALSE, cluster_columns = FALSE, use_raster = TRUE, raster_device = &amp;quot;tiff&amp;quot;)
+dev.off()
+
+pdf(&amp;quot;heatmap_raster_by_CairoPNG.pdf&amp;quot;, width = 8, height = 8)
+Heatmap(mat, cluster_rows = FALSE, cluster_columns = FALSE, use_raster = TRUE, raster_device = &amp;quot;CairoPNG&amp;quot;)
+dev.off()
+
+pdf(&amp;quot;heatmap_raster_by_CairoJPEG.pdf&amp;quot;, width = 8, height = 8)
+Heatmap(mat, cluster_rows = FALSE, cluster_columns = FALSE, use_raster = TRUE, raster_device = &amp;quot;CairoJPEG&amp;quot;)
+dev.off()
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;And the difference between these PDF files:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="r"&gt;all_files = c(&amp;quot;heatmap.pdf&amp;quot;, &amp;quot;heatmap_raster_by_png.pdf&amp;quot;, 
+              &amp;quot;heatmap_raster_by_jpeg.pdf&amp;quot;, &amp;quot;heatmap_raster_by_tiff.pdf&amp;quot;,
+              &amp;quot;heatmap_raster_by_CairoPNG.pdf&amp;quot;, &amp;quot;heatmap_raster_by_CairoJPEG.pdf&amp;quot;)
+fs = file.size(all_files)
+names(fs) = all_files
+sapply(fs, function(x) paste(round(x/1024), &amp;quot;KB&amp;quot;))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code&gt;##                     heatmap.pdf       heatmap_raster_by_png.pdf 
+##                       &amp;quot;6652 KB&amp;quot;                        &amp;quot;192 KB&amp;quot; 
+##      heatmap_raster_by_jpeg.pdf      heatmap_raster_by_tiff.pdf 
+##                        &amp;quot;779 KB&amp;quot;                        &amp;quot;192 KB&amp;quot; 
+##  heatmap_raster_by_CairoPNG.pdf heatmap_raster_by_CairoJPEG.pdf 
+##                        &amp;quot;141 KB&amp;quot;                        &amp;quot;765 KB&amp;quot;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;The ratio to &lt;code&gt;heatmap.pdf&lt;/code&gt;:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="r"&gt;fs[-1]/fs[1]
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code&gt;##       heatmap_raster_by_png.pdf      heatmap_raster_by_jpeg.pdf 
+##                      0.02882870                      0.11711975 
+##      heatmap_raster_by_tiff.pdf  heatmap_raster_by_CairoPNG.pdf 
+##                      0.02882855                      0.02112871 
+## heatmap_raster_by_CairoJPEG.pdf 
+##                      0.11499668
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2&gt;Session Info&lt;/h2&gt;
+
+&lt;pre&gt;&lt;code class="r"&gt;sessionInfo()
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code&gt;## R version 3.2.3 (2015-12-10)
+## Platform: x86_64-apple-darwin13.4.0 (64-bit)
+## Running under: OS X 10.11.3 (El Capitan)
+## 
+## locale:
+## [1] C/en_US.UTF-8/C/C/C/C
+## 
+## attached base packages:
+## [1] methods   stats     graphics  grDevices utils     datasets  base     
+## 
+## other attached packages:
+## [1] digest_0.6.9     htmltools_0.3    GetoptLong_0.1.2 markdown_0.7.7  
+## [5] knitr_1.12.3    
+## 
+## loaded via a namespace (and not attached):
+## [1] rjson_0.2.15        magrittr_1.5        formatR_1.3        
+## [4] tools_3.2.3         GlobalOptions_0.0.9 stringi_1.0-1      
+## [7] stringr_1.0.0       evaluate_0.8.3
+&lt;/code&gt;&lt;/pre&gt;
+
+
+</description>
+</item>
+
+<item>
 <title>Visualize mean signals in row clusters by ComplexHeatmap</title>
 <link>http://jokergoo.github.io/blog/html/b901f17cfa11f65353937931bda1712c.html</link>
 <pubDate>Fri, 25 Mar 2016 19:24:44 CET</pubDate>
