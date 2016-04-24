@@ -1,0 +1,74 @@
+Multiple Groups Chord Diagram
+==============================
+
+By default `chordDiagram()` function in **circlize** package visualize
+relations between two groups (i.e. rows to columns if the input is an adjacency matrix
+or column 1 to column 2 if the input is an adjacency list). However, it is easy to visualize
+relations from more than 2 groups.
+
+In this post I will demonstrate how to visualize relations from three groups. The example
+here are matrix as inputs, but the principle should be the same with adjacency data frames.
+
+First let's generate three matrix which contain pairwise relations from three groups:
+
+```{r}
+options(digits = 2)
+mat1 = matrix(rnorm(25), nrow = 5)
+rownames(mat1) = paste0("A", 1:5)
+colnames(mat1) = paste0("B", 1:5)
+
+mat2 = matrix(rnorm(25), nrow = 5)
+rownames(mat2) = paste0("A", 1:5)
+colnames(mat2) = paste0("C", 1:5)
+
+mat3 = matrix(rnorm(25), nrow = 5)
+rownames(mat3) = paste0("B", 1:5)
+colnames(mat3) = paste0("C", 1:5)
+```
+
+The key idea here is to merge multiple groups into a single big matrix:
+
+```{r}
+mat = matrix(0, nrow = 10, ncol = 10)
+rownames(mat) = c(rownames(mat2), rownames(mat3))
+colnames(mat) = c(colnames(mat1), colnames(mat2))
+mat[rownames(mat1), colnames(mat1)] = mat1
+mat[rownames(mat2), colnames(mat2)] = mat2
+mat[rownames(mat3), colnames(mat3)] = mat3
+mat
+```
+
+When making the chord diagram, it is important to set larger gaps between groups to identify different groups.
+Here we manually adjust `gap.degree` in `circos.par()`.
+
+Also we add an additional track in which we add lines to enhance the visual effect of different groups.
+
+```{r}
+library(circlize)
+circos.par(gap.degree = rep(c(rep(1, 4), 8), 3))
+chordDiagram(mat, annotationTrack = c("grid", "axis"),
+	preAllocateTracks = list(
+		track.height = 0.08,
+		track.margin = c(0.05, 0)
+))
+circos.track(track.index = 2, panel.fun = function(x, y) {
+	sector.index = get.cell.meta.data("sector.index")
+	xlim = get.cell.meta.data("xlim")
+	ylim = get.cell.meta.data("ylim")
+	circos.text(mean(xlim), mean(ylim), sector.index, cex = 0.6, niceFacing = TRUE)
+}, bg.border = NA)
+
+# add lines which cross multiple sectors
+highlight.sector(rownames(mat1), track.index = 1, col = "red", text = "A", niceFacing = TRUE)
+highlight.sector(colnames(mat1), track.index = 1, col = "green", text = "B", niceFacing = TRUE)
+highlight.sector(colnames(mat2), track.index = 1, col = "blue", text = "C", niceFacing = TRUE)
+circos.clear()
+```
+
+## Session Info
+
+```{r}
+sessionInfo()
+```
+
+

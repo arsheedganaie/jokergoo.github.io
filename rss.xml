@@ -6,6 +6,121 @@
   <description>Zuguang Gu's blog</description>
 
 <item>
+<title>Multiple Groups Chord Diagram</title>
+<link>http://jokergoo.github.io/blog/html/c29abf849253e2836a2a586ef09a02e7.html</link>
+<pubDate>Sun, 24 Apr 2016 16:35:19 CET</pubDate>
+<description>
+
+
+&lt;p&gt;By default &lt;code&gt;chordDiagram()&lt;/code&gt; function in &lt;strong&gt;circlize&lt;/strong&gt; package visualize
+relations between two groups (i.e. rows to columns if the input is an adjacency matrix
+or column 1 to column 2 if the input is an adjacency list). However, it is easy to visualize
+relations from more than 2 groups.&lt;/p&gt;
+
+&lt;p&gt;In this post I will demonstrate how to visualize relations from three groups. The example
+here are matrix as inputs, but the principle should be the same with adjacency data frames.&lt;/p&gt;
+
+&lt;p&gt;First let&amp;#39;s generate three matrix which contain pairwise relations from three groups:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="r"&gt;options(digits = 2)
+mat1 = matrix(rnorm(25), nrow = 5)
+rownames(mat1) = paste0(&amp;quot;A&amp;quot;, 1:5)
+colnames(mat1) = paste0(&amp;quot;B&amp;quot;, 1:5)
+
+mat2 = matrix(rnorm(25), nrow = 5)
+rownames(mat2) = paste0(&amp;quot;A&amp;quot;, 1:5)
+colnames(mat2) = paste0(&amp;quot;C&amp;quot;, 1:5)
+
+mat3 = matrix(rnorm(25), nrow = 5)
+rownames(mat3) = paste0(&amp;quot;B&amp;quot;, 1:5)
+colnames(mat3) = paste0(&amp;quot;C&amp;quot;, 1:5)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;The key idea here is to merge multiple groups into a single big matrix:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="r"&gt;mat = matrix(0, nrow = 10, ncol = 10)
+rownames(mat) = c(rownames(mat2), rownames(mat3))
+colnames(mat) = c(colnames(mat1), colnames(mat2))
+mat[rownames(mat1), colnames(mat1)] = mat1
+mat[rownames(mat2), colnames(mat2)] = mat2
+mat[rownames(mat3), colnames(mat3)] = mat3
+mat
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code&gt;##       B1     B2    B3   B4     B5     C1    C2    C3     C4     C5
+## A1  0.04 -1.378 -0.73 0.88 -0.498  0.065  0.39 -0.74  0.149  0.233
+## A2 -0.62  1.080 -0.40 1.13  0.042  1.044  2.62  1.10 -1.299  0.441
+## A3 -0.88 -1.165 -1.40 0.65  0.203 -0.101  0.85  0.25 -0.418 -0.117
+## A4 -0.30  0.067 -1.06 0.17  0.357  0.153  2.44  1.54 -1.232 -1.426
+## A5  1.48 -0.548  0.66 0.31 -1.110 -0.475 -0.17  0.50 -0.331  0.816
+## B1  0.00  0.000  0.00 0.00  0.000  0.400  0.52 -0.13  0.385 -0.899
+## B2  0.00  0.000  0.00 0.00  0.000  0.261 -0.81  0.12 -1.148 -0.261
+## B3  0.00  0.000  0.00 0.00  0.000 -0.448 -0.95 -1.35  0.072 -1.753
+## B4  0.00  0.000  0.00 0.00  0.000 -0.367 -1.23 -1.89  0.015  0.029
+## B5  0.00  0.000  0.00 0.00  0.000 -0.023  0.59 -0.32  0.901 -0.302
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;When making the chord diagram, it is important to set larger gaps between groups to identify different groups.
+Here we manually adjust &lt;code&gt;gap.degree&lt;/code&gt; in &lt;code&gt;circos.par()&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;Also we add an additional track in which we add lines to enhance the visual effect of different groups.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="r"&gt;library(circlize)
+circos.par(gap.degree = rep(c(rep(1, 4), 8), 3))
+chordDiagram(mat, annotationTrack = c(&amp;quot;grid&amp;quot;, &amp;quot;axis&amp;quot;),
+    preAllocateTracks = list(
+        track.height = 0.08,
+        track.margin = c(0.05, 0)
+))
+circos.track(track.index = 2, panel.fun = function(x, y) {
+    sector.index = get.cell.meta.data(&amp;quot;sector.index&amp;quot;)
+    xlim = get.cell.meta.data(&amp;quot;xlim&amp;quot;)
+    ylim = get.cell.meta.data(&amp;quot;ylim&amp;quot;)
+    circos.text(mean(xlim), mean(ylim), sector.index, cex = 0.6, niceFacing = TRUE)
+}, bg.border = NA)
+
+# add lines which cross multiple sectors
+highlight.sector(rownames(mat1), track.index = 1, col = &amp;quot;red&amp;quot;, text = &amp;quot;A&amp;quot;, niceFacing = TRUE)
+highlight.sector(colnames(mat1), track.index = 1, col = &amp;quot;green&amp;quot;, text = &amp;quot;B&amp;quot;, niceFacing = TRUE)
+highlight.sector(colnames(mat2), track.index = 1, col = &amp;quot;blue&amp;quot;, text = &amp;quot;C&amp;quot;, niceFacing = TRUE)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;strong&gt;Please see the figure in the original post.&lt;/strong&gt;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="r"&gt;circos.clear()
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2&gt;Session Info&lt;/h2&gt;
+
+&lt;pre&gt;&lt;code class="r"&gt;sessionInfo()
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code&gt;## R version 3.2.3 (2015-12-10)
+## Platform: x86_64-apple-darwin13.4.0 (64-bit)
+## Running under: OS X 10.11.3 (El Capitan)
+## 
+## locale:
+## [1] C/en_US.UTF-8/C/C/C/C
+## 
+## attached base packages:
+## [1] methods   stats     graphics  grDevices utils     datasets  base     
+## 
+## other attached packages:
+## [1] circlize_0.3.7   digest_0.6.9     htmltools_0.3.5  GetoptLong_0.1.3
+## [5] markdown_0.7.7   knitr_1.12.3    
+## 
+## loaded via a namespace (and not attached):
+##  [1] colorspace_1.2-6     rjson_0.2.15         magrittr_1.5        
+##  [4] tools_3.2.3          GlobalOptions_0.0.10 Rcpp_0.12.4         
+##  [7] stringi_1.0-1        grid_3.2.3           stringr_1.0.0       
+## [10] shape_1.4.2          evaluate_0.8.3
+&lt;/code&gt;&lt;/pre&gt;
+
+
+</description>
+</item>
+
+<item>
 <title>Support raster image in heatmaps</title>
 <link>http://jokergoo.github.io/blog/html/d3aa6e2b289514ecddded64a467d1961.html</link>
 <pubDate>Sun, 27 Mar 2016 17:25:04 CET</pubDate>
