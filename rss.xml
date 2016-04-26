@@ -6,6 +6,176 @@
   <description>Zuguang Gu's blog</description>
 
 <item>
+<title>ComplexHeatmap Supports More Types of Legends</title>
+<link>http://jokergoo.github.io/blog/html/dde69a9cf5a606a9486b19eb91ba6f4e.html</link>
+<pubDate>Tue, 26 Apr 2016 14:27:46 CET</pubDate>
+<description>
+
+
+&lt;p&gt;From version 1.9.7, &lt;strong&gt;ComplexHeatmap&lt;/strong&gt; package supports more types of legends. Basic improvements are:&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;position of title can be adjusted. There are now four optinos: &lt;code&gt;topleft&lt;/code&gt;, &lt;code&gt;topcenter&lt;/code&gt;, &lt;code&gt;leftcenter&lt;/code&gt; and &lt;code&gt;lefttop&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;when there are too many levels for a legend, they can be arranged as an array&lt;/li&gt;
+&lt;li&gt;height or width of continuous color bar can be adjusted&lt;/li&gt;
+&lt;li&gt;the continuous color bar can be set as vertical or horizontal&lt;/li&gt;
+&lt;li&gt;legends of points or lines can also be generated.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;First let&amp;#39;s generate a random matrix:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="r"&gt;set.seed(123)
+mat = matrix(rnorm(100), 10)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Now we generate legends with different styles:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="r"&gt;library(ComplexHeatmap)
+Heatmap(mat, name = &amp;quot;fooooo&amp;quot;)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;strong&gt;Please see the figure in the original post.&lt;/strong&gt;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="r"&gt;Heatmap(mat, name = &amp;quot;fooooo&amp;quot;, heatmap_legend_param = list(title_position = &amp;quot;topcenter&amp;quot;))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;strong&gt;Please see the figure in the original post.&lt;/strong&gt;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="r"&gt;Heatmap(mat, name = &amp;quot;fooooo&amp;quot;, heatmap_legend_param = list(color_bar = &amp;quot;continuous&amp;quot;))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;strong&gt;Please see the figure in the original post.&lt;/strong&gt;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="r"&gt;Heatmap(mat, name = &amp;quot;fooooo&amp;quot;, heatmap_legend_param = list(color_bar = &amp;quot;continuous&amp;quot;, 
+    legend_height = unit(5, &amp;quot;cm&amp;quot;)))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;strong&gt;Please see the figure in the original post.&lt;/strong&gt;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="r"&gt;Heatmap(mat, name = &amp;quot;fooooo&amp;quot;, heatmap_legend_param = list(color_bar = &amp;quot;continuous&amp;quot;, 
+    at = quantile(mat, c(0, 0.5, 1)), labels = c(&amp;quot;low&amp;quot;, &amp;quot;median&amp;quot;, &amp;quot;high&amp;quot;),
+    legend_height = unit(5, &amp;quot;cm&amp;quot;)))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;strong&gt;Please see the figure in the original post.&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;Next we put the legend at the bottom of the heatmap:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="r"&gt;ht = Heatmap(mat, name = &amp;quot;fooooo&amp;quot;)
+draw(ht, heatmap_legend_side = &amp;quot;bottom&amp;quot;)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;strong&gt;Please see the figure in the original post.&lt;/strong&gt;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="r"&gt;ht = Heatmap(mat, name = &amp;quot;fooooo&amp;quot;, heatmap_legend_param = list(title_position = &amp;quot;topcenter&amp;quot;,
+    color_bar = &amp;quot;continuous&amp;quot;, legend_direction = &amp;quot;horizontal&amp;quot;))
+draw(ht, heatmap_legend_side = &amp;quot;bottom&amp;quot;)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;strong&gt;Please see the figure in the original post.&lt;/strong&gt;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="r"&gt;ht = Heatmap(mat, name = &amp;quot;fooooo&amp;quot;, heatmap_legend_param = list(title_position = &amp;quot;lefttop&amp;quot;,
+    color_bar = &amp;quot;continuous&amp;quot;, legend_direction = &amp;quot;horizontal&amp;quot;))
+draw(ht, heatmap_legend_side = &amp;quot;bottom&amp;quot;)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;strong&gt;Please see the figure in the original post.&lt;/strong&gt;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="r"&gt;ht = Heatmap(mat, name = &amp;quot;fooooo&amp;quot;, heatmap_legend_param = list(title_position = &amp;quot;topcenter&amp;quot;,
+    color_bar = &amp;quot;continuous&amp;quot;, legend_direction = &amp;quot;horizontal&amp;quot;))
+draw(ht, heatmap_legend_side = &amp;quot;bottom&amp;quot;)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;strong&gt;Please see the figure in the original post.&lt;/strong&gt;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="r"&gt;ht = Heatmap(mat, name = &amp;quot;fooooo&amp;quot;, heatmap_legend_param = list(title_position = &amp;quot;topcenter&amp;quot;,
+    title = &amp;quot;bar&amp;quot;, color_bar = &amp;quot;continuous&amp;quot;, legend_direction = &amp;quot;horizontal&amp;quot;, 
+    at = quantile(mat, c(0, 0.5, 1)), labels = c(&amp;quot;low&amp;quot;, &amp;quot;median&amp;quot;, &amp;quot;high&amp;quot;), 
+    legend_width = unit(5, &amp;quot;cm&amp;quot;)))
+draw(ht, heatmap_legend_side = &amp;quot;bottom&amp;quot;)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;strong&gt;Please see the figure in the original post.&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;If we have a character matrix:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="r"&gt;cmat = matrix(sample(letters[1:12], 100, replace = TRUE), 10)
+colors = structure(circlize::rand_color(12), names = letters[1:12])
+Heatmap(cmat, name = &amp;quot;fooooo&amp;quot;, col = colors)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;strong&gt;Please see the figure in the original post.&lt;/strong&gt;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="r"&gt;Heatmap(cmat, name = &amp;quot;fooooo&amp;quot;, col = colors, heatmap_legend_param = list(ncol = 2))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;strong&gt;Please see the figure in the original post.&lt;/strong&gt;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="r"&gt;Heatmap(cmat, name = &amp;quot;fooooo&amp;quot;, col = colors, heatmap_legend_param = list(title_position = &amp;quot;topcenter&amp;quot;, 
+    nrow = 4))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;strong&gt;Please see the figure in the original post.&lt;/strong&gt;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="r"&gt;ht = Heatmap(cmat, name = &amp;quot;fooooo&amp;quot;, col = colors, heatmap_legend_param = list(title_position = &amp;quot;topcenter&amp;quot;, 
+    nrow = 2))
+draw(ht, heatmap_legend_side = &amp;quot;bottom&amp;quot;)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;strong&gt;Please see the figure in the original post.&lt;/strong&gt;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="r"&gt;ht = Heatmap(cmat, name = &amp;quot;fooooo&amp;quot;, col = colors, heatmap_legend_param = list(title_position = &amp;quot;leftcenter&amp;quot;, 
+    nrow = 1))
+draw(ht, heatmap_legend_side = &amp;quot;bottom&amp;quot;)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;strong&gt;Please see the figure in the original post.&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;The same rules apply to the annotation legends.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;ComplexHeatmap&lt;/strong&gt; only automatically generates legends for heatmaps and annotations, however, the new added
+function &lt;code&gt;Legend()&lt;/code&gt; also generate a &lt;code&gt;grob&lt;/code&gt; object which contains more general legends, e.g. points or lines.
+These legends can be used for self-defined annotations.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="r"&gt;ha = HeatmapAnnotation(pt = anno_points(runif(10), gp = gpar(col = rep(2:3, 5))))
+ht = Heatmap(mat, name = &amp;quot;fooooo&amp;quot;, top_annotation = ha)
+lgd = Legend(at = c(&amp;quot;class1&amp;quot;, &amp;quot;class2&amp;quot;), type = &amp;quot;points&amp;quot;, legend_gp = gpar(col = 2:3), title = &amp;quot;Class&amp;quot;)
+draw(ht, annotation_legend_list = list(lgd))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;strong&gt;Please see the figure in the original post.&lt;/strong&gt;&lt;/p&gt;
+
+&lt;h2&gt;Session Info&lt;/h2&gt;
+
+&lt;pre&gt;&lt;code class="r"&gt;sessionInfo()
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code&gt;## R version 3.2.3 (2015-12-10)
+## Platform: x86_64-apple-darwin13.4.0 (64-bit)
+## Running under: OS X 10.11.3 (El Capitan)
+## 
+## locale:
+## [1] C/en_US.UTF-8/C/C/C/C
+## 
+## attached base packages:
+## [1] grid      methods   stats     graphics  grDevices utils     datasets  base     
+## 
+## other attached packages:
+## [1] ComplexHeatmap_1.9.7 digest_0.6.9         htmltools_0.3.5      GetoptLong_0.1.3    
+## [5] markdown_0.7.7       knitr_1.12.3        
+## 
+## loaded via a namespace (and not attached):
+##  [1] Rcpp_0.12.4          circlize_0.3.7       dendextend_1.1.8     formatR_1.3         
+##  [5] magrittr_1.5         evaluate_0.8.3       stringi_1.0-1        GlobalOptions_0.0.10
+##  [9] whisker_0.3-2        RColorBrewer_1.1-2   rjson_0.2.15         tools_3.2.3         
+## [13] stringr_1.0.0        colorspace_1.2-6     shape_1.4.2
+&lt;/code&gt;&lt;/pre&gt;
+
+
+</description>
+</item>
+
+<item>
 <title>Multiple Groups Chord Diagram</title>
 <link>http://jokergoo.github.io/blog/html/c29abf849253e2836a2a586ef09a02e7.html</link>
 <pubDate>Sun, 24 Apr 2016 16:35:19 CET</pubDate>

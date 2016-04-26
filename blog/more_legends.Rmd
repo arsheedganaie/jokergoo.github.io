@@ -1,0 +1,107 @@
+ComplexHeatmap Supports More Types of Legends
+==============================================
+
+From version 1.9.7, **ComplexHeatmap** package supports more types of legends. Basic improvements are:
+
+1. position of title can be adjusted. There are now four optinos: `topleft`, `topcenter`, `leftcenter` and `lefttop`
+2. when there are too many levels for a legend, they can be arranged as an array
+3. height or width of continuous color bar can be adjusted
+4. the continuous color bar can be set as vertical or horizontal
+5. legends of points or lines can also be generated.
+
+```{r global_settings, echo = FALSE, message = FALSE}
+library(knitr)
+knitr::opts_chunk$set(
+    error = FALSE,
+    tidy  = FALSE,
+    message = FALSE,
+    fig.align = "center",
+    fig.width = 5,
+    fig.height = 5)
+
+options(width = 100)
+```
+
+First let's generate a random matrix:
+
+```{r}
+set.seed(123)
+mat = matrix(rnorm(100), 10)
+```
+
+Now we generate legends with different styles:
+
+```{r}
+library(ComplexHeatmap)
+Heatmap(mat, name = "fooooo")
+Heatmap(mat, name = "fooooo", heatmap_legend_param = list(title_position = "topcenter"))
+Heatmap(mat, name = "fooooo", heatmap_legend_param = list(color_bar = "continuous"))
+Heatmap(mat, name = "fooooo", heatmap_legend_param = list(color_bar = "continuous", 
+	legend_height = unit(5, "cm")))
+Heatmap(mat, name = "fooooo", heatmap_legend_param = list(color_bar = "continuous", 
+	at = quantile(mat, c(0, 0.5, 1)), labels = c("low", "median", "high"),
+	legend_height = unit(5, "cm")))
+```
+
+Next we put the legend at the bottom of the heatmap:
+
+```{r}
+ht = Heatmap(mat, name = "fooooo")
+draw(ht, heatmap_legend_side = "bottom")
+
+ht = Heatmap(mat, name = "fooooo", heatmap_legend_param = list(title_position = "topcenter",
+	color_bar = "continuous", legend_direction = "horizontal"))
+draw(ht, heatmap_legend_side = "bottom")
+
+ht = Heatmap(mat, name = "fooooo", heatmap_legend_param = list(title_position = "lefttop",
+	color_bar = "continuous", legend_direction = "horizontal"))
+draw(ht, heatmap_legend_side = "bottom")
+
+ht = Heatmap(mat, name = "fooooo", heatmap_legend_param = list(title_position = "topcenter",
+	color_bar = "continuous", legend_direction = "horizontal"))
+draw(ht, heatmap_legend_side = "bottom")
+
+ht = Heatmap(mat, name = "fooooo", heatmap_legend_param = list(title_position = "topcenter",
+	title = "bar", color_bar = "continuous", legend_direction = "horizontal", 
+	at = quantile(mat, c(0, 0.5, 1)), labels = c("low", "median", "high"), 
+	legend_width = unit(5, "cm")))
+draw(ht, heatmap_legend_side = "bottom")
+```
+
+If we have a character matrix:
+
+```{r}
+cmat = matrix(sample(letters[1:12], 100, replace = TRUE), 10)
+colors = structure(circlize::rand_color(12), names = letters[1:12])
+Heatmap(cmat, name = "fooooo", col = colors)
+Heatmap(cmat, name = "fooooo", col = colors, heatmap_legend_param = list(ncol = 2))
+Heatmap(cmat, name = "fooooo", col = colors, heatmap_legend_param = list(title_position = "topcenter", 
+	nrow = 4))
+
+ht = Heatmap(cmat, name = "fooooo", col = colors, heatmap_legend_param = list(title_position = "topcenter", 
+	nrow = 2))
+draw(ht, heatmap_legend_side = "bottom")
+
+ht = Heatmap(cmat, name = "fooooo", col = colors, heatmap_legend_param = list(title_position = "leftcenter", 
+	nrow = 1))
+draw(ht, heatmap_legend_side = "bottom")
+```
+
+The same rules apply to the annotation legends.
+
+**ComplexHeatmap** only automatically generates legends for heatmaps and annotations, however, the new added
+function `Legend()` also generate a `grob` object which contains more general legends, e.g. points or lines.
+These legends can be used for self-defined annotations.
+
+```{r}
+ha = HeatmapAnnotation(pt = anno_points(runif(10), gp = gpar(col = rep(2:3, 5))))
+ht = Heatmap(mat, name = "fooooo", top_annotation = ha)
+lgd = Legend(at = c("class1", "class2"), type = "points", legend_gp = gpar(col = 2:3), title = "Class")
+draw(ht, annotation_legend_list = list(lgd))
+```
+
+## Session Info
+
+```{r}
+sessionInfo()
+```
