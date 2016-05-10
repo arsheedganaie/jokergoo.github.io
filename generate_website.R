@@ -9,10 +9,10 @@ GetoptLong(c("all", "whether refresh all"))
 
 list = "
 <p style='text-align:right'>
-<span><a href='http://jokergoo.github.io/index.html'>Home</a></span> | 
-<span><a href='http://jokergoo.github.io/blog.html'>Blog</a></span> | 
-<span><a href='http://jokergoo.github.io/software.html'>Software</a></span> | 
-<span><a href='http://jokergoo.github.io/publications.html'>Publications</a></span> |
+<span><a href='http://zuguang.de/index.html'>Home</a></span> | 
+<span><a href='http://zuguang.de/blog.html'>Blog</a></span> | 
+<span><a href='http://zuguang.de/software.html'>Software</a></span> | 
+<span><a href='http://zuguang.de/publications.html'>Publications</a></span> |
 <span><a href='https://github.com/jokergoo/'>GitHub</a></span>
 </p>
 <hr />
@@ -211,7 +211,7 @@ header = "<?xml version='1.0' encoding='UTF-8' ?>
 <rss version='2.0'>
 <channel>
   <title>Zuguang Gu's blog</title>
-  <link>http://jokergoo.github.io/blog.html</link>
+  <link>http://zuguang.de/blog.html</link>
   <description>Zuguang Gu's blog</description>
 "
 
@@ -241,7 +241,7 @@ html = c(header,
 		i_rss = i_rss + 1
 
 		blog_body = htmlEscape(blog_body)
-		blog_body = qq("<item>\n<title>@{title}</title>\n<link>http://jokergoo.github.io/blog/@{title_url}.html</link>\n<pubDate>@{format(post_info$create_time[i], \"%a, %d %h %Y %H:%M:%S CET\")}</pubDate>\n<description>@{blog_body}</description>\n</item>\n")
+		blog_body = qq("<item>\n<title>@{title}</title>\n<link>http://zuguang.de/blog/@{title_url}.html</link>\n<pubDate>@{format(post_info$create_time[i], \"%a, %d %h %Y %H:%M:%S CET\")}</pubDate>\n<description>@{blog_body}</description>\n</item>\n")
 
 		blog_list = c(blog_list, blog_body)
 		
