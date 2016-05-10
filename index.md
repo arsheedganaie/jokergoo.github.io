@@ -1,4 +1,4 @@
-Hi there. My name is Zuguang Gu. Currently I am working at German Cancer Research Center (DKFZ) as a postdoc. 
+Hi there. My name is Zuguang Gu. Currently I am working at German Cancer Research Center (DKFZ) as a bioinformagician. 
 My major interest includes NGS data analysis and software development.
 
 
