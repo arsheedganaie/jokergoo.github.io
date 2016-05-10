@@ -1,5 +1,5 @@
-Hi there. My name is Zuguang Gu. Currently I am working at German Cancer Research Center (DKFZ) as a bioinformagician. 
-My major interest includes NGS data analysis and software development.
+Hallo. My name is Zuguang Gu. Currently I am working at German Cancer Research Center (DKFZ) as a bioinformagician 
+and focusing on transforming NGS data into gold.
 
 
 <p style='text-align:center'>
