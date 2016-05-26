@@ -8,7 +8,7 @@
 <item>
 <title>ComplexHeatmap Supports More Types of Legends</title>
 <link>http://zuguang.de/blog/html/dde69a9cf5a606a9486b19eb91ba6f4e.html</link>
-<pubDate>Tue, 26 Apr 2016 20:27:46 CET</pubDate>
+<pubDate>Tue, 26 Apr 2016 14:27:46 CET</pubDate>
 <description>
 
 
@@ -178,7 +178,7 @@ draw(ht, annotation_legend_list = list(lgd))
 <item>
 <title>Multiple Groups Chord Diagram</title>
 <link>http://zuguang.de/blog/html/c29abf849253e2836a2a586ef09a02e7.html</link>
-<pubDate>Sun, 24 Apr 2016 22:35:19 CET</pubDate>
+<pubDate>Sun, 24 Apr 2016 16:35:19 CET</pubDate>
 <description>
 
 
@@ -293,7 +293,7 @@ highlight.sector(colnames(mat2), track.index = 1, col = &amp;quot;blue&amp;quot;
 <item>
 <title>Support raster image in heatmaps</title>
 <link>http://zuguang.de/blog/html/d3aa6e2b289514ecddded64a467d1961.html</link>
-<pubDate>Sun, 27 Mar 2016 23:25:04 CET</pubDate>
+<pubDate>Sun, 27 Mar 2016 17:25:04 CET</pubDate>
 <description>
 
 
@@ -400,7 +400,7 @@ sapply(fs, function(x) paste(round(x/1024), &amp;quot;KB&amp;quot;))
 <item>
 <title>Visualize mean signals in row clusters by ComplexHeatmap</title>
 <link>http://zuguang.de/blog/html/b901f17cfa11f65353937931bda1712c.html</link>
-<pubDate>Sat, 26 Mar 2016 02:24:44 CET</pubDate>
+<pubDate>Fri, 25 Mar 2016 19:24:44 CET</pubDate>
 <description>
 
 
@@ -520,7 +520,7 @@ decorate_annotation(&amp;quot;col_mean&amp;quot;, {grid.text(&amp;quot;mean\nsig
 <item>
 <title>Circular visualization of DMRs from tagmentation-based WGBS</title>
 <link>http://zuguang.de/blog/html/179f20c97f68d2a32beaf89d6a925963.html</link>
-<pubDate>Fri, 25 Mar 2016 18:38:22 CET</pubDate>
+<pubDate>Fri, 25 Mar 2016 11:38:22 CET</pubDate>
 <description>
 
 
@@ -776,7 +776,7 @@ par(new = FALSE)
 <item>
 <title>Merge heatmap and annotation legends into a same column</title>
 <link>http://zuguang.de/blog/html/ed8209ec0c73bd19d66a99054783b89f.html</link>
-<pubDate>Sun, 20 Mar 2016 00:09:33 CET</pubDate>
+<pubDate>Sat, 19 Mar 2016 17:09:33 CET</pubDate>
 <description>
 
 
@@ -869,7 +869,7 @@ heatmap_legend = color_mapping_legend(ht@matrix_color_mapping, plot = FALSE)
 <item>
 <title>Build a static website and blog by knitr and rmarkdown</title>
 <link>http://zuguang.de/blog/html/f085f205491c97284f4c5145c45012b1.html</link>
-<pubDate>Tue, 15 Mar 2016 00:43:13 CET</pubDate>
+<pubDate>Mon, 14 Mar 2016 17:43:13 CET</pubDate>
 <description>
 
 
