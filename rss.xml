@@ -40,7 +40,7 @@ Heatmap(mat, bottom_annotation = ha)
 
 &lt;pre&gt;&lt;code class="r"&gt;cn = colnames(mat)
 ha2 = HeatmapAnnotation(foo = foo,
-    cn = anno_text(cn, rot = 90, offset = unit(1, &amp;quot;npc&amp;quot;), just = &amp;quot;right&amp;quot;),
+    cn = anno_text(cn, rot = 90, offset = unit(1, &amp;quot;npc&amp;quot;) - unit(2, &amp;quot;mm&amp;quot;), just = &amp;quot;right&amp;quot;),
     annotation_height = unit.c(unit(5, &amp;quot;mm&amp;quot;),
         max_text_width(cn)))
 Heatmap(mat, show_column_names = FALSE, bottom_annotation = ha2)

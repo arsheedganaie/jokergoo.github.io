@@ -22,7 +22,7 @@ In order to put the column names below bottom annotation, you can:
 ```{r}
 cn = colnames(mat)
 ha2 = HeatmapAnnotation(foo = foo,
-    cn = anno_text(cn, rot = 90, offset = unit(1, "npc"), just = "right"),
+    cn = anno_text(cn, rot = 90, offset = unit(1, "npc") - unit(2, "mm"), just = "right"),
     annotation_height = unit.c(unit(5, "mm"),
         max_text_width(cn)))
 Heatmap(mat, show_column_names = FALSE, bottom_annotation = ha2)
