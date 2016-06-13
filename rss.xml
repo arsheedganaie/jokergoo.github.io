@@ -15,21 +15,21 @@
 &lt;p&gt;Column names are drawn just below the heatmap body. If column annotations are put
 at the bottom of the heatmap, the annotations will be put below the column names.&lt;/p&gt;
 
+&lt;pre&gt;&lt;code class="r"&gt;library(ComplexHeatmap)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code&gt;## Loading required package: grid
+&lt;/code&gt;&lt;/pre&gt;
+
 &lt;pre&gt;&lt;code class="r"&gt;set.seed(123)
 mat = matrix(rnorm(100), 10)
 foo = sample(letters[1:2], 10, replace = TRUE)
 colnames(mat) = sapply(letters[1:10], function(x) paste(rep(x, 10), collapse = &amp;quot;&amp;quot;))
 ha = HeatmapAnnotation(foo = foo)
+Heatmap(mat, bottom_annotation = ha)
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;pre&gt;&lt;code&gt;## Error in eval(expr, envir, enclos): could not find function &amp;quot;HeatmapAnnotation&amp;quot;
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;pre&gt;&lt;code class="r"&gt;Heatmap(mat, bottom_annotation = ha)
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;pre&gt;&lt;code&gt;## Error in eval(expr, envir, enclos): could not find function &amp;quot;Heatmap&amp;quot;
-&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;strong&gt;Please see the figure in the original post.&lt;/strong&gt;&lt;/p&gt;
 
 &lt;p&gt;In order to put the column names below bottom annotation, you can:&lt;/p&gt;
 
@@ -43,16 +43,10 @@ ha2 = HeatmapAnnotation(foo = foo,
     cn = anno_text(cn, rot = 90, offset = unit(1, &amp;quot;npc&amp;quot;), just = &amp;quot;right&amp;quot;),
     annotation_height = unit.c(unit(5, &amp;quot;mm&amp;quot;),
         max_text_width(cn)))
+Heatmap(mat, show_column_names = FALSE, bottom_annotation = ha2)
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;pre&gt;&lt;code&gt;## Error in eval(expr, envir, enclos): could not find function &amp;quot;HeatmapAnnotation&amp;quot;
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;pre&gt;&lt;code class="r"&gt;Heatmap(mat, show_column_names = FALSE, bottom_annotation = ha2)
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;pre&gt;&lt;code&gt;## Error in eval(expr, envir, enclos): could not find function &amp;quot;Heatmap&amp;quot;
-&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;strong&gt;Please see the figure in the original post.&lt;/strong&gt;&lt;/p&gt;
 
 
 </description>

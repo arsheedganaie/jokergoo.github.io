@@ -5,6 +5,7 @@ Column names are drawn just below the heatmap body. If column annotations are pu
 at the bottom of the heatmap, the annotations will be put below the column names.
 
 ```{r}
+library(ComplexHeatmap)
 set.seed(123)
 mat = matrix(rnorm(100), 10)
 foo = sample(letters[1:2], 10, replace = TRUE)
