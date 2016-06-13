@@ -1,0 +1,28 @@
+Add column names below bottom annotations
+============================================
+
+Column names are drawn just below the heatmap body. If column annotations are put
+at the bottom of the heatmap, the annotations will be put below the column names.
+
+```{r}
+set.seed(123)
+mat = matrix(rnorm(100), 10)
+foo = sample(letters[1:2], 10, replace = TRUE)
+colnames(mat) = sapply(letters[1:10], function(x) paste(rep(x, 10), collapse = ""))
+ha = HeatmapAnnotation(foo = foo)
+Heatmap(mat, bottom_annotation = ha)
+```
+
+In order to put the column names below bottom annotation, you can
+
+1. suppress column names
+2. add a text annotation which contains column names
+
+```{r}
+cn = colnames(mat)
+ha2 = HeatmapAnnotation(foo = foo,
+    cn = anno_text(cn, rot = 90, offset = unit(1, "npc"), just = "right"),
+    annotation_height = unit.c(unit(5, "mm"),
+        max_text_width(cn)))
+Heatmap(mat, show_column_names = FALSE, bottom_annotation = ha2)
+```
