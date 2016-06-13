@@ -13,7 +13,7 @@ ha = HeatmapAnnotation(foo = foo)
 Heatmap(mat, bottom_annotation = ha)
 ```
 
-In order to put the column names below bottom annotation, you can
+In order to put the column names below bottom annotation, you can:
 
 1. suppress column names
 2. add a text annotation which contains column names
