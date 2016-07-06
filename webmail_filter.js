@@ -39,9 +39,10 @@ popup_frame = function() {
 	var frame = document.createElement("div");
 	frame.innerHTML = 
 "<ul style='padding:0px;margin:auto;width:500px;'>\n" +
-"<li style='float:left;padding-right:10px;'>Unread:<input type='checkbox' value='1' onchange='execute_query(this.checked, \"unread\")'></li>\n" +
+"<li style='float:left;padding-right:10px;'>Unread:<input type='checkbox' onchange='execute_query(this.checked, \"unread\")'></li>\n" +
 "<li style='float:left;padding-right:10px;width:'>From:<input type='text' value='' style='width:100px' onchange='execute_query(this.value, \"from\")'></li>\n" +
 "<li style='float:left;padding-right:10px;'>subject:<input type='text' value='' style='width:100px' onchange='execute_query(this.value, \"subject\")'></li>\n" +
+"<li style='float:left;padding-right:10px;'>use regexp:<input type='checkbox' onchange='execute_query(this.checked, \"regexp\")'></li>\n" +
 "<li style='float:left'><a href='#' onclick='reset_all();return(false);'>[x]</a></li>\n" +
 "</ul>\n";
 	frame.setAttribute("id", "webmail_filter_frame");
@@ -58,6 +59,7 @@ popup_frame = function() {
 var unread_value = 0;
 var from_value = "";
 var subject_value = "";
+var regexp = false;
 
 execute_query = function(value, name) {
 	if(name == "unread") {
@@ -70,6 +72,8 @@ execute_query = function(value, name) {
 		value.replace(/^\s+|\s+$/g, "")
 		subject_value = value;
 		subject_regexp = new RegExp(subject_value, "i");
+	} else if(name == "regexp") {
+		regexp = value;
 	}
 
 	for(var i = 2; i < rows.length; i ++) {
@@ -86,11 +90,19 @@ execute_query = function(value, name) {
 		}
 
 		if(from_value !== "") {
-			select = select && from_regexp.test(from[i]);
+			if(regexp) {
+				select = select && from_regexp.test(from[i]);
+			} else {
+				select = select && from[i].toLowerCase().indexOf(from_value.toLowerCase()) >= 0;
+			}
 		}
 
 		if(subject_value !== "") {
-			select = select && subject_regexp.test(subject[i]);
+			if(regexp) {
+				select = select && subject_regexp.test(subject[i]);
+			} else {
+				select = select && subject[i].toLowerCase().indexOf(subject_value.toLowerCase()) >= 0;
+			}
 		}
 
 		if(select) {
