@@ -7,7 +7,7 @@ var rows = new Array();
 
 load_all = function() {
 	rows = document.getElementsByClassName("lvm");
-	alert(rows);
+	alert(rows[0].innerHTML);
 	rows = document.getElementsByClassName("lvm")[0].lastChild.childNodes;
 
 	unread.length = rows.length;
