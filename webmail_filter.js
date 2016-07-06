@@ -67,13 +67,19 @@ execute_query = function(value, name) {
 	} else if(name == "from") {
 		value.replace(/^\s+|\s+$/g, "")
 		from_value = value;
-		from_regexp = new RegExp(from_value, "i");
 	} else if(name == "subject") {
 		value.replace(/^\s+|\s+$/g, "")
 		subject_value = value;
-		subject_regexp = new RegExp(subject_value, "i");
 	} else if(name == "regexp") {
 		regexp = value;
+	}
+
+	if(regexp) {
+		if(name == "from") {
+			from_regexp = new RegExp(from_value, "i");
+		} else if(name == "subject") {
+			subject_regexp = new RegExp(subject_value, "i");
+		}
 	}
 
 	for(var i = 2; i < rows.length; i ++) {
