@@ -40,8 +40,8 @@ popup_frame = function() {
 	frame.innerHTML = 
 "<ul style='padding:0px;margin:auto;width:500px;'>\n" +
 "<li style='float:left;padding-right:10px;'>Unread:<input type='checkbox' value='1' onchange='execute_query(this.checked, \"unread\")'></li>\n" +
-"<li style='float:left;padding-right:10px;width:'>From:<input type='text' value='' style='width:100px' onkeyup='execute_query(this.value, \"from\")'></li>\n" +
-"<li style='float:left;padding-right:10px;'>subject:<input type='text' value='' style='width:100px' onkeyup='execute_query(this.value, \"subject\")'></li>\n" +
+"<li style='float:left;padding-right:10px;width:'>From:<input type='text' value='' style='width:100px' onchange='execute_query(this.value, \"from\")'></li>\n" +
+"<li style='float:left;padding-right:10px;'>subject:<input type='text' value='' style='width:100px' onchange='execute_query(this.value, \"subject\")'></li>\n" +
 "<li style='float:left'><a href='#' onclick='reset_all();return(false);'>[x]</a></li>\n" +
 "</ul>\n";
 	frame.setAttribute("id", "webmail_filter_frame");
