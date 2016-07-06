@@ -38,18 +38,19 @@ popup_frame = function() {
 	// create a div
 	var frame = document.createElement("div");
 	frame.innerHTML = 
-"<ul>\n" +
-"<li><input type='checkbox' value='1' onchange='execute_query(this.checked, \"unread\")'>unread</li>\n" +
-"<li>From:<input type='text' value='' onchange='execute_query(this.value, \"from\")'></li>\n" +
-"<li>subject:<input type='text' value='' onchange='execute_query(this.value, \"subject\")'></li>\n" +
-"<li><a href='#' onclick='document.body.removeChild(document.getElementById(\"webmail_filter_frame\"));return(false);'>close</a></li>\n" +
+"<ul style='padding:0px;margin:auto;width:500px;'>\n" +
+"<li style='float:left;padding-right:10px;'>Unread:<input type='checkbox' value='1' onchange='execute_query(this.checked, \"unread\")'></li>\n" +
+"<li style='float:left;padding-right:10px;width:'>From:<input type='text' value='' style='width:100px' onchange='execute_query(this.value, \"from\")'></li>\n" +
+"<li style='float:left;padding-right:10px;'>subject:<input type='text' value='' style='width:100px' onchange='execute_query(this.value, \"subject\")'></li>\n" +
+"<li style='float:left'><a href='#' onclick='document.body.removeChild(document.getElementById(\"webmail_filter_frame\"));return(false);'>[x]</a></li>\n" +
 "</ul>\n";
 	frame.setAttribute("id", "webmail_filter_frame");
 	frame.style.position = "fixed";
 	frame.style.border = "1px solid grey";
 	frame.style.left = "0px";
 	frame.style.top = "0px";
-	frame.style.padding = "4px";
+	frame.style.width = "100%";
+	frame.style.padding = "10px";
 	frame.style.backgroundColor = "white";
 	document.body.appendChild(frame);
 }
@@ -71,6 +72,7 @@ execute_query = function(value, name) {
 
 	for(var i = 2; i < rows.length; i ++) {
 		checked[i].removeAttribute("checked");
+		rows[i].style.backgroundColor = "white";
 
 		if(!unread_value && from_value === "" && subject_value == "") {
 			continue;
@@ -91,6 +93,7 @@ execute_query = function(value, name) {
 
 		if(select) {
 			checked[i].setAttribute("checked", "checked");
+			rows[i].style.backgroundColor = "lightgreen";
 		}
 	}
 }
