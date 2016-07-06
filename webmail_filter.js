@@ -39,16 +39,18 @@ popup_frame = function() {
 	var frame = document.createElement("div");
 	frame.innerHTML = 
 "<ul>\n" +
-"<li><input type='checkbox' value='1' onchange='execute_query(this.value, \"unread\")'>unread</li>\n" +
-"<li>From:<input type='text' value='' onKeypress='execute_query(this.value), \"from\"'></li>\n" +
-"<li>subject:<input type='text' value='' onkeypress='execute_query(this.valule, \"subject\")'></li>\n" +
+"<li><input type='checkbox' value='1' onchange='execute_query(this.checked, \"unread\")'>unread</li>\n" +
+"<li>From:<input type='text' value='' onchange='execute_query(this.value, \"from\")'></li>\n" +
+"<li>subject:<input type='text' value='' onchange='execute_query(this.value, \"subject\")'></li>\n" +
+"<li><a href='#' onclick='document.body.removeChild(document.getElementById(\"webmail_filter_frame\"));return(false);'>close</a></li>\n" +
 "</ul>\n";
+	frame.setAttribute("id", "webmail_filter_frame");
 	frame.style.position = "fixed";
 	frame.style.border = "1px solid grey";
 	frame.style.left = "0px";
 	frame.style.top = "0px";
 	frame.style.padding = "4px";
-	frame.style.zIndex = "100";
+	frame.style.backgroundColor = "white";
 	document.body.appendChild(frame);
 }
 
@@ -68,29 +70,29 @@ execute_query = function(value, name) {
 	}
 
 	for(var i = 2; i < rows.length; i ++) {
-		checked[i].setAttribute("checked", 0);
+		checked[i].removeAttribute("checked");
 
-		select = false;
+		if(!unread_value && from_value === "" && subject_value == "") {
+			continue;
+		}
+
+		select = true;
 		if(unread_value) {
-			if(unread[i]) {
-				select = select && true;
-			} else if() {
-				select = false;
-			}
+			select = select && unread[i]
 		}
 
-		if(from_value !== "" && from[i].match(from_value)) {
-			select = select && true;
+		if(from_value !== "") {
+			select = select && from[i].match(from_value);
 		}
 
-		if(subject_value !== "" && subject[i].match(subject_value)) {
-			select = select && true;
+		if(subject_value !== "") {
+			select = select && subject[i].match(subject_value);
 		}
 
 		if(select) {
-			checked[i].setAttribute("checked", 1);
+			checked[i].setAttribute("checked", "checked");
 		}
 	}
 }
 
-popup_frame();
+popup_frame()
