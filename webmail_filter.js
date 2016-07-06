@@ -50,7 +50,7 @@ popup_frame = function() {
 	frame.style.left = "0px";
 	frame.style.top = "0px";
 	frame.style.width = "100%";
-	frame.style.padding = "10px";
+	frame.style.padding = "5px";
 	frame.style.backgroundColor = "white";
 	document.body.appendChild(frame);
 }
@@ -65,9 +65,11 @@ execute_query = function(value, name) {
 	} else if(name == "from") {
 		value.replace(/^\s+|\s+$/g, "")
 		from_value = value;
+		from_regexp = new RegExp(from_value, "i");
 	} else if(name == "subject") {
 		value.replace(/^\s+|\s+$/g, "")
 		subject_value = value;
+		subject_regexp = new RegExp(subject_value, "i");
 	}
 
 	for(var i = 2; i < rows.length; i ++) {
@@ -84,11 +86,11 @@ execute_query = function(value, name) {
 		}
 
 		if(from_value !== "") {
-			select = select && from[i].match(from_value);
+			select = select && from_regexp.test(from[i]);
 		}
 
 		if(subject_value !== "") {
-			select = select && subject[i].match(subject_value);
+			select = select && subject_regexp.test(subject[i]);
 		}
 
 		if(select) {
