@@ -6,6 +6,253 @@
   <description>Zuguang Gu's blog</description>
 
 <item>
+<title>Visualize chromatin state transtitions</title>
+<link>http://zuguang.de/blog/html/cb0bcadf61720734525b1b6c96c80695.html</link>
+<pubDate>Sun, 07 Aug 2016 13:43:40 CET</pubDate>
+<description>
+
+
+&lt;p&gt;A chromatin state transition matrix shows how much the chromatin state in the genome
+has been changed from e.g. one sample to another. In our &lt;a href="http://msb.embopress.org/content/12/3/861"&gt;recent paper&lt;/a&gt; 
+we demonstrated how chromatin states change between smoking people and non-smoking people 
+by means of &lt;a href="http://d3dwu2jylmmhzr.cloudfront.net/content/msb/12/3/861/F8.large.jpg"&gt;Chord Diagram&lt;/a&gt;.
+In this post, I will demonstrate how to make such plot by the &lt;strong&gt;circlize&lt;/strong&gt; package 
+and enhance it by adding methylation information.&lt;/p&gt;
+
+&lt;p&gt;The data demonstrated in this post is processed from &lt;a href="http://www.roadmapepigenomics.org/"&gt;Roadmap data&lt;/a&gt;. The
+chromatin states &lt;a href="http://egg2.wustl.edu/roadmap/web_portal/chr_state_learning.html#core_15state"&gt;are learned from five core chromatin marks&lt;/a&gt;. Roadmap samples are separated into two groups based on expression profile. In each group,
+a chromatin state is assigned to the corresponding genomic bin if it is recurrent in at least half of the samples.&lt;/p&gt;
+
+&lt;p&gt;The processed data is stored as &lt;a href="../../data/chromatin_transition.RData"&gt;chromatin_transition.RData&lt;/a&gt;.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="r"&gt;library(circlize)
+load(&amp;quot;../data/chromatin_transition.RData&amp;quot;)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;There are three matrix: &lt;code&gt;mat&lt;/code&gt;, &lt;code&gt;meth_mat_1&lt;/code&gt; and &lt;code&gt;meth_mat_2&lt;/code&gt; which are:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;mat&lt;/code&gt;: chromatin state transition matrix. Rows correspond to states in group 1 and columns
+correspond to group 2. The value in the matrix are total base pairs that transite from one group to the other.
+E.g. there are in total 79600 bp which are in &amp;ldquo;TssA&amp;rdquo; state in group 1 and they change 
+to &amp;ldquo;TssAFlnk&amp;rdquo; state in group 2. On the digonal are the unchanged states.&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;meth_mat_1&lt;/code&gt;: mean methylation in group 1 in each category.&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;meth_mat_2&lt;/code&gt;: mean methylation in group 2 in each category.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;pre&gt;&lt;code class="r"&gt;mat[1:4, 1:4]
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code&gt;##            TssA TssAFlnk TxFlnk     Tx
+## TssA     497200    79600  13400   1800
+## TssAFlnk  56400   233200   5000    800
+## TxFlnk        0      400  43000   1800
+## Tx          800      200    200 166400
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code class="r"&gt;meth_mat_1[1:4, 1:4]
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code&gt;##               TssA  TssAFlnk    TxFlnk        Tx
+## TssA     0.1647232 0.1580874 0.1917435 0.2690045
+## TssAFlnk 0.2591677 0.2689880 0.3616242 0.3411387
+## TxFlnk          NA 0.3697514 0.3360386 0.4752722
+## Tx       0.8268626 0.7822987 0.5799682 0.6595322
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Normally, majority in the genome are unchanged states, thus, we should only look at the regions
+in which their states are changed.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="r"&gt;# proportion of the unchanges states in the genome
+sum(diag(mat))/sum(mat)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code&gt;## [1] 0.6192262
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code class="r"&gt;# remove the unchanged states
+diag(mat) = 0
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;When making the plot, actually rows and columns are different (because one is from group 1 and the other is from group 2),
+thus we give them different names and the original names are stored in &lt;code&gt;all_states&lt;/code&gt;.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="r"&gt;all_states = rownames(mat)
+n_states = nrow(mat)
+
+rownames(mat) = paste0(&amp;quot;R_&amp;quot;, seq_len(n_states))
+colnames(mat) = paste0(&amp;quot;C_&amp;quot;, seq_len(n_states))
+
+dimnames(meth_mat_1) = dimnames(mat)
+dimnames(meth_mat_2) = dimnames(mat)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Next we set the colors. &lt;code&gt;colmat&lt;/code&gt; is the color of the links and the colors
+are represent as hex code. Links have more transparent (&lt;code&gt;A0&lt;/code&gt;) if they
+contain few transitions (&amp;lt; 70th percentile) because we don&amp;#39;t want it
+to disturb the visualization of the major transitions.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="r"&gt;state_col = c(&amp;quot;TssA&amp;quot; = &amp;quot;#E41A1C&amp;quot;,
+              &amp;quot;TssAFlnk&amp;quot; = &amp;quot;#E41A1C&amp;quot;,
+              &amp;quot;TxFlnk&amp;quot; = &amp;quot;#E41A1C&amp;quot;,
+              &amp;quot;Tx&amp;quot; = &amp;quot;#E41A1C&amp;quot;,
+              &amp;quot;TxWk&amp;quot; = &amp;quot;#E41A1C&amp;quot;,
+              &amp;quot;EnhG&amp;quot; = &amp;quot;#E41A1C&amp;quot;,
+              &amp;quot;Enh&amp;quot; = &amp;quot;#E41A1C&amp;quot;,
+              &amp;quot;ZNF/Rpts&amp;quot; = &amp;quot;#E41A1C&amp;quot;,
+              &amp;quot;Het&amp;quot; = &amp;quot;#377EB8&amp;quot;,
+              &amp;quot;TssBiv&amp;quot; = &amp;quot;#377EB8&amp;quot;,
+              &amp;quot;BivFlnk&amp;quot; = &amp;quot;#377EB8&amp;quot;,
+              &amp;quot;EnhBiv&amp;quot; = &amp;quot;#377EB8&amp;quot;,
+              &amp;quot;ReprPC&amp;quot; = &amp;quot;#377EB8&amp;quot;,
+              &amp;quot;ReprPCWk&amp;quot; = &amp;quot;#377EB8&amp;quot;,
+              &amp;quot;Quies&amp;quot; = &amp;quot;black&amp;quot;)
+
+# one for rows and one for columns
+state_col2 = c(state_col, state_col)
+names(state_col2) = c(rownames(mat), colnames(mat))
+
+colmat = rep(state_col2[rownames(mat)], n_states)
+colmat = rgb(t(col2rgb(colmat)), maxColorValue = 255)
+
+qati = quantile(mat, 0.7)
+colmat[mat &amp;gt; qati] = paste0(colmat[mat &amp;gt; qati], &amp;quot;A0&amp;quot;)
+colmat[mat &amp;lt;= qati] = paste0(colmat[mat &amp;lt;= qati], &amp;quot;20&amp;quot;)
+dim(colmat) = dim(mat)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Now we can use &lt;code&gt;chordDiagram()&lt;/code&gt; function to make the plot. Here we set one pre-allocated
+track in which the methylation information will be put.&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;chordDiagram()&lt;/code&gt; returns a data frame which contains coordinates for all links which will
+be used later.&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;de&lt;/code&gt; is the degree for the &amp;ldquo;gap&amp;rdquo; between group 1 and group 2.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="r"&gt;de = 360 - (360 - 20 - 30) - 30
+circos.par(start.degree = -de/4, gap.degree = c(rep(1, n_states-1), de/2, rep(1, n_states-1), de/2))
+
+cdm_res = chordDiagram(mat, col = colmat, grid.col = state_col2,
+    directional = TRUE, annotationTrack = &amp;quot;grid&amp;quot;, preAllocateTracks = list(track.height = 0.1))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;strong&gt;Please see the figure in the original post.&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;If the degree for a sector is larger than 3 degrees, the index for the state and axis is added.
+Note since there is already one pre-allocated track, the circular rectangles are in the second track (&lt;code&gt;track.index = 2&lt;/code&gt;).&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="r"&gt;for(sn in get.all.sector.index()) {
+    if(abs(get.cell.meta.data(&amp;quot;cell.start.degree&amp;quot;, sector.index = sn) - 
+           get.cell.meta.data(&amp;quot;cell.end.degree&amp;quot;, sector.index = sn)) &amp;gt; 3) {
+        xcenter = get.cell.meta.data(&amp;quot;xcenter&amp;quot;, sector.index = sn, track.index = 2)
+        ycenter = get.cell.meta.data(&amp;quot;ycenter&amp;quot;, sector.index = sn, track.index = 2)
+        i_state = as.numeric(gsub(&amp;quot;(C|R)_&amp;quot;, &amp;quot;&amp;quot;, sn))
+        circos.text(xcenter, ycenter, i_state, col = &amp;quot;white&amp;quot;, font = 2, cex = 0.7, 
+            sector.index = sn, track.index = 2, adj = c(0.5, 0.5), niceFacing = TRUE)
+        circos.axis(sector.index = sn, track.index = 2, major.tick.percentage = 0.2, 
+            labels.away.percentage = 0.2, labels.cex = 0.5)
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;strong&gt;Please see the figure in the original post.&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;On the top half, it is easy to see the proportion of different transitions in group 1 that come to every state in group 2.
+However, it is not straightforward for the states in the bottom half to see the proportion of different
+states in group 2 they transite to. This can be solved by adding small circular rectangles. In following example, 
+the newly added circular rectangles in the bottom half shows e.g. how much the state 15 in group 1 has been transited
+to different states in group 2.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="r"&gt;for(i in seq_len(nrow(cdm_res))) {
+    if(cdm_res$value[i] &amp;gt; 0) {
+        circos.rect(cdm_res[i, &amp;quot;x1&amp;quot;], -0.5, cdm_res[i, &amp;quot;x1&amp;quot;] - abs(cdm_res[i, &amp;quot;value&amp;quot;]), -0.7, 
+            col = state_col2[cdm_res$cn[i]], border = state_col2[cdm_res$cn[i]],
+            sector.index = cdm_res$rn[i], track.index = 2)
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;strong&gt;Please see the figure in the original post.&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;Methylation in each category is put on the most outside of the circle. On this track, we will
+put two paralle rectangles which are mean methylation and methylation difference between group 1
+and group 2. Basically, on the bottom, we show &lt;code&gt;meth_mat_2 - meth_mat_1&lt;/code&gt; and on the top we show
+&lt;code&gt;meth_mat_1 - meth_mat_2&lt;/code&gt;.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="r"&gt;abs_max = quantile(abs(c(meth_mat_1, meth_mat_2) - 0.5), 0.95, na.rm = TRUE)
+col_fun = colorRamp2(c(0.5 - abs_max, 0.5, 0.5 + abs_max), c(&amp;quot;blue&amp;quot;, &amp;quot;white&amp;quot;, &amp;quot;red&amp;quot;))
+col_fun2 = colorRamp2(c(-abs_max, 0, abs_max), c(&amp;quot;green&amp;quot;, &amp;quot;white&amp;quot;, &amp;quot;orange&amp;quot;))
+
+ylim = get.cell.meta.data(&amp;quot;ylim&amp;quot;, sector.index = rownames(mat)[1], track.index = 1)
+y1 = ylim[1] + (ylim[2] - ylim[1])*0.4
+y2 = ylim[2]
+for(i in seq_len(nrow(cdm_res))) {
+    if(cdm_res$value[i] &amp;gt; 0) {
+        circos.rect(cdm_res[i, &amp;quot;x1&amp;quot;], y1, cdm_res[i, &amp;quot;x1&amp;quot;] - abs(cdm_res[i, &amp;quot;value&amp;quot;]), y1 + (y2-y1)*0.45, 
+            col = col_fun(meth_mat_1[cdm_res$rn[i], cdm_res$cn[i]]), 
+            border = col_fun(meth_mat_1[cdm_res$rn[i], cdm_res$cn[i]]),
+            sector.index = cdm_res$rn[i], track.index = 1)
+
+        circos.rect(cdm_res[i, &amp;quot;x1&amp;quot;], y1 + (y2-y1)*0.55, cdm_res[i, &amp;quot;x1&amp;quot;] - abs(cdm_res[i, &amp;quot;value&amp;quot;]), y2, 
+            col = col_fun2(meth_mat_2[cdm_res$rn[i], cdm_res$cn[i]] - meth_mat_1[cdm_res$rn[i], cdm_res$cn[i]]), 
+            border = col_fun2(meth_mat_2[cdm_res$rn[i], cdm_res$cn[i]] - meth_mat_1[cdm_res$rn[i], cdm_res$cn[i]]),
+            sector.index = cdm_res$rn[i], track.index = 1)
+
+        circos.rect(cdm_res[i, &amp;quot;x2&amp;quot;], y1, cdm_res[i, &amp;quot;x2&amp;quot;] - abs(cdm_res[i, &amp;quot;value&amp;quot;]), y1 + (y2-y1)*0.45, 
+            col = col_fun(meth_mat_2[cdm_res$rn[i], cdm_res$cn[i]]), 
+            border = col_fun(meth_mat_2[cdm_res$rn[i], cdm_res$cn[i]]),
+            sector.index = cdm_res$cn[i], track.index = 1)
+
+        circos.rect(cdm_res[i, &amp;quot;x2&amp;quot;], y1 + (y2-y1)*0.55, cdm_res[i, &amp;quot;x2&amp;quot;] - abs(cdm_res[i, &amp;quot;value&amp;quot;]), y2, 
+            col = col_fun2(meth_mat_1[cdm_res$rn[i], cdm_res$cn[i]] - meth_mat_2[cdm_res$rn[i], cdm_res$cn[i]]), 
+            border = col_fun2(meth_mat_1[cdm_res$rn[i], cdm_res$cn[i]] - meth_mat_2[cdm_res$rn[i], cdm_res$cn[i]]),
+            sector.index = cdm_res$cn[i], track.index = 1)
+    }
+}
+
+circos.clear()
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;strong&gt;Please see the figure in the original post.&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;A complete plot with legends looks like:&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Please see the figure in the original post.&lt;/strong&gt;&lt;/p&gt;
+
+&lt;h2&gt;Session info&lt;/h2&gt;
+
+&lt;pre&gt;&lt;code class="r"&gt;sessionInfo()
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code&gt;## R version 3.2.3 (2015-12-10)
+## Platform: x86_64-apple-darwin13.4.0 (64-bit)
+## Running under: OS X 10.11.6 (El Capitan)
+## 
+## locale:
+## [1] C/en_US.UTF-8/C/C/C/C
+## 
+## attached base packages:
+## [1] grid      methods   stats     graphics  grDevices utils     datasets 
+## [8] base     
+## 
+## other attached packages:
+## [1] ComplexHeatmap_1.11.5 gridBase_0.4-7        circlize_0.3.7       
+## [4] digest_0.6.9          htmltools_0.3.5       GetoptLong_0.1.3     
+## [7] markdown_0.7.7        knitr_1.13           
+## 
+## loaded via a namespace (and not attached):
+##  [1] Rcpp_0.12.5          dendextend_1.1.8     formatR_1.4         
+##  [4] magrittr_1.5         evaluate_0.9         stringi_1.0-1       
+##  [7] GlobalOptions_0.0.10 whisker_0.3-2        RColorBrewer_1.1-2  
+## [10] rjson_0.2.15         tools_3.2.3          stringr_1.0.0       
+## [13] colorspace_1.2-6     shape_1.4.2
+&lt;/code&gt;&lt;/pre&gt;
+
+
+</description>
+</item>
+
+<item>
 <title>Add column names below bottom annotations</title>
 <link>http://zuguang.de/blog/html/d2d60bb3c5d6201f4914e2ca4ef40893.html</link>
 <pubDate>Mon, 13 Jun 2016 22:22:52 CET</pubDate>
