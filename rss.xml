@@ -6,6 +6,104 @@
   <description>Zuguang Gu's blog</description>
 
 <item>
+<title>Add labels to a genomic Hilbert curve under pixel mode</title>
+<link>http://zuguang.de/blog/html/4ad743c70da1872531dd544e3761f8b3.html</link>
+<pubDate>Tue, 16 Aug 2016 23:34:58 CET</pubDate>
+<description>
+
+
+&lt;pre&gt;&lt;code class="r"&gt;suppressPackageStartupMessages(library(HilbertCurve))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code&gt;## Creating a generic function for &amp;#39;nchar&amp;#39; from package &amp;#39;base&amp;#39; in package &amp;#39;S4Vectors&amp;#39;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code class="r"&gt;suppressPackageStartupMessages(library(GenomicRanges))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Making Hilbert curve for genomic data with &amp;ldquo;pixel&amp;rdquo; mode provides a high resolution way
+to visualize patterns both in a global and local scale. Under &amp;ldquo;pixel&amp;rdquo; mode, the curve
+is stored as an RGB matrix, and it is added to the graphic device as a raster image.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="r"&gt;library(HilbertCurve)
+library(circlize)
+library(GenomicRanges)
+
+set.seed(123)
+bed = generateRandomBed(1000)
+gr = GRanges(seqnames = bed[[1]], ranges = IRanges(bed[[2]], bed[[3]]), score = bed[[4]])
+col_fun = colorRamp2(c(-2, 0, 2), c(&amp;quot;green&amp;quot;, &amp;quot;white&amp;quot;, &amp;quot;red&amp;quot;))
+hc = GenomicHilbertCurve(mode = &amp;quot;pixel&amp;quot;, level = 10, title = &amp;quot;random bed&amp;quot;)
+hc_layer(hc, gr, col = col_fun(gr$score))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;strong&gt;Please see the figure in the original post.&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;Since there are multiple chromosomes, adding border for each chromosome helps to identify
+different chromosomes on the plot. Under &amp;ldquo;pixel&amp;rdquo; mode, &lt;code&gt;hc_map()&lt;/code&gt; actually calculates the
+border of each chromosome and modify corresponding pixel in the RGB matrix to &lt;code&gt;#808080&lt;/code&gt;.
+Then the raster image will be updated in the graphic device.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="r"&gt;hc_map(hc, add = TRUE, fill = NA, border = &amp;quot;#808080&amp;quot;)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;strong&gt;Please see the figure in the original post.&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;But still, it is not straightforward to tell which chromosome locates where. Also, it is impossible
+to add text directly to the plot because the Hilbert curve itself is stored as an RGB matrix. However,
+there is a workaround that we can add another Hilbert curve which only contains the labels for chromosomes
+on top of the first curve.&lt;/p&gt;
+
+&lt;p&gt;When making the plot, the curve itself belongs to a viewport with a name &lt;code&gt;hilbert_curve_$i&lt;/code&gt; that the name
+can be obtained by &lt;code&gt;paste0(&amp;quot;hilbert_curve_&amp;quot;, HilbertCurve:::.ENV$I_PLOT)&lt;/code&gt;. Then we can go to that viewport
+by &lt;code&gt;seekViewport()&lt;/code&gt; and add a second curve with the same setting as the first one expect the mode is set to &amp;ldquo;normal&amp;rdquo; and with a
+lower level (because we only want to locate each chromosome and a low level is sufficient for locating it,
+also lower level gives faster speed). Remember to set &lt;code&gt;newpage = FALSE&lt;/code&gt; so that the second curve
+will not create a new graphic page.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="r"&gt;seekViewport(paste0(&amp;quot;hilbert_curve_&amp;quot;, HilbertCurve:::.ENV$I_PLOT))
+
+hc = GenomicHilbertCurve(mode = &amp;quot;normal&amp;quot;, level = 6, newpage = FALSE)
+hc_map(hc, add = TRUE, fill = NA, border = NA)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;strong&gt;Please see the figure in the original post.&lt;/strong&gt;&lt;/p&gt;
+
+&lt;h2&gt;Session info&lt;/h2&gt;
+
+&lt;pre&gt;&lt;code class="r"&gt;sessionInfo()
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code&gt;## R version 3.2.3 (2015-12-10)
+## Platform: x86_64-apple-darwin13.4.0 (64-bit)
+## Running under: OS X 10.11.6 (El Capitan)
+## 
+## locale:
+## [1] C/en_US.UTF-8/C/C/C/C
+## 
+## attached base packages:
+##  [1] stats4    parallel  methods   grid      stats     graphics  grDevices
+##  [8] utils     datasets  base     
+## 
+## other attached packages:
+##  [1] circlize_0.3.7       HilbertCurve_1.1.3   GenomicRanges_1.20.8
+##  [4] GenomeInfoDb_1.4.3   IRanges_2.2.9        S4Vectors_0.6.6     
+##  [7] BiocGenerics_0.14.0  digest_0.6.9         htmltools_0.3.5     
+## [10] GetoptLong_0.1.4     markdown_0.7.7       knitr_1.13          
+## 
+## loaded via a namespace (and not attached):
+##  [1] Rcpp_0.12.5          XVector_0.8.0        magrittr_1.5        
+##  [4] colorspace_1.2-6     lattice_0.20-33      rjson_0.2.15        
+##  [7] stringr_1.0.0        tools_3.2.3          png_0.1-7           
+## [10] formatR_1.4          HilbertVis_1.26.0    GlobalOptions_0.0.10
+## [13] shape_1.4.2          evaluate_0.9         stringi_1.0-1
+&lt;/code&gt;&lt;/pre&gt;
+
+
+</description>
+</item>
+
+<item>
 <title>Visualize chromatin state transtitions</title>
 <link>http://zuguang.de/blog/html/cb0bcadf61720734525b1b6c96c80695.html</link>
 <pubDate>Sun, 07 Aug 2016 13:43:40 CET</pubDate>
