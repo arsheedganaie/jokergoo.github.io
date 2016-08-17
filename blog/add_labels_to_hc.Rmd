@@ -1,7 +1,7 @@
 Add labels to a genomic Hilbert curve under pixel mode
 ======================================================
 
-```{r}
+```{r, echo = FALSE, warning = FALSE, results = "hide", message = FALSE, include = FALSE}
 suppressPackageStartupMessages(library(HilbertCurve))
 suppressPackageStartupMessages(library(GenomicRanges))
 ```

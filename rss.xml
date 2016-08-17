@@ -12,15 +12,6 @@
 <description>
 
 
-&lt;pre&gt;&lt;code class="r"&gt;suppressPackageStartupMessages(library(HilbertCurve))
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;pre&gt;&lt;code&gt;## Creating a generic function for &amp;#39;nchar&amp;#39; from package &amp;#39;base&amp;#39; in package &amp;#39;S4Vectors&amp;#39;
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;pre&gt;&lt;code class="r"&gt;suppressPackageStartupMessages(library(GenomicRanges))
-&lt;/code&gt;&lt;/pre&gt;
-
 &lt;p&gt;Making Hilbert curve for genomic data with &amp;ldquo;pixel&amp;rdquo; mode provides a high resolution way
 to visualize patterns both in a global and local scale. Under &amp;ldquo;pixel&amp;rdquo; mode, the curve
 is stored as an RGB matrix, and it is added to the graphic device as a raster image.&lt;/p&gt;
