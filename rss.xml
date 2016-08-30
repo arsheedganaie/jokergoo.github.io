@@ -6,6 +6,112 @@
   <description>Zuguang Gu's blog</description>
 
 <item>
+<title>Customize barplots for the oncoPrint</title>
+<link>http://zuguang.de/blog/html/19986c839873566d0fbf099716c113f1.html</link>
+<pubDate>Tue, 30 Aug 2016 13:14:23 CET</pubDate>
+<description>
+
+
+&lt;p&gt;For the &lt;code&gt;oncoPrint()&lt;/code&gt; function in the &lt;strong&gt;circlize&lt;/strong&gt; package, by default, there are barplots
+on top which visualize occurance of different types of genomic mutations in patients and 
+barplots in the right which visualize occurance of mutations in genes. Since it is common
+that each gene may have more than one type of mutations in a patients, the height of bars sometimes
+is larger than the number of genes or patients that are mutated.&lt;/p&gt;
+
+&lt;p&gt;If the aim is only to look at the number of mutated genes and patients regardless of different
+types of mutations, it is easy to customize the column barplots and row barplots for the 
+oncoPrint.&lt;/p&gt;
+
+&lt;p&gt;First, we plot a oncoPrint with default style:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="r"&gt;mat = read.table(textConnection(
+&amp;quot;,s1,s2,s3
+g1,snv;indel,snv,indel
+g2,,snv;indel,snv
+g3,snv,,indel;snv&amp;quot;), row.names = 1, header = TRUE, sep = &amp;quot;,&amp;quot;, stringsAsFactors = FALSE)
+mat = as.matrix(mat)
+
+col = c(snv = &amp;quot;red&amp;quot;, indel = &amp;quot;blue&amp;quot;)
+
+library(ComplexHeatmap)
+oncoPrint(mat, get_type = function(x) strsplit(x, &amp;quot;;&amp;quot;)[[1]],
+    alter_fun = list(
+        snv = function(x, y, w, h) grid.rect(x, y, w*0.9, h*0.9, gp = gpar(fill = col[&amp;quot;snv&amp;quot;], col = NA)),
+        indel = function(x, y, w, h) grid.rect(x, y, w*0.9, h*0.4, gp = gpar(fill = col[&amp;quot;indel&amp;quot;], col = NA))
+    ), col = col)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;strong&gt;Please see the figure in the original post.&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;The method is rather simple, we first suppress the default column barplots and row barplots,
+then define new column barplots and row barplots, assign to &lt;code&gt;top_annotation&lt;/code&gt; and by using
+&lt;code&gt;rowAnnotation()&lt;/code&gt; separately.&lt;/p&gt;
+
+&lt;p&gt;How many geness are mutated and how many patients are mutated.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="r"&gt;n_mutated_patients = apply(mat, 1, function(x) sum(x != &amp;quot;&amp;quot;))
+n_mutated_genes = apply(mat, 2, function(x) sum(x != &amp;quot;&amp;quot;))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Default column barplots are replaced by a new &lt;code&gt;HeatmapAnnotation&lt;/code&gt; object and 
+and row barplots are turned off by setting &lt;code&gt;show_row_barplot = FALSE&lt;/code&gt;, then
+a new row annotation is added by &lt;code&gt;rowAnnotation()&lt;/code&gt;.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="r"&gt;oncoPrint(mat, get_type = function(x) strsplit(x, &amp;quot;;&amp;quot;)[[1]],
+    alter_fun = list(
+        snv = function(x, y, w, h) grid.rect(x, y, w*0.9, h*0.9, gp = gpar(fill = col[&amp;quot;snv&amp;quot;], col = NA)),
+        indel = function(x, y, w, h) grid.rect(x, y, w*0.9, h*0.4, gp = gpar(fill = col[&amp;quot;indel&amp;quot;], col = NA))
+    ), col = col, show_row_barplot = FALSE, 
+    top_annotation = HeatmapAnnotation(column_barplot = anno_barplot(n_mutated_genes, 
+        axis = TRUE, ylim = c(0, max(n_mutated_genes)))),
+    top_annotation_height = unit(2, &amp;quot;cm&amp;quot;)) +
+rowAnnotation(row_barplot = row_anno_barplot(n_mutated_patients, ylim = c(0, max(n_mutated_patients)), 
+    axis = TRUE, axis_side = &amp;quot;top&amp;quot;), width = unit(2, &amp;quot;cm&amp;quot;))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;strong&gt;Please see the figure in the original post.&lt;/strong&gt;&lt;/p&gt;
+
+&lt;h2&gt;Session Info&lt;/h2&gt;
+
+&lt;pre&gt;&lt;code class="r"&gt;sessionInfo()
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code&gt;## R version 3.2.3 (2015-12-10)
+## Platform: x86_64-apple-darwin13.4.0 (64-bit)
+## Running under: OS X 10.11.6 (El Capitan)
+## 
+## locale:
+## [1] C/en_US.UTF-8/C/C/C/C
+## 
+## attached base packages:
+## [1] methods   grid      stats     graphics  grDevices utils     datasets 
+## [8] base     
+## 
+## other attached packages:
+## [1] ComplexHeatmap_1.11.6 digest_0.6.10         htmltools_0.3.5      
+## [4] GetoptLong_0.1.5      markdown_0.7.7        knitr_1.14           
+## 
+## loaded via a namespace (and not attached):
+##  [1] Rcpp_0.12.6          DEoptimR_1.0-6       formatR_1.4         
+##  [4] RColorBrewer_1.1-2   plyr_1.8.4           class_7.3-14        
+##  [7] tools_3.2.3          prabclus_2.2-6       dendextend_1.2.0    
+## [10] mclust_5.2           evaluate_0.9         gtable_0.2.0        
+## [13] lattice_0.20-33      mvtnorm_1.0-5        trimcluster_0.1-2   
+## [16] stringr_1.1.0        cluster_2.0.4        GlobalOptions_0.0.10
+## [19] fpc_2.1-10           stats4_3.2.3         diptest_0.75-7      
+## [22] nnet_7.3-12          robustbase_0.92-6    flexmix_2.3-13      
+## [25] kernlab_0.9-24       ggplot2_2.1.0        magrittr_1.5        
+## [28] whisker_0.3-2        scales_0.4.0         modeltools_0.2-21   
+## [31] MASS_7.3-45          shape_1.4.2          circlize_0.3.8      
+## [34] colorspace_1.2-6     stringi_1.1.1        munsell_0.4.3       
+## [37] rjson_0.2.15
+&lt;/code&gt;&lt;/pre&gt;
+
+
+</description>
+</item>
+
+<item>
 <title>Add labels to a genomic Hilbert curve under pixel mode</title>
 <link>http://zuguang.de/blog/html/4ad743c70da1872531dd544e3761f8b3.html</link>
 <pubDate>Tue, 16 Aug 2016 23:34:58 CET</pubDate>

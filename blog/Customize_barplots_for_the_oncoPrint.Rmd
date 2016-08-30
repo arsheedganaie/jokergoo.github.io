@@ -1,0 +1,70 @@
+Customize barplots for the oncoPrint
+========================================
+
+```{r, echo = FALSE, warning = FALSE}
+suppressPackageStartupMessages(library(ComplexHeatmap))
+```
+
+For the `oncoPrint()` function in the **circlize** package, by default, there are barplots
+on top which visualize occurance of different types of genomic mutations in patients and 
+barplots in the right which visualize occurance of mutations in genes. Since it is common
+that each gene may have more than one type of mutations in a patients, the height of bars sometimes
+is larger than the number of genes or patients that are mutated.
+
+If the aim is only to look at the number of mutated genes and patients regardless of different
+types of mutations, it is easy to customize the column barplots and row barplots for the 
+oncoPrint.
+
+First, we plot a oncoPrint with default style:
+
+```{r}
+mat = read.table(textConnection(
+",s1,s2,s3
+g1,snv;indel,snv,indel
+g2,,snv;indel,snv
+g3,snv,,indel;snv"), row.names = 1, header = TRUE, sep = ",", stringsAsFactors = FALSE)
+mat = as.matrix(mat)
+
+col = c(snv = "red", indel = "blue")
+
+library(ComplexHeatmap)
+oncoPrint(mat, get_type = function(x) strsplit(x, ";")[[1]],
+    alter_fun = list(
+        snv = function(x, y, w, h) grid.rect(x, y, w*0.9, h*0.9, gp = gpar(fill = col["snv"], col = NA)),
+        indel = function(x, y, w, h) grid.rect(x, y, w*0.9, h*0.4, gp = gpar(fill = col["indel"], col = NA))
+    ), col = col)
+```
+
+The method is rather simple, we first suppress the default column barplots and row barplots,
+then define new column barplots and row barplots, assign to `top_annotation` and by using
+`rowAnnotation()` separately.
+
+How many geness are mutated and how many patients are mutated.
+
+```{r}
+n_mutated_patients = apply(mat, 1, function(x) sum(x != ""))
+n_mutated_genes = apply(mat, 2, function(x) sum(x != ""))
+```
+
+Default column barplots are replaced by a new `HeatmapAnnotation` object and 
+and row barplots are turned off by setting `show_row_barplot = FALSE`, then
+a new row annotation is added by `rowAnnotation()`.
+
+```{r}
+oncoPrint(mat, get_type = function(x) strsplit(x, ";")[[1]],
+    alter_fun = list(
+        snv = function(x, y, w, h) grid.rect(x, y, w*0.9, h*0.9, gp = gpar(fill = col["snv"], col = NA)),
+        indel = function(x, y, w, h) grid.rect(x, y, w*0.9, h*0.4, gp = gpar(fill = col["indel"], col = NA))
+    ), col = col, show_row_barplot = FALSE, 
+    top_annotation = HeatmapAnnotation(column_barplot = anno_barplot(n_mutated_genes, 
+    	axis = TRUE, ylim = c(0, max(n_mutated_genes)))),
+    top_annotation_height = unit(2, "cm")) +
+rowAnnotation(row_barplot = row_anno_barplot(n_mutated_patients, ylim = c(0, max(n_mutated_patients)), 
+	axis = TRUE, axis_side = "top"), width = unit(2, "cm"))
+```
+
+## Session Info
+
+```{r}
+sessionInfo()
+```
