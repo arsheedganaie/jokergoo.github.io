@@ -1,7 +1,7 @@
 Use closure to store variables locally
 ========================================
 
-Assuming following scenario: we first construct a list of functions in a `for`e loop that
+Assuming following scenario: we first construct a list of functions in a `for` loop that
 each function does some job and also tracks the status of each iteration. Later all the functions
 in the list will be executed sequentially. This scenario is not rare e.g. when making a complex
 genomic plot with multiple tracks that each track accepts a self-defined graphic function. All
