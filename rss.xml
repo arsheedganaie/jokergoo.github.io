@@ -6,6 +6,80 @@
   <description>Zuguang Gu's blog</description>
 
 <item>
+<title>Use closure to store variables locally</title>
+<link>http://zuguang.de/blog/html/209a327c7898e890cdce26ee446fad68.html</link>
+<pubDate>Wed, 07 Sep 2016 21:39:08 CET</pubDate>
+<description>
+
+
+&lt;p&gt;Assuming following scenario: we first construct a list of functions in a &lt;code&gt;for&lt;/code&gt;e loop that
+each function does some job and also tracks the status of each iteration. Later all the functions
+in the list will be executed sequentially. This scenario is not rare e.g. when making a complex
+genomic plot with multiple tracks that each track accepts a self-defined graphic function. All
+self-defined functions are firstly recorded and put into a wrapper object and in the end, a plotting
+function is applied to execute all the graphic functions. Following code shows an example:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="r"&gt;for(i in 1:n_track) {
+    new_track = add_new_track(..., fun = function() {
+        ...
+        cat(&amp;quot;this is track&amp;quot;, i, &amp;quot;\n&amp;quot;)
+    })
+    obj = add_obj(obj, new_track)
+}
+plot_tracks(obj)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;However, &lt;code&gt;i&lt;/code&gt; in the self-defined functions does not have the value you expect. Actually &lt;code&gt;i&lt;/code&gt; always has
+the value &lt;code&gt;n_track&lt;/code&gt;. Let&amp;#39;s do following simplified experiment:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="r"&gt;f_list = list()
+for(i in 1:4) {
+    f_list[[i]] = function() print(i)
+}
+
+for(k in 1:4) {
+    f_list[[k]]()
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code&gt;## [1] 4
+## [1] 4
+## [1] 4
+## [1] 4
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Unfortunately, the function always gets the value of 4 which is the last number of the for loop. &lt;/p&gt;
+
+&lt;p&gt;The reasion is when the function is defined, the variables inside the function will not be evaluated unless they
+are executed, so in the &lt;code&gt;function() print(i)&lt;/code&gt;, the value of &lt;code&gt;i&lt;/code&gt; is not recorded when it is defined, and when it is called,
+it looks for &lt;code&gt;i&lt;/code&gt; in the current environment and the four iterations have been already finished and &lt;code&gt;i&lt;/code&gt; has the value of 4.&lt;/p&gt;
+
+&lt;p&gt;In order to catch the value of &lt;code&gt;i&lt;/code&gt; in each iteration, we can use closure to catch it and stored it locally. In following
+example, a copy of &lt;code&gt;i&lt;/code&gt; is stored in a local environment which is associated with the function defined in each iteration.
+Later on, when the function is executed, it will look for the &lt;code&gt;i&lt;/code&gt; in the environment where it is defined and it is
+exactly the local environment it is associated.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="r"&gt;f_list = list()
+for(i in 1:4) {
+    f_list[[i]] = local({i = i; function() print(i)})
+}
+
+for(k in 1:4) {
+    f_list[[k]]()
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code&gt;## [1] 1
+## [1] 2
+## [1] 3
+## [1] 4
+&lt;/code&gt;&lt;/pre&gt;
+
+
+</description>
+</item>
+
+<item>
 <title>Customize barplots for the oncoPrint</title>
 <link>http://zuguang.de/blog/html/19986c839873566d0fbf099716c113f1.html</link>
 <pubDate>Tue, 30 Aug 2016 13:14:23 CET</pubDate>
