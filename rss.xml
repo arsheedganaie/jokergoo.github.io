@@ -7,12 +7,12 @@
 
 <item>
 <title>Use closure to store variables locally</title>
-<link>http://zuguang.de/blog/html/209a327c7898e890cdce26ee446fad68.html</link>
-<pubDate>Wed, 07 Sep 2016 21:39:08 CET</pubDate>
+<link>http://zuguang.de/blog/html/bca70854c4818bfd60523fe088e93a5b.html</link>
+<pubDate>Wed, 07 Sep 2016 21:49:23 CET</pubDate>
 <description>
 
 
-&lt;p&gt;Assuming following scenario: we first construct a list of functions in a &lt;code&gt;for&lt;/code&gt;e loop that
+&lt;p&gt;Assuming following scenario: we first construct a list of functions in a &lt;code&gt;for&lt;/code&gt; loop that
 each function does some job and also tracks the status of each iteration. Later all the functions
 in the list will be executed sequentially. This scenario is not rare e.g. when making a complex
 genomic plot with multiple tracks that each track accepts a self-defined graphic function. All
@@ -963,7 +963,7 @@ sapply(fs, function(x) paste(round(x/1024), &amp;quot;KB&amp;quot;))
 <item>
 <title>Visualize mean signals in row clusters by ComplexHeatmap</title>
 <link>http://zuguang.de/blog/html/b901f17cfa11f65353937931bda1712c.html</link>
-<pubDate>Fri, 25 Mar 2016 19:24:44 CET</pubDate>
+<pubDate>Fri, 25 Mar 2016 19:56:04 CET</pubDate>
 <description>
 
 
@@ -973,7 +973,12 @@ sapply(fs, function(x) paste(round(x/1024), &amp;quot;KB&amp;quot;))
 
 &lt;pre&gt;&lt;code class="r"&gt;library(ComplexHeatmap)
 library(circlize)
-library(RColorBrewer)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code&gt;## Warning: package &amp;#39;circlize&amp;#39; was built under R version 3.2.5
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code class="r"&gt;library(RColorBrewer)
 
 set.seed(123)
 
@@ -1055,25 +1060,33 @@ decorate_annotation(&amp;quot;col_mean&amp;quot;, {grid.text(&amp;quot;mean\nsig
 
 &lt;pre&gt;&lt;code&gt;## R version 3.2.3 (2015-12-10)
 ## Platform: x86_64-apple-darwin13.4.0 (64-bit)
-## Running under: OS X 10.11.3 (El Capitan)
+## Running under: OS X 10.11.6 (El Capitan)
 ## 
 ## locale:
 ## [1] C/en_US.UTF-8/C/C/C/C
 ## 
 ## attached base packages:
-## [1] grid      methods   stats     graphics  grDevices utils     datasets 
+## [1] methods   grid      stats     graphics  grDevices utils     datasets 
 ## [8] base     
 ## 
 ## other attached packages:
-## [1] RColorBrewer_1.1-2   circlize_0.3.5       ComplexHeatmap_1.9.3
-## [4] digest_0.6.9         htmltools_0.3        GetoptLong_0.1.2    
-## [7] markdown_0.7.7       knitr_1.12.3        
+## [1] RColorBrewer_1.1-2    circlize_0.3.8        ComplexHeatmap_1.11.6
+## [4] digest_0.6.10         htmltools_0.3.5       GetoptLong_0.1.5     
+## [7] markdown_0.7.7        knitr_1.14           
 ## 
 ## loaded via a namespace (and not attached):
-##  [1] dendextend_1.1.8    formatR_1.3         magrittr_1.5       
-##  [4] evaluate_0.8.3      stringi_1.0-1       GlobalOptions_0.0.9
-##  [7] whisker_0.3-2       rjson_0.2.15        tools_3.2.3        
-## [10] stringr_1.0.0       colorspace_1.2-6    shape_1.4.2
+##  [1] Rcpp_0.12.6          DEoptimR_1.0-6       formatR_1.4         
+##  [4] plyr_1.8.4           class_7.3-14         tools_3.2.3         
+##  [7] prabclus_2.2-6       dendextend_1.2.0     mclust_5.2          
+## [10] evaluate_0.9         gtable_0.2.0         lattice_0.20-33     
+## [13] mvtnorm_1.0-5        trimcluster_0.1-2    stringr_1.1.0       
+## [16] cluster_2.0.4        GlobalOptions_0.0.10 fpc_2.1-10          
+## [19] stats4_3.2.3         diptest_0.75-7       nnet_7.3-12         
+## [22] robustbase_0.92-6    flexmix_2.3-13       kernlab_0.9-24      
+## [25] ggplot2_2.1.0        magrittr_1.5         whisker_0.3-2       
+## [28] scales_0.4.0         modeltools_0.2-21    MASS_7.3-45         
+## [31] shape_1.4.2          colorspace_1.2-6     stringi_1.1.1       
+## [34] munsell_0.4.3        rjson_0.2.15
 &lt;/code&gt;&lt;/pre&gt;
 
 
