@@ -92,8 +92,8 @@ However, there is one serious problem that the order of rows also affect the pos
 can see in above plot, the order of links on a sector is not very optimized that links are twisted. We want 
 the left second red link to be moved to the most right on sector "R2".
 
-From version 0.3.9, if the input is a data frame, the `chordDiagram()` recognize a `rank` column which defines the 
-order of adding links (so here rank == 1 means draw first)
+From version 0.3.9, if the input is a data frame, the `chordDiagram()` recognizes a `rank` column which defines the 
+order of adding links (so here rank == 1 means draw first).
 
 ```{r}
 df$rank = rank(abs(df[[3]]))
@@ -106,6 +106,8 @@ Or to put non-transparent links on the top:
 df$rank = ifelse(df[[1]] == "R2", 2, 1)
 chordDiagram(df, grid.col = grid.col)
 ```
+
+I am happy that you can control the order of adding link while not change the structure of the diagram.
 
 ## Session info
 

@@ -132,8 +132,8 @@ chordDiagram(df3, grid.col = grid.col, order = c(paste0(&amp;quot;R&amp;quot;, 1
 can see in above plot, the order of links on a sector is not very optimized that links are twisted. We want 
 the left second red link to be moved to the most right on sector &amp;ldquo;R2&amp;rdquo;.&lt;/p&gt;
 
-&lt;p&gt;From version 0.3.9, if the input is a data frame, the &lt;code&gt;chordDiagram()&lt;/code&gt; recognize a &lt;code&gt;rank&lt;/code&gt; column which defines the 
-order of adding links (so here rank == 1 means draw first)&lt;/p&gt;
+&lt;p&gt;From version 0.3.9, if the input is a data frame, the &lt;code&gt;chordDiagram()&lt;/code&gt; recognizes a &lt;code&gt;rank&lt;/code&gt; column which defines the 
+order of adding links (so here rank == 1 means draw first).&lt;/p&gt;
 
 &lt;pre&gt;&lt;code class="r"&gt;df$rank = rank(abs(df[[3]]))
 chordDiagram(df, grid.col = grid.col)
@@ -148,6 +148,8 @@ chordDiagram(df, grid.col = grid.col)
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;&lt;strong&gt;Please see the figure in the original post.&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;I am happy that you can control the order of adding link while not change the structure of the diagram.&lt;/p&gt;
 
 &lt;h2&gt;Session info&lt;/h2&gt;
 
