@@ -6,6 +6,181 @@
   <description>Zuguang Gu's blog</description>
 
 <item>
+<title>Adjust order or adding links to the Chord diagram</title>
+<link>http://zuguang.de/blog/html/a32c04bb1d9ef97a819f0570a4b61156.html</link>
+<pubDate>Tue, 20 Sep 2016 19:36:05 CET</pubDate>
+<description>
+
+
+&lt;p&gt;Assuming following matrix:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="r"&gt;set.seed(123)
+mat = matrix(sample(16, 16), 4, byrow = TRUE)
+rownames(mat) = paste0(&amp;quot;R&amp;quot;, 1:4)
+colnames(mat) = paste0(&amp;quot;C&amp;quot;, 1:4)
+mat
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code&gt;##    C1 C2 C3 C4
+## R1  5 12  6 15
+## R2 13  1 14  9
+## R3 16  4 10  3
+## R4  8  2 11  7
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;The order of adding links is:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;R1 -&amp;gt; C1
+R2 -&amp;gt; C1
+R3 -&amp;gt; C1
+R4 -&amp;gt; C1
+R1 -&amp;gt; C2
+...
+R4 -&amp;gt; C4
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Actually if the input is a matrix, the matrix will be converted to a data frame:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="r"&gt;reshape2::melt(mat)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code&gt;##    Var1 Var2 value
+## 1    R1   C1     5
+## 2    R2   C1    13
+## 3    R3   C1    16
+## 4    R4   C1     8
+## 5    R1   C2    12
+## 6    R2   C2     1
+## 7    R3   C2     4
+## 8    R4   C2     2
+## 9    R1   C3     6
+## 10   R2   C3    14
+## 11   R3   C3    10
+## 12   R4   C3    11
+## 13   R1   C4    15
+## 14   R2   C4     9
+## 15   R3   C4     3
+## 16   R4   C4     7
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;and add links for the first record to the last.&lt;/p&gt;
+
+&lt;p&gt;There are several scenarios that we need to adjust the default order:&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;we want to put the widest link on the most top,&lt;/li&gt;
+&lt;li&gt;we want to put the non-transparent links on the top.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;These two scenarios are all for emphasizing certain links. If we have the data frame which
+contains the interactions, we can adjust the order of rows to adjust the order of adding links
+to the Chord diagram.&lt;/p&gt;
+
+&lt;p&gt;If it is a matrix, we can use &lt;code&gt;melt()&lt;/code&gt; from &lt;strong&gt;reshape2&lt;/strong&gt; package to convert it to a data frame:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="r"&gt;df = reshape2::melt(mat)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;To make it simple, we define colors for sectors:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="r"&gt;grid.col = c(&amp;quot;#00000040&amp;quot;, &amp;quot;red&amp;quot;, &amp;quot;#00FF0040&amp;quot;, &amp;quot;#0000FF40&amp;quot;, &amp;quot;orange&amp;quot;, &amp;quot;pink&amp;quot;, &amp;quot;yellow&amp;quot;, &amp;quot;grey&amp;quot;)
+names(grid.col) = c(rownames(mat), colnames(mat))
+grid.col
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code&gt;##          R1          R2          R3          R4          C1          C2 
+## &amp;quot;#00000040&amp;quot;       &amp;quot;red&amp;quot; &amp;quot;#00FF0040&amp;quot; &amp;quot;#0000FF40&amp;quot;    &amp;quot;orange&amp;quot;      &amp;quot;pink&amp;quot; 
+##          C3          C4 
+##    &amp;quot;yellow&amp;quot;      &amp;quot;grey&amp;quot;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Following is the default Chord diagram. As you can see links from &amp;ldquo;R2&amp;rdquo; are complete red, it is
+covered by links from &amp;ldquo;R3&amp;rdquo; and &amp;ldquo;R4&amp;rdquo; because &amp;ldquo;R3&amp;rdquo; and &amp;ldquo;R4&amp;rdquo; links are drawn later than &amp;ldquo;R2&amp;rdquo; links.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="r"&gt;library(circlize)
+chordDiagram(df, grid.col = grid.col)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;strong&gt;Please see the figure in the original post.&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;Next we adjust the order of rows of &lt;code&gt;df&lt;/code&gt; to put &amp;ldquo;R2&amp;rdquo; links to the end, and then make the plot:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="r"&gt;df2 = df[c(which(df[[1]] == &amp;quot;R1&amp;quot;), which(df[[1]] == &amp;quot;R3&amp;quot;), which(df[[1]] == &amp;quot;R4&amp;quot;), which(df[[1]] == &amp;quot;R2&amp;quot;)), ]
+chordDiagram(df2, grid.col = grid.col)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;strong&gt;Please see the figure in the original post.&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;Now the &amp;ldquo;R2&amp;rdquo; links are on the top, but the order of sectors changed that &amp;ldquo;R2&amp;rdquo; becomes the last sector in all &amp;ldquo;R*&amp;rdquo; sectors.
+This problem can be simply solved by explictly setting &lt;code&gt;order&lt;/code&gt; options:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="r"&gt;chordDiagram(df2, grid.col = grid.col, order = c(paste0(&amp;quot;R&amp;quot;, 1:4), paste0(&amp;quot;C&amp;quot;, 1:4)))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;strong&gt;Please see the figure in the original post.&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;In a same way, if you want to put the widest link on the very top, just reorder the rows of the data frame by 
+the associated absolute values.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="r"&gt;df3 = df[order(abs(df[[3]])), ]
+chordDiagram(df3, grid.col = grid.col, order = c(paste0(&amp;quot;R&amp;quot;, 1:4), paste0(&amp;quot;C&amp;quot;, 1:4)))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;strong&gt;Please see the figure in the original post.&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;However, there is one serious problem that the order of rows also affect the positioning of links on a sector. As you 
+can see in above plot, the order of links on a sector is not very optimized that links are twisted. We want 
+the left second red link to be moved to the most right on sector &amp;ldquo;R2&amp;rdquo;.&lt;/p&gt;
+
+&lt;p&gt;From version 0.3.9, if the input is a data frame, the &lt;code&gt;chordDiagram()&lt;/code&gt; recognize a &lt;code&gt;rank&lt;/code&gt; column which defines the 
+order of adding links (so here rank == 1 means draw first)&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="r"&gt;df$rank = rank(abs(df[[3]]))
+chordDiagram(df, grid.col = grid.col)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;strong&gt;Please see the figure in the original post.&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;Or to put non-transparent links on the top:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="r"&gt;df$rank = ifelse(df[[1]] == &amp;quot;R2&amp;quot;, 2, 1)
+chordDiagram(df, grid.col = grid.col)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;strong&gt;Please see the figure in the original post.&lt;/strong&gt;&lt;/p&gt;
+
+&lt;h2&gt;Session info&lt;/h2&gt;
+
+&lt;pre&gt;&lt;code class="r"&gt;sessionInfo()
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code&gt;## R version 3.2.3 (2015-12-10)
+## Platform: x86_64-apple-darwin13.4.0 (64-bit)
+## Running under: OS X 10.11.6 (El Capitan)
+## 
+## locale:
+## [1] C/en_US.UTF-8/C/C/C/C
+## 
+## attached base packages:
+## [1] methods   stats     graphics  grDevices utils     datasets  base     
+## 
+## other attached packages:
+## [1] circlize_0.3.9   digest_0.6.10    htmltools_0.3.5  GetoptLong_0.1.5
+## [5] markdown_0.7.7   knitr_1.14      
+## 
+## loaded via a namespace (and not attached):
+##  [1] Rcpp_0.12.6          plyr_1.8.4           grid_3.2.3          
+##  [4] formatR_1.4          magrittr_1.5         evaluate_0.9        
+##  [7] stringi_1.1.1        GlobalOptions_0.0.10 reshape2_1.4.1      
+## [10] rjson_0.2.15         tools_3.2.3          stringr_1.1.0       
+## [13] colorspace_1.2-6     shape_1.4.2
+&lt;/code&gt;&lt;/pre&gt;
+
+
+</description>
+</item>
+
+<item>
 <title>Use closure to store variables locally</title>
 <link>http://zuguang.de/blog/html/bca70854c4818bfd60523fe088e93a5b.html</link>
 <pubDate>Wed, 07 Sep 2016 21:49:23 CET</pubDate>
