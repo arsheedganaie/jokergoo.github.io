@@ -41,9 +41,6 @@ R4 -&amp;gt; C4
 
 &lt;p&gt;Actually if the input is a matrix, the matrix will be converted to a data frame:&lt;/p&gt;
 
-&lt;pre&gt;&lt;code class="r"&gt;reshape2::melt(mat)
-&lt;/code&gt;&lt;/pre&gt;
-
 &lt;pre&gt;&lt;code&gt;##    Var1 Var2 value
 ## 1    R1   C1     5
 ## 2    R2   C1    13

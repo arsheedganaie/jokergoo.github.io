@@ -29,7 +29,7 @@ R4 -> C4
 
 Actually if the input is a matrix, the matrix will be converted to a data frame:
 
-```{r}
+```{r, echo = FALSE}
 reshape2::melt(mat)
 ```
 
