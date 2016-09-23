@@ -6,6 +6,46 @@
   <description>Zuguang Gu's blog</description>
 
 <item>
+<title>Circular scan</title>
+<link>http://zuguang.de/blog/html/8fe5151c062b3a521b255b5cc3b2b044.html</link>
+<pubDate>Fri, 23 Sep 2016 14:24:15 CET</pubDate>
+<description>
+
+
+&lt;pre&gt;&lt;code class="r"&gt;library(circlize)
+circular_scan = function(theta, width, r, x, y) {
+    theta1 = theta %% 360  # enforce theta in [0, 360)
+    theta2 = (theta + width) %% 360
+    theta_p = circlize:::as.degree(atan(y/x)) # ranging [-90, 90]
+    theta_p = ifelse(x &amp;lt; 0, theta_p + 180, theta_p)
+    theta_p = theta_p %% 360
+    r_p = sqrt(x^2 + y^2)
+    # rotate to put bottom edge at x-axis
+    offset = 360 - theta1
+    l = (theta_p + offset) %% 360 &amp;gt;= (theta1 + offset) %% 360 &amp;amp;
+        (theta_p + offset) %% 360 &amp;lt;= (theta2 + offset) %% 360 &amp;amp;
+        r_p &amp;lt;= r
+
+    par(mar = c(1, 1, 1, 1))
+    plot(NULL, xlim = c(-r, r), ylim = c(-r, r), axes = FALSE, ann = FALSE)
+    draw.sector(start.degree = theta, end.degree = theta + width, rou1 = r, clock.wise = FALSE, col = &amp;quot;grey&amp;quot;)
+    points(x, y, col = ifelse(l, &amp;quot;red&amp;quot;, &amp;quot;grey&amp;quot;), pch = 16)
+}
+
+x = runif(40, -2, 2)
+y = runif(40, -2, 2)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code class="r"&gt;for(d in 0:360) circular_scan(d, 30, 2, x + runif(40, -0.05, 0.05), y + runif(40, -0.05, 0.05))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;video   loop&gt;&lt;source src="unnamed-chunk-3-.webm" /&gt;&lt;p&gt;video of chunk unnamed-chunk-3&lt;/p&gt;&lt;/video&gt;&lt;/p&gt;
+
+
+</description>
+</item>
+
+<item>
 <title>Adjust order or adding links to the Chord diagram</title>
 <link>http://zuguang.de/blog/html/a32c04bb1d9ef97a819f0570a4b61156.html</link>
 <pubDate>Tue, 20 Sep 2016 19:36:05 CET</pubDate>

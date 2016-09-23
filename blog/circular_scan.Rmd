@@ -1,0 +1,35 @@
+Circular scan
+==============
+
+```{r, echo = FALSE}
+suppressWarnings(suppressPackageStartupMessages(library(circlize)))
+```
+
+```{r}
+library(circlize)
+circular_scan = function(theta, width, r, x, y) {
+    theta1 = theta %% 360  # enforce theta in [0, 360)
+    theta2 = (theta + width) %% 360
+    theta_p = circlize:::as.degree(atan(y/x)) # ranging [-90, 90]
+    theta_p = ifelse(x < 0, theta_p + 180, theta_p)
+    theta_p = theta_p %% 360
+    r_p = sqrt(x^2 + y^2)
+    # rotate to put bottom edge at x-axis
+    offset = 360 - theta1
+    l = (theta_p + offset) %% 360 >= (theta1 + offset) %% 360 &
+        (theta_p + offset) %% 360 <= (theta2 + offset) %% 360 &
+        r_p <= r
+
+    par(mar = c(1, 1, 1, 1))
+    plot(NULL, xlim = c(-r, r), ylim = c(-r, r), axes = FALSE, ann = FALSE)
+    draw.sector(start.degree = theta, end.degree = theta + width, rou1 = r, clock.wise = FALSE, col = "grey")
+    points(x, y, col = ifelse(l, "red", "grey"), pch = 16)
+}
+
+x = runif(40, -2, 2)
+y = runif(40, -2, 2)
+```
+
+```{r, fig.show="animate", interval = 0.1, aniopts="loop"}
+for(d in 0:360) circular_scan(d, 30, 2, x + runif(40, -0.05, 0.05), y + runif(40, -0.05, 0.05))
+```
