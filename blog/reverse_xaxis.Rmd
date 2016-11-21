@@ -1,0 +1,58 @@
+Reverse x-axis in the circular layout
+======================================
+
+In *circlize* package, x-axis in always clockwise in each sector, no matter it
+is on the top of the circle or at the bottom. However, you can manually convert
+the original positions on x-axis to pretend you have a reversed xaxis. Take folling example:
+
+```{r}
+library(circlize)
+circos.par(gap.degree = c(10, 10), start.degree = -5)
+circos.initialize(factors = c("a", "b"), xlim = c(0, 1))
+circos.trackPlotRegion(ylim = c(0, 1), panel.fun = function(x, y) {
+	circos.axis(major.at = seq(0, 1, by = 0.1))
+})
+circos.rect(0.2, 0.2, 0.4, 0.4, col = "red", sector.index = "a")
+circos.link("a", 0.3, "b", 0.7)
+circos.clear()
+```
+
+In the bottom sector, the order of x-axis seems not very convinient to read.
+Actually we can make some transformation on the original coordinates on x-axis.
+In following we defined `reverse_xaxis()` which flips the axis.
+
+```{r}
+reverse_xaxis = function(x, xlim) {
+	(xlim[2] - xlim[1]) - (x - xlim[1]) + xlim[1]
+}
+reverse_xaxis(seq(0, 1, by = 0.1), xlim = c(0, 1))
+```
+
+Now we apply `reverse_xaxis()` to all the coordinates in the sectors we want to
+flip.
+
+```{r}
+circos.par(gap.degree = c(10, 10), start.degree = -5)
+circos.initialize(factors = c("a", "b"), xlim = c(0, 1))
+circos.trackPlotRegion(ylim = c(0, 1), panel.fun = function(x, y) {
+	sector.index = get.cell.meta.data("sector.index")
+	xlim =  get.cell.meta.data("xlim")
+	if(sector.index == "a") {
+		circos.axis(major.at = seq(0, 1, by = 0.1), labels = reverse_xaxis(seq(0, 1, by = 0.1), xlim))
+		circos.rect(reverse_xaxis(0.2, xlim), 0.2, reverse_xaxis(0.4, xlim), 0.4, 
+			col = "red", sector.index = "a")
+	} else {
+		circos.axis(major.at = seq(0, 1, by = 0.1))
+	}
+})
+xlim = get.cell.meta.data("xlim", sector.index = "a")
+circos.link("a", reverse_xaxis(0.3, xlim), "b", 0.7)
+circos.clear()
+```
+
+## Session info
+
+```{r}
+sessionInfo()
+```
+

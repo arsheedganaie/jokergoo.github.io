@@ -203,10 +203,10 @@ hr {
 
 <body>
 <p style='text-align:right'>
-<span><a href='http://jokergoo.github.io/index.html'>Home</a></span> | 
-<span><a href='http://jokergoo.github.io/blog.html'>Blog</a></span> | 
-<span><a href='http://jokergoo.github.io/software.html'>Software</a></span> | 
-<span><a href='http://jokergoo.github.io/publications.html'>Publications</a></span> |
+<span><a href='http://zuguang.de/index.html'>Home</a></span> | 
+<span><a href='http://zuguang.de/blog.html'>Blog</a></span> | 
+<span><a href='http://zuguang.de/software.html'>Software</a></span> | 
+<span><a href='http://zuguang.de/publications.html'>Publications</a></span> |
 <span><a href='https://github.com/jokergoo/'>GitHub</a></span>
 </p>
 <hr />
@@ -235,17 +235,17 @@ tagments[1:2, ]
 <pre><code class="r">DMR1[1:2, ]
 </code></pre>
 
-<pre><code>##    chr    start      end   methDiff                tagment
-## 1 chr1 44894352 44894643 -0.2812889 chr1-44876009-45016546
-## 2 chr1 44902069 44902966 -0.3331170 chr1-44876009-45016546
+<pre><code>##    chr    start      end methDiff                tagment
+## 1 chr1 44894352 44894643    -0.28 chr1-44876009-45016546
+## 2 chr1 44902069 44902966    -0.33 chr1-44876009-45016546
 </code></pre>
 
 <pre><code class="r">DMR2[1:2, ]
 </code></pre>
 
-<pre><code>##    chr    start      end   methDiff                tagment
-## 1 chr2 64979958 64980308 -0.2151918 chr2-64897317-65173964
-## 2 chr2 65038093 65039051 -0.2082847 chr2-64897317-65173964
+<pre><code>##    chr    start      end methDiff                tagment
+## 1 chr2 64979958 64980308    -0.22 chr2-64897317-65173964
+## 2 chr2 65038093 65039051    -0.21 chr2-64897317-65173964
 </code></pre>
 
 <p>Chromosomes (e.g. <code>chr1</code>, <code>chr2</code>) and tagments (e.g. <code>chr1-44876009-45016546</code>, <code>chr1-90460304-90761641</code>)
@@ -436,26 +436,37 @@ par(new = FALSE)
 
 <pre><code>## R version 3.2.3 (2015-12-10)
 ## Platform: x86_64-apple-darwin13.4.0 (64-bit)
-## Running under: OS X 10.11.3 (El Capitan)
+## Running under: OS X 10.12.1 (unknown)
 ## 
 ## locale:
 ## [1] C/en_US.UTF-8/C/C/C/C
 ## 
 ## attached base packages:
-## [1] grid      methods   stats     graphics  grDevices utils     datasets 
-## [8] base     
+##  [1] stats4    parallel  methods   grid      stats     graphics  grDevices
+##  [8] utils     datasets  base     
 ## 
 ## other attached packages:
-## [1] circlize_0.3.5       ComplexHeatmap_1.9.3 digest_0.6.9        
-## [4] htmltools_0.3        GetoptLong_0.1.2     markdown_0.7.7      
-## [7] knitr_1.12.3        
+##  [1] HilbertCurve_1.1.3    GenomicRanges_1.20.8  GenomeInfoDb_1.4.3   
+##  [4] IRanges_2.2.9         S4Vectors_0.6.6       BiocGenerics_0.14.0  
+##  [7] gridBase_0.4-7        circlize_0.3.9        ComplexHeatmap_1.11.8
+## [10] digest_0.6.10         htmltools_0.3.5       GetoptLong_0.1.6     
+## [13] markdown_0.7.7        knitr_1.14           
 ## 
 ## loaded via a namespace (and not attached):
-##  [1] dendextend_1.1.8    mime_0.4            formatR_1.3        
-##  [4] magrittr_1.5        evaluate_0.8.3      stringi_1.0-1      
-##  [7] GlobalOptions_0.0.9 whisker_0.3-2       RColorBrewer_1.1-2 
-## [10] rjson_0.2.15        tools_3.2.3         stringr_1.0.0      
-## [13] colorspace_1.2-6    shape_1.4.2
+##  [1] Rcpp_0.12.6          XVector_0.8.0        formatR_1.4         
+##  [4] DEoptimR_1.0-6       RColorBrewer_1.1-2   plyr_1.8.4          
+##  [7] HilbertVis_1.26.0    class_7.3-14         tools_3.2.3         
+## [10] prabclus_2.2-6       dendextend_1.2.0     mclust_5.2          
+## [13] evaluate_0.9         gtable_0.2.0         lattice_0.20-33     
+## [16] png_0.1-7            mvtnorm_1.0-5        trimcluster_0.1-2   
+## [19] stringr_1.1.0        cluster_2.0.4        GlobalOptions_0.0.10
+## [22] fpc_2.1-10           diptest_0.75-7       nnet_7.3-12         
+## [25] robustbase_0.92-6    flexmix_2.3-13       reshape2_1.4.1      
+## [28] kernlab_0.9-24       ggplot2_2.1.0        magrittr_1.5        
+## [31] whisker_0.3-2        scales_0.4.0         modeltools_0.2-21   
+## [34] MASS_7.3-45          mime_0.5             shape_1.4.2         
+## [37] colorspace_1.2-6     stringi_1.1.1        munsell_0.4.3       
+## [40] rjson_0.2.15
 </code></pre>
 
 

@@ -254,11 +254,11 @@ to &ldquo;TssAFlnk&rdquo; state in group 2. On the digonal are the unchanged sta
 <pre><code class="r">meth_mat_1[1:4, 1:4]
 </code></pre>
 
-<pre><code>##               TssA  TssAFlnk    TxFlnk        Tx
-## TssA     0.1647232 0.1580874 0.1917435 0.2690045
-## TssAFlnk 0.2591677 0.2689880 0.3616242 0.3411387
-## TxFlnk          NA 0.3697514 0.3360386 0.4752722
-## Tx       0.8268626 0.7822987 0.5799682 0.6595322
+<pre><code>##          TssA TssAFlnk TxFlnk   Tx
+## TssA     0.16     0.16   0.19 0.27
+## TssAFlnk 0.26     0.27   0.36 0.34
+## TxFlnk     NA     0.37   0.34 0.48
+## Tx       0.83     0.78   0.58 0.66
 </code></pre>
 
 <p>Normally, majority in the genome are unchanged states, thus, we should only look at the regions
@@ -268,7 +268,7 @@ in which their states are changed.</p>
 sum(diag(mat))/sum(mat)
 </code></pre>
 
-<pre><code>## [1] 0.6192262
+<pre><code>## [1] 0.62
 </code></pre>
 
 <pre><code class="r"># remove the unchanged states
@@ -427,26 +427,34 @@ circos.clear()
 
 <pre><code>## R version 3.2.3 (2015-12-10)
 ## Platform: x86_64-apple-darwin13.4.0 (64-bit)
-## Running under: OS X 10.11.6 (El Capitan)
+## Running under: OS X 10.12.1 (unknown)
 ## 
 ## locale:
 ## [1] C/en_US.UTF-8/C/C/C/C
 ## 
 ## attached base packages:
-## [1] grid      methods   stats     graphics  grDevices utils     datasets 
+## [1] methods   grid      stats     graphics  grDevices utils     datasets 
 ## [8] base     
 ## 
 ## other attached packages:
-## [1] ComplexHeatmap_1.11.5 gridBase_0.4-7        circlize_0.3.7       
-## [4] digest_0.6.9          htmltools_0.3.5       GetoptLong_0.1.3     
-## [7] markdown_0.7.7        knitr_1.13           
+## [1] gridBase_0.4-7        circlize_0.3.9        ComplexHeatmap_1.11.8
+## [4] digest_0.6.10         htmltools_0.3.5       GetoptLong_0.1.6     
+## [7] markdown_0.7.7        knitr_1.14           
 ## 
 ## loaded via a namespace (and not attached):
-##  [1] Rcpp_0.12.5          dendextend_1.1.8     formatR_1.4         
-##  [4] magrittr_1.5         evaluate_0.9         stringi_1.0-1       
-##  [7] GlobalOptions_0.0.10 whisker_0.3-2        RColorBrewer_1.1-2  
-## [10] rjson_0.2.15         tools_3.2.3          stringr_1.0.0       
-## [13] colorspace_1.2-6     shape_1.4.2
+##  [1] Rcpp_0.12.6          formatR_1.4          DEoptimR_1.0-6      
+##  [4] RColorBrewer_1.1-2   plyr_1.8.4           class_7.3-14        
+##  [7] tools_3.2.3          prabclus_2.2-6       dendextend_1.2.0    
+## [10] mclust_5.2           evaluate_0.9         gtable_0.2.0        
+## [13] lattice_0.20-33      mvtnorm_1.0-5        trimcluster_0.1-2   
+## [16] stringr_1.1.0        cluster_2.0.4        GlobalOptions_0.0.10
+## [19] fpc_2.1-10           stats4_3.2.3         diptest_0.75-7      
+## [22] nnet_7.3-12          robustbase_0.92-6    flexmix_2.3-13      
+## [25] kernlab_0.9-24       ggplot2_2.1.0        magrittr_1.5        
+## [28] whisker_0.3-2        scales_0.4.0         modeltools_0.2-21   
+## [31] MASS_7.3-45          mime_0.5             shape_1.4.2         
+## [34] colorspace_1.2-6     stringi_1.1.1        munsell_0.4.3       
+## [37] rjson_0.2.15
 </code></pre>
 
 

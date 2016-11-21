@@ -6,9 +6,127 @@
   <description>Zuguang Gu's blog</description>
 
 <item>
+<title>Reverse x-axis in the circular layout</title>
+<link>http://zuguang.de/blog/html/794438b591513cee91a513a21c784e85.html</link>
+<pubDate>Sat, 19 Nov 2016 17:06:45 CET</pubDate>
+<description>
+
+
+&lt;p&gt;In &lt;em&gt;circlize&lt;/em&gt; package, x-axis in always clockwise in each sector, no matter it
+is on the top of the circle or at the bottom. However, you can manually convert
+the original positions on x-axis to pretend you have a reversed xaxis. Take folling example:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="r"&gt;library(circlize)
+circos.par(gap.degree = c(10, 10), start.degree = -5)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code&gt;## Warning in .self$filter(opt_value): &amp;#39;gap.degree&amp;#39; can only be modified before `circos.initialize`,
+## or maybe you forgot to call `circos.clear` in your last plot.
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code&gt;## Warning in .self$filter(opt_value): &amp;#39;start.degree&amp;#39; can only be modified before `circos.initialize`,
+## or maybe you forgot to call `circos.clear` in your last plot.
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code class="r"&gt;circos.initialize(factors = c(&amp;quot;a&amp;quot;, &amp;quot;b&amp;quot;), xlim = c(0, 1))
+circos.trackPlotRegion(ylim = c(0, 1), panel.fun = function(x, y) {
+    circos.axis(major.at = seq(0, 1, by = 0.1))
+})
+circos.rect(0.2, 0.2, 0.4, 0.4, col = &amp;quot;red&amp;quot;, sector.index = &amp;quot;a&amp;quot;)
+circos.link(&amp;quot;a&amp;quot;, 0.3, &amp;quot;b&amp;quot;, 0.7)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;strong&gt;Please see the figure in the original post.&lt;/strong&gt;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="r"&gt;circos.clear()
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;In the bottom sector, the order of x-axis seems not very convinient to read.
+Actually we can make some transformation on the original coordinates on x-axis.
+In following we defined &lt;code&gt;reverse_xaxis()&lt;/code&gt; which flips the axis.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="r"&gt;reverse_xaxis = function(x, xlim) {
+    (xlim[2] - xlim[1]) - (x - xlim[1]) + xlim[1]
+}
+reverse_xaxis(seq(0, 1, by = 0.1), xlim = c(0, 1))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code&gt;##  [1] 1.0 0.9 0.8 0.7 0.6 0.5 0.4 0.3 0.2 0.1 0.0
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Now we apply &lt;code&gt;reverse_xaxis()&lt;/code&gt; to all the coordinates in the sectors we want to
+flip.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="r"&gt;circos.par(gap.degree = c(10, 10), start.degree = -5)
+circos.initialize(factors = c(&amp;quot;a&amp;quot;, &amp;quot;b&amp;quot;), xlim = c(0, 1))
+circos.trackPlotRegion(ylim = c(0, 1), panel.fun = function(x, y) {
+    sector.index = get.cell.meta.data(&amp;quot;sector.index&amp;quot;)
+    xlim =  get.cell.meta.data(&amp;quot;xlim&amp;quot;)
+    if(sector.index == &amp;quot;a&amp;quot;) {
+        circos.axis(major.at = seq(0, 1, by = 0.1), labels = reverse_xaxis(seq(0, 1, by = 0.1), xlim))
+        circos.rect(reverse_xaxis(0.2, xlim), 0.2, reverse_xaxis(0.4, xlim), 0.4, 
+            col = &amp;quot;red&amp;quot;, sector.index = &amp;quot;a&amp;quot;)
+    } else {
+        circos.axis(major.at = seq(0, 1, by = 0.1))
+    }
+})
+xlim = get.cell.meta.data(&amp;quot;xlim&amp;quot;, sector.index = &amp;quot;a&amp;quot;)
+circos.link(&amp;quot;a&amp;quot;, reverse_xaxis(0.3, xlim), &amp;quot;b&amp;quot;, 0.7)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;strong&gt;Please see the figure in the original post.&lt;/strong&gt;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="r"&gt;circos.clear()
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2&gt;Session info&lt;/h2&gt;
+
+&lt;pre&gt;&lt;code class="r"&gt;sessionInfo()
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code&gt;## R version 3.2.3 (2015-12-10)
+## Platform: x86_64-apple-darwin13.4.0 (64-bit)
+## Running under: OS X 10.12.1 (unknown)
+## 
+## locale:
+## [1] C/en_US.UTF-8/C/C/C/C
+## 
+## attached base packages:
+##  [1] stats4    parallel  methods   grid      stats     graphics  grDevices
+##  [8] utils     datasets  base     
+## 
+## other attached packages:
+##  [1] HilbertCurve_1.1.3    GenomicRanges_1.20.8  GenomeInfoDb_1.4.3   
+##  [4] IRanges_2.2.9         S4Vectors_0.6.6       BiocGenerics_0.14.0  
+##  [7] gridBase_0.4-7        circlize_0.3.9        ComplexHeatmap_1.11.8
+## [10] digest_0.6.10         htmltools_0.3.5       GetoptLong_0.1.6     
+## [13] markdown_0.7.7        knitr_1.14           
+## 
+## loaded via a namespace (and not attached):
+##  [1] Rcpp_0.12.6          XVector_0.8.0        formatR_1.4         
+##  [4] DEoptimR_1.0-6       RColorBrewer_1.1-2   plyr_1.8.4          
+##  [7] HilbertVis_1.26.0    class_7.3-14         tools_3.2.3         
+## [10] prabclus_2.2-6       dendextend_1.2.0     mclust_5.2          
+## [13] evaluate_0.9         gtable_0.2.0         lattice_0.20-33     
+## [16] png_0.1-7            mvtnorm_1.0-5        trimcluster_0.1-2   
+## [19] stringr_1.1.0        cluster_2.0.4        GlobalOptions_0.0.10
+## [22] fpc_2.1-10           diptest_0.75-7       nnet_7.3-12         
+## [25] robustbase_0.92-6    flexmix_2.3-13       reshape2_1.4.1      
+## [28] kernlab_0.9-24       ggplot2_2.1.0        magrittr_1.5        
+## [31] whisker_0.3-2        scales_0.4.0         modeltools_0.2-21   
+## [34] MASS_7.3-45          mime_0.5             shape_1.4.2         
+## [37] colorspace_1.2-6     stringi_1.1.1        munsell_0.4.3       
+## [40] rjson_0.2.15
+&lt;/code&gt;&lt;/pre&gt;
+
+
+</description>
+</item>
+
+<item>
 <title>Circular scan</title>
 <link>http://zuguang.de/blog/html/8fe5151c062b3a521b255b5cc3b2b044.html</link>
-<pubDate>Fri, 23 Sep 2016 14:24:15 CET</pubDate>
+<pubDate>Fri, 23 Sep 2016 14:54:28 CET</pubDate>
 <description>
 
 
@@ -39,7 +157,7 @@ y = runif(40, -2, 2)
 &lt;pre&gt;&lt;code class="r"&gt;for(d in 0:360) circular_scan(d, 30, 2, x + runif(40, -0.05, 0.05), y + runif(40, -0.05, 0.05))
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;&lt;video   controls loop&gt;&lt;source src="unnamed-chunk-3-.webm" /&gt;&lt;p&gt;video of chunk unnamed-chunk-3&lt;/p&gt;&lt;/video&gt;&lt;/p&gt;
+&lt;p&gt;&lt;video   loop&gt;&lt;source src="figure/unnamed-chunk-3-.webm" /&gt;&lt;p&gt;video of chunk unnamed-chunk-3&lt;/p&gt;&lt;/video&gt;&lt;/p&gt;
 
 
 </description>
@@ -48,7 +166,7 @@ y = runif(40, -2, 2)
 <item>
 <title>Adjust order or adding links to the Chord diagram</title>
 <link>http://zuguang.de/blog/html/a32c04bb1d9ef97a819f0570a4b61156.html</link>
-<pubDate>Tue, 20 Sep 2016 19:36:05 CET</pubDate>
+<pubDate>Wed, 21 Sep 2016 15:48:59 CET</pubDate>
 <description>
 
 
@@ -195,24 +313,37 @@ chordDiagram(df, grid.col = grid.col)
 
 &lt;pre&gt;&lt;code&gt;## R version 3.2.3 (2015-12-10)
 ## Platform: x86_64-apple-darwin13.4.0 (64-bit)
-## Running under: OS X 10.11.6 (El Capitan)
+## Running under: OS X 10.12.1 (unknown)
 ## 
 ## locale:
 ## [1] C/en_US.UTF-8/C/C/C/C
 ## 
 ## attached base packages:
-## [1] methods   stats     graphics  grDevices utils     datasets  base     
+##  [1] stats4    parallel  methods   grid      stats     graphics  grDevices
+##  [8] utils     datasets  base     
 ## 
 ## other attached packages:
-## [1] circlize_0.3.9   digest_0.6.10    htmltools_0.3.5  GetoptLong_0.1.5
-## [5] markdown_0.7.7   knitr_1.14      
+##  [1] HilbertCurve_1.1.3    GenomicRanges_1.20.8  GenomeInfoDb_1.4.3   
+##  [4] IRanges_2.2.9         S4Vectors_0.6.6       BiocGenerics_0.14.0  
+##  [7] gridBase_0.4-7        circlize_0.3.9        ComplexHeatmap_1.11.8
+## [10] digest_0.6.10         htmltools_0.3.5       GetoptLong_0.1.6     
+## [13] markdown_0.7.7        knitr_1.14           
 ## 
 ## loaded via a namespace (and not attached):
-##  [1] Rcpp_0.12.6          plyr_1.8.4           grid_3.2.3          
-##  [4] formatR_1.4          magrittr_1.5         evaluate_0.9        
-##  [7] stringi_1.1.1        GlobalOptions_0.0.10 reshape2_1.4.1      
-## [10] rjson_0.2.15         tools_3.2.3          stringr_1.1.0       
-## [13] colorspace_1.2-6     shape_1.4.2
+##  [1] Rcpp_0.12.6          XVector_0.8.0        formatR_1.4         
+##  [4] DEoptimR_1.0-6       RColorBrewer_1.1-2   plyr_1.8.4          
+##  [7] HilbertVis_1.26.0    class_7.3-14         tools_3.2.3         
+## [10] prabclus_2.2-6       dendextend_1.2.0     mclust_5.2          
+## [13] evaluate_0.9         gtable_0.2.0         lattice_0.20-33     
+## [16] png_0.1-7            mvtnorm_1.0-5        trimcluster_0.1-2   
+## [19] stringr_1.1.0        cluster_2.0.4        GlobalOptions_0.0.10
+## [22] fpc_2.1-10           diptest_0.75-7       nnet_7.3-12         
+## [25] robustbase_0.92-6    flexmix_2.3-13       reshape2_1.4.1      
+## [28] kernlab_0.9-24       ggplot2_2.1.0        magrittr_1.5        
+## [31] whisker_0.3-2        scales_0.4.0         modeltools_0.2-21   
+## [34] MASS_7.3-45          mime_0.5             shape_1.4.2         
+## [37] colorspace_1.2-6     stringi_1.1.1        munsell_0.4.3       
+## [40] rjson_0.2.15
 &lt;/code&gt;&lt;/pre&gt;
 
 
@@ -296,7 +427,7 @@ for(k in 1:4) {
 <item>
 <title>Customize barplots for the oncoPrint</title>
 <link>http://zuguang.de/blog/html/19986c839873566d0fbf099716c113f1.html</link>
-<pubDate>Tue, 30 Aug 2016 13:14:23 CET</pubDate>
+<pubDate>Tue, 30 Aug 2016 13:16:48 CET</pubDate>
 <description>
 
 
@@ -366,7 +497,7 @@ rowAnnotation(row_barplot = row_anno_barplot(n_mutated_patients, ylim = c(0, max
 
 &lt;pre&gt;&lt;code&gt;## R version 3.2.3 (2015-12-10)
 ## Platform: x86_64-apple-darwin13.4.0 (64-bit)
-## Running under: OS X 10.11.6 (El Capitan)
+## Running under: OS X 10.12.1 (unknown)
 ## 
 ## locale:
 ## [1] C/en_US.UTF-8/C/C/C/C
@@ -376,11 +507,11 @@ rowAnnotation(row_barplot = row_anno_barplot(n_mutated_patients, ylim = c(0, max
 ## [8] base     
 ## 
 ## other attached packages:
-## [1] ComplexHeatmap_1.11.6 digest_0.6.10         htmltools_0.3.5      
-## [4] GetoptLong_0.1.5      markdown_0.7.7        knitr_1.14           
+## [1] ComplexHeatmap_1.11.8 digest_0.6.10         htmltools_0.3.5      
+## [4] GetoptLong_0.1.6      markdown_0.7.7        knitr_1.14           
 ## 
 ## loaded via a namespace (and not attached):
-##  [1] Rcpp_0.12.6          DEoptimR_1.0-6       formatR_1.4         
+##  [1] Rcpp_0.12.6          formatR_1.4          DEoptimR_1.0-6      
 ##  [4] RColorBrewer_1.1-2   plyr_1.8.4           class_7.3-14        
 ##  [7] tools_3.2.3          prabclus_2.2-6       dendextend_1.2.0    
 ## [10] mclust_5.2           evaluate_0.9         gtable_0.2.0        
@@ -390,9 +521,9 @@ rowAnnotation(row_barplot = row_anno_barplot(n_mutated_patients, ylim = c(0, max
 ## [22] nnet_7.3-12          robustbase_0.92-6    flexmix_2.3-13      
 ## [25] kernlab_0.9-24       ggplot2_2.1.0        magrittr_1.5        
 ## [28] whisker_0.3-2        scales_0.4.0         modeltools_0.2-21   
-## [31] MASS_7.3-45          shape_1.4.2          circlize_0.3.8      
-## [34] colorspace_1.2-6     stringi_1.1.1        munsell_0.4.3       
-## [37] rjson_0.2.15
+## [31] MASS_7.3-45          mime_0.5             shape_1.4.2         
+## [34] circlize_0.3.9       colorspace_1.2-6     stringi_1.1.1       
+## [37] munsell_0.4.3        rjson_0.2.15
 &lt;/code&gt;&lt;/pre&gt;
 
 
@@ -402,7 +533,7 @@ rowAnnotation(row_barplot = row_anno_barplot(n_mutated_patients, ylim = c(0, max
 <item>
 <title>Add labels to a genomic Hilbert curve under pixel mode</title>
 <link>http://zuguang.de/blog/html/4ad743c70da1872531dd544e3761f8b3.html</link>
-<pubDate>Tue, 16 Aug 2016 23:34:58 CET</pubDate>
+<pubDate>Wed, 17 Aug 2016 10:53:10 CET</pubDate>
 <description>
 
 
@@ -461,7 +592,7 @@ hc_map(hc, add = TRUE, fill = NA, border = NA)
 
 &lt;pre&gt;&lt;code&gt;## R version 3.2.3 (2015-12-10)
 ## Platform: x86_64-apple-darwin13.4.0 (64-bit)
-## Running under: OS X 10.11.6 (El Capitan)
+## Running under: OS X 10.12.1 (unknown)
 ## 
 ## locale:
 ## [1] C/en_US.UTF-8/C/C/C/C
@@ -471,17 +602,26 @@ hc_map(hc, add = TRUE, fill = NA, border = NA)
 ##  [8] utils     datasets  base     
 ## 
 ## other attached packages:
-##  [1] circlize_0.3.7       HilbertCurve_1.1.3   GenomicRanges_1.20.8
-##  [4] GenomeInfoDb_1.4.3   IRanges_2.2.9        S4Vectors_0.6.6     
-##  [7] BiocGenerics_0.14.0  digest_0.6.9         htmltools_0.3.5     
-## [10] GetoptLong_0.1.4     markdown_0.7.7       knitr_1.13          
+##  [1] HilbertCurve_1.1.3    GenomicRanges_1.20.8  GenomeInfoDb_1.4.3   
+##  [4] IRanges_2.2.9         S4Vectors_0.6.6       BiocGenerics_0.14.0  
+##  [7] gridBase_0.4-7        circlize_0.3.9        ComplexHeatmap_1.11.8
+## [10] digest_0.6.10         htmltools_0.3.5       GetoptLong_0.1.6     
+## [13] markdown_0.7.7        knitr_1.14           
 ## 
 ## loaded via a namespace (and not attached):
-##  [1] Rcpp_0.12.5          XVector_0.8.0        magrittr_1.5        
-##  [4] colorspace_1.2-6     lattice_0.20-33      rjson_0.2.15        
-##  [7] stringr_1.0.0        tools_3.2.3          png_0.1-7           
-## [10] formatR_1.4          HilbertVis_1.26.0    GlobalOptions_0.0.10
-## [13] shape_1.4.2          evaluate_0.9         stringi_1.0-1
+##  [1] Rcpp_0.12.6          XVector_0.8.0        formatR_1.4         
+##  [4] DEoptimR_1.0-6       RColorBrewer_1.1-2   plyr_1.8.4          
+##  [7] HilbertVis_1.26.0    class_7.3-14         tools_3.2.3         
+## [10] prabclus_2.2-6       dendextend_1.2.0     mclust_5.2          
+## [13] evaluate_0.9         gtable_0.2.0         lattice_0.20-33     
+## [16] png_0.1-7            mvtnorm_1.0-5        trimcluster_0.1-2   
+## [19] stringr_1.1.0        cluster_2.0.4        GlobalOptions_0.0.10
+## [22] fpc_2.1-10           diptest_0.75-7       nnet_7.3-12         
+## [25] robustbase_0.92-6    flexmix_2.3-13       kernlab_0.9-24      
+## [28] ggplot2_2.1.0        magrittr_1.5         whisker_0.3-2       
+## [31] scales_0.4.0         modeltools_0.2-21    MASS_7.3-45         
+## [34] mime_0.5             shape_1.4.2          colorspace_1.2-6    
+## [37] stringi_1.1.1        munsell_0.4.3        rjson_0.2.15
 &lt;/code&gt;&lt;/pre&gt;
 
 
@@ -491,7 +631,7 @@ hc_map(hc, add = TRUE, fill = NA, border = NA)
 <item>
 <title>Visualize chromatin state transtitions</title>
 <link>http://zuguang.de/blog/html/cb0bcadf61720734525b1b6c96c80695.html</link>
-<pubDate>Sun, 07 Aug 2016 13:43:40 CET</pubDate>
+<pubDate>Sun, 07 Aug 2016 15:45:28 CET</pubDate>
 <description>
 
 
@@ -536,11 +676,11 @@ to &amp;ldquo;TssAFlnk&amp;rdquo; state in group 2. On the digonal are the uncha
 &lt;pre&gt;&lt;code class="r"&gt;meth_mat_1[1:4, 1:4]
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;pre&gt;&lt;code&gt;##               TssA  TssAFlnk    TxFlnk        Tx
-## TssA     0.1647232 0.1580874 0.1917435 0.2690045
-## TssAFlnk 0.2591677 0.2689880 0.3616242 0.3411387
-## TxFlnk          NA 0.3697514 0.3360386 0.4752722
-## Tx       0.8268626 0.7822987 0.5799682 0.6595322
+&lt;pre&gt;&lt;code&gt;##          TssA TssAFlnk TxFlnk   Tx
+## TssA     0.16     0.16   0.19 0.27
+## TssAFlnk 0.26     0.27   0.36 0.34
+## TxFlnk     NA     0.37   0.34 0.48
+## Tx       0.83     0.78   0.58 0.66
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;Normally, majority in the genome are unchanged states, thus, we should only look at the regions
@@ -550,7 +690,7 @@ in which their states are changed.&lt;/p&gt;
 sum(diag(mat))/sum(mat)
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;pre&gt;&lt;code&gt;## [1] 0.6192262
+&lt;pre&gt;&lt;code&gt;## [1] 0.62
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;pre&gt;&lt;code class="r"&gt;# remove the unchanged states
@@ -709,26 +849,34 @@ circos.clear()
 
 &lt;pre&gt;&lt;code&gt;## R version 3.2.3 (2015-12-10)
 ## Platform: x86_64-apple-darwin13.4.0 (64-bit)
-## Running under: OS X 10.11.6 (El Capitan)
+## Running under: OS X 10.12.1 (unknown)
 ## 
 ## locale:
 ## [1] C/en_US.UTF-8/C/C/C/C
 ## 
 ## attached base packages:
-## [1] grid      methods   stats     graphics  grDevices utils     datasets 
+## [1] methods   grid      stats     graphics  grDevices utils     datasets 
 ## [8] base     
 ## 
 ## other attached packages:
-## [1] ComplexHeatmap_1.11.5 gridBase_0.4-7        circlize_0.3.7       
-## [4] digest_0.6.9          htmltools_0.3.5       GetoptLong_0.1.3     
-## [7] markdown_0.7.7        knitr_1.13           
+## [1] gridBase_0.4-7        circlize_0.3.9        ComplexHeatmap_1.11.8
+## [4] digest_0.6.10         htmltools_0.3.5       GetoptLong_0.1.6     
+## [7] markdown_0.7.7        knitr_1.14           
 ## 
 ## loaded via a namespace (and not attached):
-##  [1] Rcpp_0.12.5          dendextend_1.1.8     formatR_1.4         
-##  [4] magrittr_1.5         evaluate_0.9         stringi_1.0-1       
-##  [7] GlobalOptions_0.0.10 whisker_0.3-2        RColorBrewer_1.1-2  
-## [10] rjson_0.2.15         tools_3.2.3          stringr_1.0.0       
-## [13] colorspace_1.2-6     shape_1.4.2
+##  [1] Rcpp_0.12.6          formatR_1.4          DEoptimR_1.0-6      
+##  [4] RColorBrewer_1.1-2   plyr_1.8.4           class_7.3-14        
+##  [7] tools_3.2.3          prabclus_2.2-6       dendextend_1.2.0    
+## [10] mclust_5.2           evaluate_0.9         gtable_0.2.0        
+## [13] lattice_0.20-33      mvtnorm_1.0-5        trimcluster_0.1-2   
+## [16] stringr_1.1.0        cluster_2.0.4        GlobalOptions_0.0.10
+## [19] fpc_2.1-10           stats4_3.2.3         diptest_0.75-7      
+## [22] nnet_7.3-12          robustbase_0.92-6    flexmix_2.3-13      
+## [25] kernlab_0.9-24       ggplot2_2.1.0        magrittr_1.5        
+## [28] whisker_0.3-2        scales_0.4.0         modeltools_0.2-21   
+## [31] MASS_7.3-45          mime_0.5             shape_1.4.2         
+## [34] colorspace_1.2-6     stringi_1.1.1        munsell_0.4.3       
+## [37] rjson_0.2.15
 &lt;/code&gt;&lt;/pre&gt;
 
 
@@ -738,7 +886,7 @@ circos.clear()
 <item>
 <title>Add column names below bottom annotations</title>
 <link>http://zuguang.de/blog/html/d2d60bb3c5d6201f4914e2ca4ef40893.html</link>
-<pubDate>Mon, 13 Jun 2016 22:22:52 CET</pubDate>
+<pubDate>Mon, 13 Jun 2016 22:24:26 CET</pubDate>
 <description>
 
 
@@ -749,6 +897,14 @@ at the bottom of the heatmap, the annotations will be put below the column names
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;pre&gt;&lt;code&gt;## Loading required package: grid
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code&gt;## Warning in .doLoadActions(where, attach): trying to execute load actions
+## without &amp;#39;methods&amp;#39; package
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code&gt;## Warning: replacing previous import by &amp;#39;magrittr::%&amp;gt;%&amp;#39; when loading
+## &amp;#39;dendextend&amp;#39;
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;pre&gt;&lt;code class="r"&gt;set.seed(123)
@@ -785,7 +941,7 @@ Heatmap(mat, show_column_names = FALSE, bottom_annotation = ha2)
 <item>
 <title>ComplexHeatmap Supports More Types of Legends</title>
 <link>http://zuguang.de/blog/html/dde69a9cf5a606a9486b19eb91ba6f4e.html</link>
-<pubDate>Tue, 26 Apr 2016 14:27:46 CET</pubDate>
+<pubDate>Tue, 26 Apr 2016 14:56:09 CET</pubDate>
 <description>
 
 
@@ -929,23 +1085,32 @@ draw(ht, annotation_legend_list = list(lgd))
 
 &lt;pre&gt;&lt;code&gt;## R version 3.2.3 (2015-12-10)
 ## Platform: x86_64-apple-darwin13.4.0 (64-bit)
-## Running under: OS X 10.11.3 (El Capitan)
+## Running under: OS X 10.12.1 (unknown)
 ## 
 ## locale:
 ## [1] C/en_US.UTF-8/C/C/C/C
 ## 
 ## attached base packages:
-## [1] grid      methods   stats     graphics  grDevices utils     datasets  base     
+##  [1] stats4    parallel  methods   grid      stats     graphics  grDevices utils     datasets 
+## [10] base     
 ## 
 ## other attached packages:
-## [1] ComplexHeatmap_1.9.7 digest_0.6.9         htmltools_0.3.5      GetoptLong_0.1.3    
-## [5] markdown_0.7.7       knitr_1.12.3        
+##  [1] HilbertCurve_1.1.3    GenomicRanges_1.20.8  GenomeInfoDb_1.4.3    IRanges_2.2.9        
+##  [5] S4Vectors_0.6.6       BiocGenerics_0.14.0   gridBase_0.4-7        circlize_0.3.9       
+##  [9] ComplexHeatmap_1.11.8 digest_0.6.10         htmltools_0.3.5       GetoptLong_0.1.6     
+## [13] markdown_0.7.7        knitr_1.14           
 ## 
 ## loaded via a namespace (and not attached):
-##  [1] Rcpp_0.12.4          circlize_0.3.7       dendextend_1.1.8     formatR_1.3         
-##  [5] magrittr_1.5         evaluate_0.8.3       stringi_1.0-1        GlobalOptions_0.0.10
-##  [9] whisker_0.3-2        RColorBrewer_1.1-2   rjson_0.2.15         tools_3.2.3         
-## [13] stringr_1.0.0        colorspace_1.2-6     shape_1.4.2
+##  [1] Rcpp_0.12.6          XVector_0.8.0        formatR_1.4          DEoptimR_1.0-6      
+##  [5] RColorBrewer_1.1-2   plyr_1.8.4           HilbertVis_1.26.0    class_7.3-14        
+##  [9] tools_3.2.3          prabclus_2.2-6       dendextend_1.2.0     mclust_5.2          
+## [13] evaluate_0.9         gtable_0.2.0         lattice_0.20-33      png_0.1-7           
+## [17] mvtnorm_1.0-5        trimcluster_0.1-2    stringr_1.1.0        cluster_2.0.4       
+## [21] GlobalOptions_0.0.10 fpc_2.1-10           diptest_0.75-7       nnet_7.3-12         
+## [25] robustbase_0.92-6    flexmix_2.3-13       reshape2_1.4.1       kernlab_0.9-24      
+## [29] ggplot2_2.1.0        magrittr_1.5         whisker_0.3-2        scales_0.4.0        
+## [33] modeltools_0.2-21    MASS_7.3-45          mime_0.5             shape_1.4.2         
+## [37] colorspace_1.2-6     stringi_1.1.1        munsell_0.4.3        rjson_0.2.15
 &lt;/code&gt;&lt;/pre&gt;
 
 
@@ -955,7 +1120,7 @@ draw(ht, annotation_legend_list = list(lgd))
 <item>
 <title>Multiple Groups Chord Diagram</title>
 <link>http://zuguang.de/blog/html/c29abf849253e2836a2a586ef09a02e7.html</link>
-<pubDate>Sun, 24 Apr 2016 16:35:19 CET</pubDate>
+<pubDate>Sun, 24 Apr 2016 16:36:54 CET</pubDate>
 <description>
 
 
@@ -994,17 +1159,17 @@ mat[rownames(mat3), colnames(mat3)] = mat3
 mat
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;pre&gt;&lt;code&gt;##       B1     B2    B3   B4     B5     C1    C2    C3     C4     C5
-## A1  0.04 -1.378 -0.73 0.88 -0.498  0.065  0.39 -0.74  0.149  0.233
-## A2 -0.62  1.080 -0.40 1.13  0.042  1.044  2.62  1.10 -1.299  0.441
-## A3 -0.88 -1.165 -1.40 0.65  0.203 -0.101  0.85  0.25 -0.418 -0.117
-## A4 -0.30  0.067 -1.06 0.17  0.357  0.153  2.44  1.54 -1.232 -1.426
-## A5  1.48 -0.548  0.66 0.31 -1.110 -0.475 -0.17  0.50 -0.331  0.816
-## B1  0.00  0.000  0.00 0.00  0.000  0.400  0.52 -0.13  0.385 -0.899
-## B2  0.00  0.000  0.00 0.00  0.000  0.261 -0.81  0.12 -1.148 -0.261
-## B3  0.00  0.000  0.00 0.00  0.000 -0.448 -0.95 -1.35  0.072 -1.753
-## B4  0.00  0.000  0.00 0.00  0.000 -0.367 -1.23 -1.89  0.015  0.029
-## B5  0.00  0.000  0.00 0.00  0.000 -0.023  0.59 -0.32  0.901 -0.302
+&lt;pre&gt;&lt;code&gt;##        B1    B2    B3     B4     B5    C1    C2     C3     C4    C5
+## A1  0.919  0.52 -1.02  1.844 -0.071 -2.05 -1.44 -1.602 -1.287 -0.12
+## A2 -0.575  0.30  0.12 -0.652  1.445  1.13  0.70 -0.531  0.788 -0.28
+## A3  0.608  0.11 -0.95  0.235  0.452 -1.46 -0.26 -1.462  0.769  0.56
+## A4 -1.618 -0.64 -0.49  0.078  0.041  0.74 -1.57  0.688  0.332 -0.37
+## A5 -0.056 -0.85 -0.26 -0.962 -0.422  1.91 -1.51  2.100 -1.008  0.98
+## B1  0.000  0.00  0.00  0.000  0.000 -0.37 -0.42  0.369 -0.741 -0.46
+## B2  0.000  0.00  0.00  0.000  0.000  1.05  0.30 -0.215 -1.096 -1.06
+## B3  0.000  0.00  0.00  0.000  0.000 -1.05  0.64  0.065  0.038  1.26
+## B4  0.000  0.00  0.00  0.000  0.000 -1.26 -0.48 -0.034  0.310 -0.35
+## B5  0.000  0.00  0.00  0.000  0.000  3.24  0.52  2.128  0.437 -0.87
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;When making the chord diagram, it is important to set larger gaps between groups to identify different groups.
@@ -1044,23 +1209,34 @@ highlight.sector(colnames(mat2), track.index = 1, col = &amp;quot;blue&amp;quot;
 
 &lt;pre&gt;&lt;code&gt;## R version 3.2.3 (2015-12-10)
 ## Platform: x86_64-apple-darwin13.4.0 (64-bit)
-## Running under: OS X 10.11.3 (El Capitan)
+## Running under: OS X 10.12.1 (unknown)
 ## 
 ## locale:
 ## [1] C/en_US.UTF-8/C/C/C/C
 ## 
 ## attached base packages:
-## [1] methods   stats     graphics  grDevices utils     datasets  base     
+## [1] methods   grid      stats     graphics  grDevices utils     datasets 
+## [8] base     
 ## 
 ## other attached packages:
-## [1] circlize_0.3.7   digest_0.6.9     htmltools_0.3.5  GetoptLong_0.1.3
-## [5] markdown_0.7.7   knitr_1.12.3    
+## [1] circlize_0.3.9        ComplexHeatmap_1.11.8 digest_0.6.10        
+## [4] htmltools_0.3.5       GetoptLong_0.1.6      markdown_0.7.7       
+## [7] knitr_1.14           
 ## 
 ## loaded via a namespace (and not attached):
-##  [1] colorspace_1.2-6     rjson_0.2.15         magrittr_1.5        
-##  [4] tools_3.2.3          GlobalOptions_0.0.10 Rcpp_0.12.4         
-##  [7] stringi_1.0-1        grid_3.2.3           stringr_1.0.0       
-## [10] shape_1.4.2          evaluate_0.8.3
+##  [1] Rcpp_0.12.6          formatR_1.4          DEoptimR_1.0-6      
+##  [4] RColorBrewer_1.1-2   plyr_1.8.4           class_7.3-14        
+##  [7] tools_3.2.3          prabclus_2.2-6       dendextend_1.2.0    
+## [10] mclust_5.2           evaluate_0.9         gtable_0.2.0        
+## [13] lattice_0.20-33      mvtnorm_1.0-5        trimcluster_0.1-2   
+## [16] stringr_1.1.0        cluster_2.0.4        GlobalOptions_0.0.10
+## [19] fpc_2.1-10           stats4_3.2.3         diptest_0.75-7      
+## [22] nnet_7.3-12          robustbase_0.92-6    flexmix_2.3-13      
+## [25] kernlab_0.9-24       ggplot2_2.1.0        magrittr_1.5        
+## [28] whisker_0.3-2        scales_0.4.0         modeltools_0.2-21   
+## [31] MASS_7.3-45          mime_0.5             shape_1.4.2         
+## [34] colorspace_1.2-6     stringi_1.1.1        munsell_0.4.3       
+## [37] rjson_0.2.15
 &lt;/code&gt;&lt;/pre&gt;
 
 
@@ -1070,7 +1246,7 @@ highlight.sector(colnames(mat2), track.index = 1, col = &amp;quot;blue&amp;quot;
 <item>
 <title>Support raster image in heatmaps</title>
 <link>http://zuguang.de/blog/html/d3aa6e2b289514ecddded64a467d1961.html</link>
-<pubDate>Sun, 27 Mar 2016 17:25:04 CET</pubDate>
+<pubDate>Sun, 27 Mar 2016 18:37:52 CET</pubDate>
 <description>
 
 
@@ -1138,11 +1314,11 @@ sapply(fs, function(x) paste(round(x/1024), &amp;quot;KB&amp;quot;))
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;pre&gt;&lt;code&gt;##       heatmap_raster_by_png.pdf      heatmap_raster_by_jpeg.pdf 
-##                      0.02882870                      0.11711975 
+##                           0.029                           0.117 
 ##      heatmap_raster_by_tiff.pdf  heatmap_raster_by_CairoPNG.pdf 
-##                      0.02882855                      0.02112871 
+##                           0.029                           0.021 
 ## heatmap_raster_by_CairoJPEG.pdf 
-##                      0.11499668
+##                           0.115
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;h2&gt;Session Info&lt;/h2&gt;
@@ -1152,22 +1328,37 @@ sapply(fs, function(x) paste(round(x/1024), &amp;quot;KB&amp;quot;))
 
 &lt;pre&gt;&lt;code&gt;## R version 3.2.3 (2015-12-10)
 ## Platform: x86_64-apple-darwin13.4.0 (64-bit)
-## Running under: OS X 10.11.3 (El Capitan)
+## Running under: OS X 10.12.1 (unknown)
 ## 
 ## locale:
 ## [1] C/en_US.UTF-8/C/C/C/C
 ## 
 ## attached base packages:
-## [1] methods   stats     graphics  grDevices utils     datasets  base     
+##  [1] stats4    parallel  methods   grid      stats     graphics  grDevices
+##  [8] utils     datasets  base     
 ## 
 ## other attached packages:
-## [1] digest_0.6.9     htmltools_0.3    GetoptLong_0.1.2 markdown_0.7.7  
-## [5] knitr_1.12.3    
+##  [1] HilbertCurve_1.1.3    GenomicRanges_1.20.8  GenomeInfoDb_1.4.3   
+##  [4] IRanges_2.2.9         S4Vectors_0.6.6       BiocGenerics_0.14.0  
+##  [7] gridBase_0.4-7        circlize_0.3.9        ComplexHeatmap_1.11.8
+## [10] digest_0.6.10         htmltools_0.3.5       GetoptLong_0.1.6     
+## [13] markdown_0.7.7        knitr_1.14           
 ## 
 ## loaded via a namespace (and not attached):
-## [1] rjson_0.2.15        magrittr_1.5        formatR_1.3        
-## [4] tools_3.2.3         GlobalOptions_0.0.9 stringi_1.0-1      
-## [7] stringr_1.0.0       evaluate_0.8.3
+##  [1] Rcpp_0.12.6          XVector_0.8.0        formatR_1.4         
+##  [4] DEoptimR_1.0-6       RColorBrewer_1.1-2   plyr_1.8.4          
+##  [7] HilbertVis_1.26.0    class_7.3-14         tools_3.2.3         
+## [10] prabclus_2.2-6       dendextend_1.2.0     mclust_5.2          
+## [13] evaluate_0.9         gtable_0.2.0         lattice_0.20-33     
+## [16] png_0.1-7            mvtnorm_1.0-5        trimcluster_0.1-2   
+## [19] stringr_1.1.0        cluster_2.0.4        GlobalOptions_0.0.10
+## [22] fpc_2.1-10           diptest_0.75-7       nnet_7.3-12         
+## [25] robustbase_0.92-6    flexmix_2.3-13       reshape2_1.4.1      
+## [28] kernlab_0.9-24       ggplot2_2.1.0        magrittr_1.5        
+## [31] whisker_0.3-2        scales_0.4.0         modeltools_0.2-21   
+## [34] MASS_7.3-45          mime_0.5             shape_1.4.2         
+## [37] colorspace_1.2-6     stringi_1.1.1        munsell_0.4.3       
+## [40] rjson_0.2.15
 &lt;/code&gt;&lt;/pre&gt;
 
 
@@ -1187,12 +1378,7 @@ sapply(fs, function(x) paste(round(x/1024), &amp;quot;KB&amp;quot;))
 
 &lt;pre&gt;&lt;code class="r"&gt;library(ComplexHeatmap)
 library(circlize)
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;pre&gt;&lt;code&gt;## Warning: package &amp;#39;circlize&amp;#39; was built under R version 3.2.5
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;pre&gt;&lt;code class="r"&gt;library(RColorBrewer)
+library(RColorBrewer)
 
 set.seed(123)
 
@@ -1274,33 +1460,36 @@ decorate_annotation(&amp;quot;col_mean&amp;quot;, {grid.text(&amp;quot;mean\nsig
 
 &lt;pre&gt;&lt;code&gt;## R version 3.2.3 (2015-12-10)
 ## Platform: x86_64-apple-darwin13.4.0 (64-bit)
-## Running under: OS X 10.11.6 (El Capitan)
+## Running under: OS X 10.12.1 (unknown)
 ## 
 ## locale:
 ## [1] C/en_US.UTF-8/C/C/C/C
 ## 
 ## attached base packages:
-## [1] methods   grid      stats     graphics  grDevices utils     datasets 
-## [8] base     
+##  [1] stats4    parallel  methods   grid      stats     graphics  grDevices
+##  [8] utils     datasets  base     
 ## 
 ## other attached packages:
-## [1] RColorBrewer_1.1-2    circlize_0.3.8        ComplexHeatmap_1.11.6
-## [4] digest_0.6.10         htmltools_0.3.5       GetoptLong_0.1.5     
-## [7] markdown_0.7.7        knitr_1.14           
+##  [1] RColorBrewer_1.1-2    HilbertCurve_1.1.3    GenomicRanges_1.20.8 
+##  [4] GenomeInfoDb_1.4.3    IRanges_2.2.9         S4Vectors_0.6.6      
+##  [7] BiocGenerics_0.14.0   gridBase_0.4-7        circlize_0.3.9       
+## [10] ComplexHeatmap_1.11.8 digest_0.6.10         htmltools_0.3.5      
+## [13] GetoptLong_0.1.6      markdown_0.7.7        knitr_1.14           
 ## 
 ## loaded via a namespace (and not attached):
-##  [1] Rcpp_0.12.6          DEoptimR_1.0-6       formatR_1.4         
-##  [4] plyr_1.8.4           class_7.3-14         tools_3.2.3         
-##  [7] prabclus_2.2-6       dendextend_1.2.0     mclust_5.2          
-## [10] evaluate_0.9         gtable_0.2.0         lattice_0.20-33     
-## [13] mvtnorm_1.0-5        trimcluster_0.1-2    stringr_1.1.0       
-## [16] cluster_2.0.4        GlobalOptions_0.0.10 fpc_2.1-10          
-## [19] stats4_3.2.3         diptest_0.75-7       nnet_7.3-12         
-## [22] robustbase_0.92-6    flexmix_2.3-13       kernlab_0.9-24      
-## [25] ggplot2_2.1.0        magrittr_1.5         whisker_0.3-2       
-## [28] scales_0.4.0         modeltools_0.2-21    MASS_7.3-45         
-## [31] shape_1.4.2          colorspace_1.2-6     stringi_1.1.1       
-## [34] munsell_0.4.3        rjson_0.2.15
+##  [1] Rcpp_0.12.6          XVector_0.8.0        formatR_1.4         
+##  [4] DEoptimR_1.0-6       plyr_1.8.4           HilbertVis_1.26.0   
+##  [7] class_7.3-14         tools_3.2.3          prabclus_2.2-6      
+## [10] dendextend_1.2.0     mclust_5.2           evaluate_0.9        
+## [13] gtable_0.2.0         lattice_0.20-33      png_0.1-7           
+## [16] mvtnorm_1.0-5        trimcluster_0.1-2    stringr_1.1.0       
+## [19] cluster_2.0.4        GlobalOptions_0.0.10 fpc_2.1-10          
+## [22] diptest_0.75-7       nnet_7.3-12          robustbase_0.92-6   
+## [25] flexmix_2.3-13       reshape2_1.4.1       kernlab_0.9-24      
+## [28] ggplot2_2.1.0        magrittr_1.5         whisker_0.3-2       
+## [31] scales_0.4.0         modeltools_0.2-21    MASS_7.3-45         
+## [34] mime_0.5             shape_1.4.2          colorspace_1.2-6    
+## [37] stringi_1.1.1        munsell_0.4.3        rjson_0.2.15
 &lt;/code&gt;&lt;/pre&gt;
 
 
@@ -1336,17 +1525,17 @@ tagments[1:2, ]
 &lt;pre&gt;&lt;code class="r"&gt;DMR1[1:2, ]
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;pre&gt;&lt;code&gt;##    chr    start      end   methDiff                tagment
-## 1 chr1 44894352 44894643 -0.2812889 chr1-44876009-45016546
-## 2 chr1 44902069 44902966 -0.3331170 chr1-44876009-45016546
+&lt;pre&gt;&lt;code&gt;##    chr    start      end methDiff                tagment
+## 1 chr1 44894352 44894643    -0.28 chr1-44876009-45016546
+## 2 chr1 44902069 44902966    -0.33 chr1-44876009-45016546
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;pre&gt;&lt;code class="r"&gt;DMR2[1:2, ]
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;pre&gt;&lt;code&gt;##    chr    start      end   methDiff                tagment
-## 1 chr2 64979958 64980308 -0.2151918 chr2-64897317-65173964
-## 2 chr2 65038093 65039051 -0.2082847 chr2-64897317-65173964
+&lt;pre&gt;&lt;code&gt;##    chr    start      end methDiff                tagment
+## 1 chr2 64979958 64980308    -0.22 chr2-64897317-65173964
+## 2 chr2 65038093 65039051    -0.21 chr2-64897317-65173964
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;Chromosomes (e.g. &lt;code&gt;chr1&lt;/code&gt;, &lt;code&gt;chr2&lt;/code&gt;) and tagments (e.g. &lt;code&gt;chr1-44876009-45016546&lt;/code&gt;, &lt;code&gt;chr1-90460304-90761641&lt;/code&gt;)
@@ -1537,26 +1726,37 @@ par(new = FALSE)
 
 &lt;pre&gt;&lt;code&gt;## R version 3.2.3 (2015-12-10)
 ## Platform: x86_64-apple-darwin13.4.0 (64-bit)
-## Running under: OS X 10.11.3 (El Capitan)
+## Running under: OS X 10.12.1 (unknown)
 ## 
 ## locale:
 ## [1] C/en_US.UTF-8/C/C/C/C
 ## 
 ## attached base packages:
-## [1] grid      methods   stats     graphics  grDevices utils     datasets 
-## [8] base     
+##  [1] stats4    parallel  methods   grid      stats     graphics  grDevices
+##  [8] utils     datasets  base     
 ## 
 ## other attached packages:
-## [1] circlize_0.3.5       ComplexHeatmap_1.9.3 digest_0.6.9        
-## [4] htmltools_0.3        GetoptLong_0.1.2     markdown_0.7.7      
-## [7] knitr_1.12.3        
+##  [1] HilbertCurve_1.1.3    GenomicRanges_1.20.8  GenomeInfoDb_1.4.3   
+##  [4] IRanges_2.2.9         S4Vectors_0.6.6       BiocGenerics_0.14.0  
+##  [7] gridBase_0.4-7        circlize_0.3.9        ComplexHeatmap_1.11.8
+## [10] digest_0.6.10         htmltools_0.3.5       GetoptLong_0.1.6     
+## [13] markdown_0.7.7        knitr_1.14           
 ## 
 ## loaded via a namespace (and not attached):
-##  [1] dendextend_1.1.8    mime_0.4            formatR_1.3        
-##  [4] magrittr_1.5        evaluate_0.8.3      stringi_1.0-1      
-##  [7] GlobalOptions_0.0.9 whisker_0.3-2       RColorBrewer_1.1-2 
-## [10] rjson_0.2.15        tools_3.2.3         stringr_1.0.0      
-## [13] colorspace_1.2-6    shape_1.4.2
+##  [1] Rcpp_0.12.6          XVector_0.8.0        formatR_1.4         
+##  [4] DEoptimR_1.0-6       RColorBrewer_1.1-2   plyr_1.8.4          
+##  [7] HilbertVis_1.26.0    class_7.3-14         tools_3.2.3         
+## [10] prabclus_2.2-6       dendextend_1.2.0     mclust_5.2          
+## [13] evaluate_0.9         gtable_0.2.0         lattice_0.20-33     
+## [16] png_0.1-7            mvtnorm_1.0-5        trimcluster_0.1-2   
+## [19] stringr_1.1.0        cluster_2.0.4        GlobalOptions_0.0.10
+## [22] fpc_2.1-10           diptest_0.75-7       nnet_7.3-12         
+## [25] robustbase_0.92-6    flexmix_2.3-13       reshape2_1.4.1      
+## [28] kernlab_0.9-24       ggplot2_2.1.0        magrittr_1.5        
+## [31] whisker_0.3-2        scales_0.4.0         modeltools_0.2-21   
+## [34] MASS_7.3-45          mime_0.5             shape_1.4.2         
+## [37] colorspace_1.2-6     stringi_1.1.1        munsell_0.4.3       
+## [40] rjson_0.2.15
 &lt;/code&gt;&lt;/pre&gt;
 
 
@@ -1602,10 +1802,10 @@ anno_legend_list
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;pre&gt;&lt;code&gt;## $type
-## frame[GRID.frame.4] 
+## frame[GRID.frame.559] 
 ## 
 ## $age
-## frame[GRID.frame.17]
+## frame[GRID.frame.574]
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;Similar, &lt;code&gt;show_heatmap_legend&lt;/code&gt; is set to &lt;code&gt;FALSE&lt;/code&gt; when creating &lt;code&gt;ht&lt;/code&gt; and legend object is extracted afterwards.&lt;/p&gt;
@@ -1630,26 +1830,37 @@ heatmap_legend = color_mapping_legend(ht@matrix_color_mapping, plot = FALSE)
 
 &lt;pre&gt;&lt;code&gt;## R version 3.2.3 (2015-12-10)
 ## Platform: x86_64-apple-darwin13.4.0 (64-bit)
-## Running under: OS X 10.11.3 (El Capitan)
+## Running under: OS X 10.12.1 (unknown)
 ## 
 ## locale:
 ## [1] C/en_US.UTF-8/C/C/C/C
 ## 
 ## attached base packages:
-## [1] grid      methods   stats     graphics  grDevices utils     datasets 
-## [8] base     
+##  [1] stats4    parallel  methods   grid      stats     graphics  grDevices
+##  [8] utils     datasets  base     
 ## 
 ## other attached packages:
-## [1] circlize_0.3.5       ComplexHeatmap_1.9.3 digest_0.6.9        
-## [4] htmltools_0.3        GetoptLong_0.1.2     markdown_0.7.7      
-## [7] knitr_1.12.3        
+##  [1] HilbertCurve_1.1.3    GenomicRanges_1.20.8  GenomeInfoDb_1.4.3   
+##  [4] IRanges_2.2.9         S4Vectors_0.6.6       BiocGenerics_0.14.0  
+##  [7] gridBase_0.4-7        circlize_0.3.9        ComplexHeatmap_1.11.8
+## [10] digest_0.6.10         htmltools_0.3.5       GetoptLong_0.1.6     
+## [13] markdown_0.7.7        knitr_1.14           
 ## 
 ## loaded via a namespace (and not attached):
-##  [1] dendextend_1.1.8    formatR_1.3         magrittr_1.5       
-##  [4] evaluate_0.8.3      stringi_1.0-1       GlobalOptions_0.0.9
-##  [7] whisker_0.3-2       RColorBrewer_1.1-2  rjson_0.2.15       
-## [10] tools_3.2.3         stringr_1.0.0       colorspace_1.2-6   
-## [13] shape_1.4.2
+##  [1] Rcpp_0.12.6          XVector_0.8.0        formatR_1.4         
+##  [4] DEoptimR_1.0-6       RColorBrewer_1.1-2   plyr_1.8.4          
+##  [7] HilbertVis_1.26.0    class_7.3-14         tools_3.2.3         
+## [10] prabclus_2.2-6       dendextend_1.2.0     mclust_5.2          
+## [13] evaluate_0.9         gtable_0.2.0         lattice_0.20-33     
+## [16] png_0.1-7            mvtnorm_1.0-5        trimcluster_0.1-2   
+## [19] stringr_1.1.0        cluster_2.0.4        GlobalOptions_0.0.10
+## [22] fpc_2.1-10           diptest_0.75-7       nnet_7.3-12         
+## [25] robustbase_0.92-6    flexmix_2.3-13       reshape2_1.4.1      
+## [28] kernlab_0.9-24       ggplot2_2.1.0        magrittr_1.5        
+## [31] whisker_0.3-2        scales_0.4.0         modeltools_0.2-21   
+## [34] MASS_7.3-45          mime_0.5             shape_1.4.2         
+## [37] colorspace_1.2-6     stringi_1.1.1        munsell_0.4.3       
+## [40] rjson_0.2.15
 &lt;/code&gt;&lt;/pre&gt;
 
 
