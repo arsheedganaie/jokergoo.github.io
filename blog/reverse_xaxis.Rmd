@@ -5,8 +5,9 @@ In *circlize* package, x-axis in always clockwise in each sector, no matter it
 is on the top of the circle or at the bottom. However, you can manually convert
 the original positions on x-axis to pretend you have a reversed xaxis. Take folling example:
 
-```{r}
+```{r, echo = -2}
 library(circlize)
+circos.clear()
 circos.par(gap.degree = c(10, 10), start.degree = -5)
 circos.initialize(factors = c("a", "b"), xlim = c(0, 1))
 circos.trackPlotRegion(ylim = c(0, 1), panel.fun = function(x, y) {
