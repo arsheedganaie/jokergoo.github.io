@@ -32,3 +32,5 @@ which will be used to generate `blog.html`.
 If comments system is to be supported, after the HTML generation of each post, the Javascript fragment of [Disqus](https://disqus.com/home/)
 can be inserted before `</body>`.
  
+
+<!-- uid=website_knitr -->

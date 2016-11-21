@@ -42,6 +42,7 @@ html = c(header,
 markdownToHTML("index.md", fragment.only = TRUE),
 footer)
 
+cat("generate index.html...\n")
 writeLines(html, "index.html", useBytes = TRUE)
 
 
@@ -50,6 +51,7 @@ html = c(header,
 markdownToHTML("software.md", fragment.only = TRUE),
 footer)
 
+cat("generate software.html...\n")
 writeLines(html, "software.html", useBytes = TRUE)
 
 
@@ -59,6 +61,7 @@ html = c(header,
 markdownToHTML("publications.md", fragment.only = TRUE),
 footer)
 
+cat("generate publications.html...\n")
 writeLines(html, "publications.html", useBytes = TRUE)
 
 
@@ -99,24 +102,43 @@ add_list = function(html) {
 }
 
 if(!file.exists(".post_info.RData")) {
-	post_info = list(inode = NULL, title = NULL, create_time = NULL, last_modified_time = NULL, file_name = NULL)
+	cat("cannot find .post_info.RData, initalize a new one...\n")
+	post_info = list(uid = NULL, title = NULL, create_time = NULL, last_modified_time = NULL, file_name = NULL)
 } else {
+	cat("load .post_info.RData...\n")
 	load(".post_info.RData")	
+	qqcat("There are already @{length(post_info$title)} posts.\n")
 }
 
 md_files = dir(pattern = "\\.R?md$")
-md_inode = read.table(pipe("ls -i"), stringsAsFactors = FALSE)
-md_inode = structure(md_inode[[1]], names = md_inode[[2]])
-md_inode = md_inode[md_files]
+md_uid = sapply(md_files, function(f) {
+	lines = readLines(f)
+	ind = grep("<!-- uid=.*? -->", lines)
+	if(length(ind)) {
+		ind = ind[1]
+		uid = gsub("<!-- uid=(.*?) -->", "\\1", lines[ind])
+		return(uid)
+	} else {
+		return("")
+	}
+})
+md_uid2 = md_uid
 md_last_modified = file.info(md_files)$mtime
+qqcat("detected @{length(md_files)} (R)md files.\n")
 
 for(i in seq_along(md_files)) {
 	
 	# if it is a new file
-	if(!md_inode[i] %in% post_info$inode) {
+	if(md_uid[i] == "" || !md_uid[i] %in% post_info$uid) {
 
-		post_info$inode = c(post_info$inode, md_inode[i])
-		fn = digest(md_inode[i], algo = "md5")
+		# uid = digest(qq("@{md_files[i]}_@{md_last_modified[i]}"), algo = "md5")
+		if(md_uid[i] == "") {
+			uid = gsub("\\.R?md$", "", md_files[i])
+		} else {
+			uid = md_uid[i]
+		}
+		post_info$uid = c(post_info$uid, uid)
+		fn = uid
 		post_info$file_name = c(post_info$file_name, fn)
 		if(length(post_info$create_time) == 0) {
 			post_info$create_time = md_last_modified[i]
@@ -127,6 +149,14 @@ for(i in seq_along(md_files)) {
 			post_info$last_modified_time = md_last_modified[i]
 		} else {
 			post_info$last_modified_time = c(post_info$last_modified_time, md_last_modified[i])
+		}
+		md_uid2[i] = uid
+
+		# add uid to (R)md file
+		if(md_uid[i] == "") {
+			lines = readLines(md_files[i])
+			lines = c(lines, "", qq("<!-- uid=@{uid} -->"))
+			writeLines(lines, md_files[i])
 		}
 
 		if(grepl("\\.Rmd$", md_files[i])) {
@@ -143,15 +173,17 @@ for(i in seq_along(md_files)) {
 		title_url = paste0("html/", fn)
 		html = add_disqus(html, url = title_url)
 		html = add_list(html)
+		qqcat("writing @{title_url}.html\n")
 		writeLines(html, qq("@{title_url}.html"), useBytes = TRUE)
 
-		qqcat("create post: @{title}.\n")
+		qqcat("created post: @{title}.\n")
 
 	} else {
-		k = which(post_info$inode %in% md_inode[i])
+		k = which(post_info$uid %in% md_uid[i])
 		# if it is modified since last time
 		if(md_last_modified[i] > post_info$last_modified_time[k] || all) {
 
+			qqcat("@{md_last_modified[i]} > @{post_info$last_modified_time[k]}\n")
 			post_info$last_modified_time[k] = md_last_modified[i]
 
 			title_url = paste0("html/", post_info$file_name[k])
@@ -171,18 +203,21 @@ for(i in seq_along(md_files)) {
 			title_url = paste0("html/", post_info$file_name[k])
 			html = add_disqus(html, url = title_url)
 			html = add_list(html)
+			qqcat("writing @{title_url}.html\n")
 			writeLines(html, qq("@{title_url}.html"), useBytes = TRUE)
 
-			qqcat("update post: @{title}.\n")
+			qqcat("updated post: @{title}.\n")
 		}
 	}
 }
 
-deleted_md_inode = setdiff(post_info$inode, md_inode)
-if(length(deleted_md_inode) > 0) {
-	l = deleted_md_inode %in% post_info$inode
+deleted_md_uid = setdiff(post_info$uid, md_uid2)
+if(length(deleted_md_uid) > 0) {
+	l = deleted_md_uid %in% post_info$uid
 	post_info = lapply(post_info, function(x) x[!l])
 }
+qqcat("delete @{deleted_md_uid} old posts.\n")
+
 save(post_info, file = ".post_info.RData")
 setwd("..")
 
@@ -203,6 +238,7 @@ html = c(header,
 "\n<p style='border-top:1px dotted #CCCCCC;text-align:right;margin-top:10px;font-size:0.8em'><a href='http://feeds.feedburner.com/ZuguangGusBlog' style='color:#CCCCCC;font-weight:normal'>RSS</a></p>\n",
 footer)
 
+cat("generate blog.html...\n")
 writeLines(html, "blog.html", useBytes = TRUE)
 
 
@@ -252,5 +288,6 @@ html = c(header,
 },
 footer)
 
+cat("generate rss.html...\n")
 writeLines(html, "rss.xml", useBytes = TRUE)
 

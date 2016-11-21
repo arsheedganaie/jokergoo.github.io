@@ -12,3 +12,5 @@ This is a test for a post in **markdown** format.
 
 
 http://google.com
+
+<!-- uid=testtest -->

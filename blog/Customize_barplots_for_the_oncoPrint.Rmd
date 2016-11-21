@@ -68,3 +68,5 @@ rowAnnotation(row_barplot = row_anno_barplot(n_mutated_patients, ylim = c(0, max
 ```{r}
 sessionInfo()
 ```
+
+<!-- uid=Customize_barplots_for_the_oncoPrint -->

@@ -62,3 +62,5 @@ hc_map(hc, add = TRUE, fill = NA, border = NA)
 ```{r}
 sessionInfo()
 ```
+
+<!-- uid=add_labels_to_hc -->

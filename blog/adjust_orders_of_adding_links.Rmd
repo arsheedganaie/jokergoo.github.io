@@ -115,3 +115,4 @@ I am happy that you can control the order of adding link while not change the st
 sessionInfo()
 ```
 
+<!-- uid=adjust_orders_of_adding_links -->

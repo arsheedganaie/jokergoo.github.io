@@ -3,7 +3,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
 
-<title>Reverse x-axis in the circular layout</title>
+<title>Use closure to store variables locally</title>
 
 <script type="text/javascript">
 window.onload = function() {
@@ -211,117 +211,78 @@ hr {
 </p>
 <hr />
 
-<h1>Reverse x-axis in the circular layout</h1>
+<h1>Use closure to store variables locally</h1>
 
-<p>In <em>circlize</em> package, x-axis in always clockwise in each sector, no matter it
-is on the top of the circle or at the bottom. However, you can manually convert
-the original positions on x-axis to pretend you have a reversed xaxis. Take folling example:</p>
+<p>Assuming following scenario: we first construct a list of functions in a <code>for</code> loop that
+each function does some job and also tracks the status of each iteration. Later all the functions
+in the list will be executed sequentially. This scenario is not rare e.g. when making a complex
+genomic plot with multiple tracks that each track accepts a self-defined graphic function. All
+self-defined functions are firstly recorded and put into a wrapper object and in the end, a plotting
+function is applied to execute all the graphic functions. Following code shows an example:</p>
 
-<pre><code class="r">circos.par(gap.degree = c(10, 10), start.degree = -5)
-</code></pre>
-
-<pre><code>## Error in eval(expr, envir, enclos): could not find function &quot;circos.par&quot;
-</code></pre>
-
-<pre><code class="r">circos.initialize(factors = c(&quot;a&quot;, &quot;b&quot;), xlim = c(0, 1))
-</code></pre>
-
-<pre><code>## Error in eval(expr, envir, enclos): could not find function &quot;circos.initialize&quot;
-</code></pre>
-
-<pre><code class="r">circos.trackPlotRegion(ylim = c(0, 1), panel.fun = function(x, y) {
-    circos.axis(major.at = seq(0, 1, by = 0.1))
-})
-</code></pre>
-
-<pre><code>## Error in eval(expr, envir, enclos): could not find function &quot;circos.trackPlotRegion&quot;
-</code></pre>
-
-<pre><code class="r">circos.rect(0.2, 0.2, 0.4, 0.4, col = &quot;red&quot;, sector.index = &quot;a&quot;)
-</code></pre>
-
-<pre><code>## Error in eval(expr, envir, enclos): could not find function &quot;circos.rect&quot;
-</code></pre>
-
-<pre><code class="r">circos.link(&quot;a&quot;, 0.3, &quot;b&quot;, 0.7)
-</code></pre>
-
-<pre><code>## Error in eval(expr, envir, enclos): could not find function &quot;circos.link&quot;
-</code></pre>
-
-<pre><code class="r">circos.clear()
-</code></pre>
-
-<pre><code>## Error in eval(expr, envir, enclos): could not find function &quot;circos.clear&quot;
-</code></pre>
-
-<p>In the bottom sector, the order of x-axis seems not very convinient to read.
-Actually we can make some transformation on the original coordinates on x-axis.
-In following we defined <code>reverse_xaxis()</code> which flips the axis.</p>
-
-<pre><code class="r">reverse_xaxis = function(x, xlim) {
-    (xlim[2] - xlim[1]) - (x - xlim[1]) + xlim[1]
+<pre><code class="r">for(i in 1:n_track) {
+    new_track = add_new_track(..., fun = function() {
+        ...
+        cat(&quot;this is track&quot;, i, &quot;\n&quot;)
+    })
+    obj = add_obj(obj, new_track)
 }
-reverse_xaxis(seq(0, 1, by = 0.1), xlim = c(0, 1))
+plot_tracks(obj)
 </code></pre>
 
-<pre><code>##  [1] 1.0 0.9 0.8 0.7 0.6 0.5 0.4 0.3 0.2 0.1 0.0
+<p>However, <code>i</code> in the self-defined functions does not have the value you expect. Actually <code>i</code> always has
+the value <code>n_track</code>. Let&#39;s do following simplified experiment:</p>
+
+<pre><code class="r">f_list = list()
+for(i in 1:4) {
+    f_list[[i]] = function() print(i)
+}
+
+for(k in 1:4) {
+    f_list[[k]]()
+}
 </code></pre>
 
-<p>Now we apply <code>reverse_xaxis()</code> to all the coordinates in the sectors we want to
-flip.</p>
-
-<pre><code class="r">circos.par(gap.degree = c(10, 10), start.degree = -5)
+<pre><code>## [1] 4
+## [1] 4
+## [1] 4
+## [1] 4
 </code></pre>
 
-<pre><code>## Error in eval(expr, envir, enclos): could not find function &quot;circos.par&quot;
+<p>Unfortunately, the function always gets the value of 4 which is the last number of the for loop. </p>
+
+<p>The reasion is when the function is defined, the variables inside the function will not be evaluated unless they
+are executed, so in the <code>function() print(i)</code>, the value of <code>i</code> is not recorded when it is defined, and when it is called,
+it looks for <code>i</code> in the current environment and the four iterations have been already finished and <code>i</code> has the value of 4.</p>
+
+<p>In order to catch the value of <code>i</code> in each iteration, we can use closure to catch it and stored it locally. In following
+example, a copy of <code>i</code> is stored in a local environment which is associated with the function defined in each iteration.
+Later on, when the function is executed, it will look for the <code>i</code> in the environment where it is defined and it is
+exactly the local environment it is associated.</p>
+
+<pre><code class="r">f_list = list()
+for(i in 1:4) {
+    f_list[[i]] = local({i = i; function() print(i)})
+}
+
+for(k in 1:4) {
+    f_list[[k]]()
+}
 </code></pre>
 
-<pre><code class="r">circos.initialize(factors = c(&quot;a&quot;, &quot;b&quot;), xlim = c(0, 1))
+<pre><code>## [1] 1
+## [1] 2
+## [1] 3
+## [1] 4
 </code></pre>
 
-<pre><code>## Error in eval(expr, envir, enclos): could not find function &quot;circos.initialize&quot;
-</code></pre>
-
-<pre><code class="r">circos.trackPlotRegion(ylim = c(0, 1), panel.fun = function(x, y) {
-    sector.index = get.cell.meta.data(&quot;sector.index&quot;)
-    xlim =  get.cell.meta.data(&quot;xlim&quot;)
-    if(sector.index == &quot;a&quot;) {
-        circos.axis(major.at = seq(0, 1, by = 0.1), labels = reverse_xaxis(seq(0, 1, by = 0.1), xlim))
-        circos.rect(reverse_xaxis(0.2, xlim), 0.2, reverse_xaxis(0.4, xlim), 0.4, 
-            col = &quot;red&quot;, sector.index = &quot;a&quot;)
-    } else {
-        circos.axis(major.at = seq(0, 1, by = 0.1))
-    }
-})
-</code></pre>
-
-<pre><code>## Error in eval(expr, envir, enclos): could not find function &quot;circos.trackPlotRegion&quot;
-</code></pre>
-
-<pre><code class="r">xlim = get.cell.meta.data(&quot;xlim&quot;, sector.index = &quot;a&quot;)
-</code></pre>
-
-<pre><code>## Error in eval(expr, envir, enclos): could not find function &quot;get.cell.meta.data&quot;
-</code></pre>
-
-<pre><code class="r">circos.link(&quot;a&quot;, reverse_xaxis(0.3, xlim), &quot;b&quot;, 0.7)
-</code></pre>
-
-<pre><code>## Error in eval(expr, envir, enclos): could not find function &quot;circos.link&quot;
-</code></pre>
-
-<pre><code class="r">circos.clear()
-</code></pre>
-
-<pre><code>## Error in eval(expr, envir, enclos): could not find function &quot;circos.clear&quot;
-</code></pre>
+<!-- uid=use_closure_to_store_variables_locally -->
 
 
 <div id='disqus_thread'></div>
 <script>
 var disqus_config = function () {
-this.page.url = "http://jokergoo.github.io/blog/html/816b7c9035ca38cfac184a69ab9a1c11";
+this.page.url = "http://jokergoo.github.io/blog/html/use_closure_to_store_variables_locally";
 };
 (function() { // DON'T EDIT BELOW THIS LINE
 var d = document, s = d.createElement('script');

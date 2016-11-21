@@ -58,3 +58,5 @@ draw(ht, heatmap_legend_list = c(anno_legend_list, list(heatmap_legend)))
 ```{r}
 sessionInfo()
 ```
+
+<!-- uid=merge_heatmap_and_annotation_legend -->

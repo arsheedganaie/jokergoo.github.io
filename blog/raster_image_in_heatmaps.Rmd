@@ -76,3 +76,5 @@ invisible(file.remove(all_files))
 ```{r}
 sessionInfo()
 ```
+
+<!-- uid=raster_image_in_heatmaps -->

@@ -3,7 +3,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
 
-<title>Use closure to store variables locally</title>
+<title>Support raster image in heatmaps</title>
 
 <script type="text/javascript">
 window.onload = function() {
@@ -211,76 +211,126 @@ hr {
 </p>
 <hr />
 
-<h1>Use closure to store variables locally</h1>
+<h1>Support raster image in heatmaps</h1>
 
-<p>Assuming following scenario: we first construct a list of functions in a <code>for</code> loop that
-each function does some job and also tracks the status of each iteration. Later all the functions
-in the list will be executed sequentially. This scenario is not rare e.g. when making a complex
-genomic plot with multiple tracks that each track accepts a self-defined graphic function. All
-self-defined functions are firstly recorded and put into a wrapper object and in the end, a plotting
-function is applied to execute all the graphic functions. Following code shows an example:</p>
+<p>Saving heatmaps in PDF format is kind of best parctice to preserve the quality. However,
+when there are too many rows (say, &gt; 10000), the output PDF file size would be huge and it takes
+time and memory to read the plot.</p>
 
-<pre><code class="r">for(i in 1:n_track) {
-    new_track = add_new_track(..., fun = function() {
-        ...
-        cat(&quot;this is track&quot;, i, &quot;\n&quot;)
-    })
-    obj = add_obj(obj, new_track)
-}
-plot_tracks(obj)
+<p>Rendering heatmaps as raster images will effectively reduce
+the file size. In <code>Heatmap()</code> function, there are four options which control how to generate
+the raster image: <code>use_raster</code>, <code>raster_device</code>, <code>raster_quality</code>, <code>raster_device_param</code>. </p>
+
+<pre><code class="r">set.seed(123)
+mat = matrix(rnorm(10000*100), ncol = 100)
 </code></pre>
 
-<p>However, <code>i</code> in the self-defined functions does not have the value you expect. Actually <code>i</code> always has
-the value <code>n_track</code>. Let&#39;s do following simplified experiment:</p>
+<p>Following make the heatmap with and without raster images.</p>
 
-<pre><code class="r">f_list = list()
-for(i in 1:4) {
-    f_list[[i]] = function() print(i)
-}
+<pre><code class="r">library(ComplexHeatmap)
+pdf(&quot;heatmap.pdf&quot;, width = 8, height = 8)
+Heatmap(mat, cluster_rows = FALSE, cluster_columns = FALSE)
+dev.off()
 
-for(k in 1:4) {
-    f_list[[k]]()
-}
+pdf(&quot;heatmap_raster_by_png.pdf&quot;, width = 8, height = 8)
+Heatmap(mat, cluster_rows = FALSE, cluster_columns = FALSE, use_raster = TRUE, raster_device = &quot;png&quot;)
+dev.off()
+
+pdf(&quot;heatmap_raster_by_jpeg.pdf&quot;, width = 8, height = 8)
+Heatmap(mat, cluster_rows = FALSE, cluster_columns = FALSE, use_raster = TRUE, raster_device = &quot;jpeg&quot;)
+dev.off()
+
+pdf(&quot;heatmap_raster_by_tiff.pdf&quot;, width = 8, height = 8)
+Heatmap(mat, cluster_rows = FALSE, cluster_columns = FALSE, use_raster = TRUE, raster_device = &quot;tiff&quot;)
+dev.off()
+
+pdf(&quot;heatmap_raster_by_CairoPNG.pdf&quot;, width = 8, height = 8)
+Heatmap(mat, cluster_rows = FALSE, cluster_columns = FALSE, use_raster = TRUE, raster_device = &quot;CairoPNG&quot;)
+dev.off()
+
+pdf(&quot;heatmap_raster_by_CairoJPEG.pdf&quot;, width = 8, height = 8)
+Heatmap(mat, cluster_rows = FALSE, cluster_columns = FALSE, use_raster = TRUE, raster_device = &quot;CairoJPEG&quot;)
+dev.off()
 </code></pre>
 
-<pre><code>## [1] 4
-## [1] 4
-## [1] 4
-## [1] 4
+<p>And the difference between these PDF files:</p>
+
+<pre><code class="r">all_files = c(&quot;heatmap.pdf&quot;, &quot;heatmap_raster_by_png.pdf&quot;, 
+              &quot;heatmap_raster_by_jpeg.pdf&quot;, &quot;heatmap_raster_by_tiff.pdf&quot;,
+              &quot;heatmap_raster_by_CairoPNG.pdf&quot;, &quot;heatmap_raster_by_CairoJPEG.pdf&quot;)
+fs = file.size(all_files)
+names(fs) = all_files
+sapply(fs, function(x) paste(round(x/1024), &quot;KB&quot;))
 </code></pre>
 
-<p>Unfortunately, the function always gets the value of 4 which is the last number of the for loop. </p>
-
-<p>The reasion is when the function is defined, the variables inside the function will not be evaluated unless they
-are executed, so in the <code>function() print(i)</code>, the value of <code>i</code> is not recorded when it is defined, and when it is called,
-it looks for <code>i</code> in the current environment and the four iterations have been already finished and <code>i</code> has the value of 4.</p>
-
-<p>In order to catch the value of <code>i</code> in each iteration, we can use closure to catch it and stored it locally. In following
-example, a copy of <code>i</code> is stored in a local environment which is associated with the function defined in each iteration.
-Later on, when the function is executed, it will look for the <code>i</code> in the environment where it is defined and it is
-exactly the local environment it is associated.</p>
-
-<pre><code class="r">f_list = list()
-for(i in 1:4) {
-    f_list[[i]] = local({i = i; function() print(i)})
-}
-
-for(k in 1:4) {
-    f_list[[k]]()
-}
+<pre><code>##                     heatmap.pdf       heatmap_raster_by_png.pdf 
+##                       &quot;6652 KB&quot;                        &quot;192 KB&quot; 
+##      heatmap_raster_by_jpeg.pdf      heatmap_raster_by_tiff.pdf 
+##                        &quot;779 KB&quot;                        &quot;192 KB&quot; 
+##  heatmap_raster_by_CairoPNG.pdf heatmap_raster_by_CairoJPEG.pdf 
+##                        &quot;141 KB&quot;                        &quot;765 KB&quot;
 </code></pre>
 
-<pre><code>## [1] 1
-## [1] 2
-## [1] 3
-## [1] 4
+<p>The ratio to <code>heatmap.pdf</code>:</p>
+
+<pre><code class="r">fs[-1]/fs[1]
 </code></pre>
+
+<pre><code>##       heatmap_raster_by_png.pdf      heatmap_raster_by_jpeg.pdf 
+##                           0.029                           0.117 
+##      heatmap_raster_by_tiff.pdf  heatmap_raster_by_CairoPNG.pdf 
+##                           0.029                           0.021 
+## heatmap_raster_by_CairoJPEG.pdf 
+##                           0.115
+</code></pre>
+
+<h2>Session Info</h2>
+
+<pre><code class="r">sessionInfo()
+</code></pre>
+
+<pre><code>## R version 3.2.3 (2015-12-10)
+## Platform: x86_64-apple-darwin13.4.0 (64-bit)
+## Running under: OS X 10.12.1 (unknown)
+## 
+## locale:
+## [1] C/en_US.UTF-8/C/C/C/C
+## 
+## attached base packages:
+##  [1] stats4    parallel  grid      stats     graphics  grDevices utils    
+##  [8] datasets  methods   base     
+## 
+## other attached packages:
+##  [1] RColorBrewer_1.1-2    HilbertCurve_1.1.3    GenomicRanges_1.20.8 
+##  [4] GenomeInfoDb_1.4.3    IRanges_2.2.9         S4Vectors_0.6.6      
+##  [7] BiocGenerics_0.14.0   gridBase_0.4-7        circlize_0.3.9       
+## [10] ComplexHeatmap_1.11.8 digest_0.6.10         htmltools_0.3.5      
+## [13] GetoptLong_0.1.6      markdown_0.7.7        knitr_1.14           
+## [16] colorout_1.1-2       
+## 
+## loaded via a namespace (and not attached):
+##  [1] Rcpp_0.12.6          XVector_0.8.0        formatR_1.4         
+##  [4] DEoptimR_1.0-6       plyr_1.8.4           HilbertVis_1.26.0   
+##  [7] class_7.3-14         tools_3.2.3          prabclus_2.2-6      
+## [10] dendextend_1.2.0     mclust_5.2           evaluate_0.9        
+## [13] gtable_0.2.0         lattice_0.20-33      png_0.1-7           
+## [16] mvtnorm_1.0-5        trimcluster_0.1-2    stringr_1.1.0       
+## [19] cluster_2.0.4        GlobalOptions_0.0.10 fpc_2.1-10          
+## [22] diptest_0.75-7       nnet_7.3-12          robustbase_0.92-6   
+## [25] flexmix_2.3-13       reshape2_1.4.1       kernlab_0.9-24      
+## [28] ggplot2_2.1.0        magrittr_1.5         whisker_0.3-2       
+## [31] scales_0.4.0         modeltools_0.2-21    MASS_7.3-45         
+## [34] mime_0.5             shape_1.4.2          colorspace_1.2-6    
+## [37] stringi_1.1.1        munsell_0.4.3        rjson_0.2.15
+</code></pre>
+
+<!-- uid=raster_image_in_heatmaps -->
 
 
 <div id='disqus_thread'></div>
 <script>
 var disqus_config = function () {
-this.page.url = "http://jokergoo.github.io/blog/html/bca70854c4818bfd60523fe088e93a5b";
+this.page.url = "http://jokergoo.github.io/blog/html/raster_image_in_heatmaps";
 };
 (function() { // DON'T EDIT BELOW THIS LINE
 var d = document, s = d.createElement('script');

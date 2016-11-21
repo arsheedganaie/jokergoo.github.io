@@ -54,3 +54,5 @@ for(k in 1:4) {
 	f_list[[k]]()
 }
 ```
+
+<!-- uid=use_closure_to_store_variables_locally -->

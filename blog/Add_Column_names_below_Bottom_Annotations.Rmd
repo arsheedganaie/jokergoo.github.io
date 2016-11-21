@@ -27,3 +27,5 @@ ha2 = HeatmapAnnotation(foo = foo,
         max_text_width(cn)))
 Heatmap(mat, show_column_names = FALSE, bottom_annotation = ha2)
 ```
+
+<!-- uid=Add_Column_names_below_Bottom_Annotations -->

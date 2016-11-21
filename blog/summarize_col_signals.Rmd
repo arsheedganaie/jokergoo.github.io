@@ -89,3 +89,5 @@ decorate_annotation("col_mean", {grid.text("mean\nsignal", unit(-10, "mm"), rot 
 ```{r}
 sessionInfo()
 ```
+
+<!-- uid=summarize_col_signals -->

@@ -105,3 +105,5 @@ draw(ht, annotation_legend_list = list(lgd))
 ```{r}
 sessionInfo()
 ```
+
+<!-- uid=more_legends -->
