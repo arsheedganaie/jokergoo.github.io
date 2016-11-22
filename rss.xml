@@ -24,9 +24,6 @@ negative signals separatedly. &lt;/p&gt;
 &lt;p&gt;In following example, variable &lt;code&gt;mat_H3K4me1&lt;/code&gt; contains correlation between H3K4me1 signal and 
 expression of corresponding genes in (-5kb, 10kb)of the gene TSS.&lt;/p&gt;
 
-&lt;pre&gt;&lt;code&gt;## Creating a generic function for &amp;#39;nchar&amp;#39; from package &amp;#39;base&amp;#39; in package &amp;#39;S4Vectors&amp;#39;
-&lt;/code&gt;&lt;/pre&gt;
-
 &lt;pre&gt;&lt;code class="r"&gt;library(EnrichedHeatmap)
 library(circlize)
 load(paste0(system.file(&amp;quot;extdata&amp;quot;, &amp;quot;H3K4me1_corr_normalize_to_tss.RData&amp;quot;, package = &amp;quot;EnrichedHeatmap&amp;quot;)))
@@ -87,21 +84,15 @@ two matrix.&lt;/p&gt;
 &lt;p&gt;If you split the rows in the heatmap, graphic parameters can still be set as a vector. After observing
 the above heatmap, we make a kmeans clustering to a sub-matrix which contains signals in (0, 2kb) of TSS.&lt;/p&gt;
 
-&lt;pre&gt;&lt;code class="r"&gt;split = kmeans(mat_H3K4me1[, 101:140])$cluster
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;pre&gt;&lt;code&gt;## Error in kmeans(mat_H3K4me1[, 101:140]): &amp;#39;centers&amp;#39; must be a number or a matrix
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;pre&gt;&lt;code class="r"&gt;EnrichedHeatmap(mat_H3K4me1, col = cor_col_fun, name = &amp;quot;corr_H3K4me1&amp;quot;,
+&lt;pre&gt;&lt;code class="r"&gt;split = kmeans(mat_H3K4me1[, 101:140], centers = 2)$cluster
+EnrichedHeatmap(mat_H3K4me1, col = cor_col_fun, name = &amp;quot;corr_H3K4me1&amp;quot;,
     top_annotation = HeatmapAnnotation(line = anno_enriched(gp = gpar(neg_col = &amp;quot;darkgreen&amp;quot;, pos_col = &amp;quot;red&amp;quot;, 
         lty = 1:2))),
     top_annotation_height = unit(2, &amp;quot;cm&amp;quot;),
     column_title = &amp;quot;correlation&amp;quot;, split = split)
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;pre&gt;&lt;code&gt;## Error in Heatmap(mat, row_order = od, cluster_columns = FALSE, cluster_rows = cluster_rows, : Length or number of rows of `split` should be same as rows in `matrix`.
-&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;strong&gt;Please see the figure in the original post.&lt;/strong&gt;&lt;/p&gt;
 
 &lt;!-- uid=visualize_signals_by_sign_in_enrichedheatmap --&gt;
 
