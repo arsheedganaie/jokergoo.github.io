@@ -60,13 +60,15 @@ EnrichedHeatmap(mat_H3K4me1, col = cor_col_fun, name = "corr_H3K4me1",
 If you split the rows in the heatmap, graphic parameters can still be set as a vector. After observing
 the above heatmap, we make a kmeans clustering to a sub-matrix which contains signals in (0, 2kb) of TSS.
 
-```{r, fig.width = 4}
+```{r, fig.width = 5}
 split = kmeans(mat_H3K4me1[, 101:140], centers = 2)$cluster
-EnrichedHeatmap(mat_H3K4me1, col = cor_col_fun, name = "corr_H3K4me1",
+ht = EnrichedHeatmap(mat_H3K4me1, col = cor_col_fun, name = "corr_H3K4me1",
     top_annotation = HeatmapAnnotation(line = anno_enriched(gp = gpar(neg_col = "darkgreen", pos_col = "red", 
     	lty = 1:2))),
     top_annotation_height = unit(2, "cm"),
     column_title = "correlation", split = split)
+lgd = Legend(at = c("1", "2"), type = "lines", legend_gp = gpar(lty = 1:2), title = "cluster")
+draw(ht, annotation_legend_list = list(lgd))
 ```
 
 <!-- uid=visualize_signals_by_sign_in_enrichedheatmap -->

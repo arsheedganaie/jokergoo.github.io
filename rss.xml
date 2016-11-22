@@ -85,11 +85,13 @@ two matrix.&lt;/p&gt;
 the above heatmap, we make a kmeans clustering to a sub-matrix which contains signals in (0, 2kb) of TSS.&lt;/p&gt;
 
 &lt;pre&gt;&lt;code class="r"&gt;split = kmeans(mat_H3K4me1[, 101:140], centers = 2)$cluster
-EnrichedHeatmap(mat_H3K4me1, col = cor_col_fun, name = &amp;quot;corr_H3K4me1&amp;quot;,
+ht = EnrichedHeatmap(mat_H3K4me1, col = cor_col_fun, name = &amp;quot;corr_H3K4me1&amp;quot;,
     top_annotation = HeatmapAnnotation(line = anno_enriched(gp = gpar(neg_col = &amp;quot;darkgreen&amp;quot;, pos_col = &amp;quot;red&amp;quot;, 
         lty = 1:2))),
     top_annotation_height = unit(2, &amp;quot;cm&amp;quot;),
     column_title = &amp;quot;correlation&amp;quot;, split = split)
+lgd = Legend(at = c(&amp;quot;1&amp;quot;, &amp;quot;2&amp;quot;), type = &amp;quot;lines&amp;quot;, legend_gp = gpar(lty = 1:2), title = &amp;quot;cluster&amp;quot;)
+draw(ht, annotation_legend_list = list(lgd))
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;&lt;strong&gt;Please see the figure in the original post.&lt;/strong&gt;&lt;/p&gt;
