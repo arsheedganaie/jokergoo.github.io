@@ -213,10 +213,10 @@ for(i in seq_along(md_files)) {
 
 deleted_md_uid = setdiff(post_info$uid, md_uid2)
 if(length(deleted_md_uid) > 0) {
-	l = deleted_md_uid %in% post_info$uid
+	l = post_info$uid %in% deleted_md_uid
 	post_info = lapply(post_info, function(x) x[!l])
 }
-qqcat("delete @{deleted_md_uid} old posts.\n")
+qqcat("delete @{deleted_md_uid}.\n")
 
 save(post_info, file = ".post_info.RData")
 setwd("..")

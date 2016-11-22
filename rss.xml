@@ -226,8 +226,8 @@ decorate_annotation(&amp;quot;col_mean&amp;quot;, {grid.text(&amp;quot;mean\nsig
 ## [1] C/en_US.UTF-8/C/C/C/C
 ## 
 ## attached base packages:
-##  [1] stats4    parallel  grid      stats     graphics  grDevices utils    
-##  [8] datasets  methods   base     
+##  [1] stats4    parallel  methods   grid      stats     graphics  grDevices
+##  [8] utils     datasets  base     
 ## 
 ## other attached packages:
 ##  [1] RColorBrewer_1.1-2    HilbertCurve_1.1.3    GenomicRanges_1.20.8 
@@ -235,7 +235,6 @@ decorate_annotation(&amp;quot;col_mean&amp;quot;, {grid.text(&amp;quot;mean\nsig
 ##  [7] BiocGenerics_0.14.0   gridBase_0.4-7        circlize_0.3.9       
 ## [10] ComplexHeatmap_1.11.8 digest_0.6.10         htmltools_0.3.5      
 ## [13] GetoptLong_0.1.6      markdown_0.7.7        knitr_1.14           
-## [16] colorout_1.1-2       
 ## 
 ## loaded via a namespace (and not attached):
 ##  [1] Rcpp_0.12.6          XVector_0.8.0        formatR_1.4         
@@ -336,31 +335,31 @@ circos.link(&amp;quot;a&amp;quot;, reverse_xaxis(0.3, xlim), &amp;quot;b&amp;quo
 ## [1] C/en_US.UTF-8/C/C/C/C
 ## 
 ## attached base packages:
-##  [1] stats4    parallel  grid      stats     graphics  grDevices utils    
-##  [8] datasets  methods   base     
+##  [1] stats4    parallel  methods   grid      stats     graphics  grDevices
+##  [8] utils     datasets  base     
 ## 
 ## other attached packages:
-##  [1] RColorBrewer_1.1-2    HilbertCurve_1.1.3    GenomicRanges_1.20.8 
-##  [4] GenomeInfoDb_1.4.3    IRanges_2.2.9         S4Vectors_0.6.6      
-##  [7] BiocGenerics_0.14.0   gridBase_0.4-7        circlize_0.3.9       
-## [10] ComplexHeatmap_1.11.8 digest_0.6.10         htmltools_0.3.5      
-## [13] GetoptLong_0.1.6      markdown_0.7.7        knitr_1.14           
-## [16] colorout_1.1-2       
+##  [1] HilbertCurve_1.1.3    GenomicRanges_1.20.8  GenomeInfoDb_1.4.3   
+##  [4] IRanges_2.2.9         S4Vectors_0.6.6       BiocGenerics_0.14.0  
+##  [7] gridBase_0.4-7        circlize_0.3.9        ComplexHeatmap_1.11.8
+## [10] digest_0.6.10         htmltools_0.3.5       GetoptLong_0.1.6     
+## [13] markdown_0.7.7        knitr_1.14           
 ## 
 ## loaded via a namespace (and not attached):
 ##  [1] Rcpp_0.12.6          XVector_0.8.0        formatR_1.4         
-##  [4] DEoptimR_1.0-6       plyr_1.8.4           HilbertVis_1.26.0   
-##  [7] class_7.3-14         tools_3.2.3          prabclus_2.2-6      
-## [10] dendextend_1.2.0     mclust_5.2           evaluate_0.9        
-## [13] gtable_0.2.0         lattice_0.20-33      png_0.1-7           
-## [16] mvtnorm_1.0-5        trimcluster_0.1-2    stringr_1.1.0       
-## [19] cluster_2.0.4        GlobalOptions_0.0.10 fpc_2.1-10          
-## [22] diptest_0.75-7       nnet_7.3-12          robustbase_0.92-6   
-## [25] flexmix_2.3-13       reshape2_1.4.1       kernlab_0.9-24      
-## [28] ggplot2_2.1.0        magrittr_1.5         whisker_0.3-2       
-## [31] scales_0.4.0         modeltools_0.2-21    MASS_7.3-45         
-## [34] mime_0.5             shape_1.4.2          colorspace_1.2-6    
-## [37] stringi_1.1.1        munsell_0.4.3        rjson_0.2.15
+##  [4] DEoptimR_1.0-6       RColorBrewer_1.1-2   plyr_1.8.4          
+##  [7] HilbertVis_1.26.0    class_7.3-14         tools_3.2.3         
+## [10] prabclus_2.2-6       dendextend_1.2.0     mclust_5.2          
+## [13] evaluate_0.9         gtable_0.2.0         lattice_0.20-33     
+## [16] png_0.1-7            mvtnorm_1.0-5        trimcluster_0.1-2   
+## [19] stringr_1.1.0        cluster_2.0.4        GlobalOptions_0.0.10
+## [22] fpc_2.1-10           diptest_0.75-7       nnet_7.3-12         
+## [25] robustbase_0.92-6    flexmix_2.3-13       reshape2_1.4.1      
+## [28] kernlab_0.9-24       ggplot2_2.1.0        magrittr_1.5        
+## [31] whisker_0.3-2        scales_0.4.0         modeltools_0.2-21   
+## [34] MASS_7.3-45          mime_0.5             shape_1.4.2         
+## [37] colorspace_1.2-6     stringi_1.1.1        munsell_0.4.3       
+## [40] rjson_0.2.15
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;!-- uid=reverse_xaxis --&gt;
@@ -605,31 +604,31 @@ par(new = FALSE)
 ## [1] C/en_US.UTF-8/C/C/C/C
 ## 
 ## attached base packages:
-##  [1] stats4    parallel  grid      stats     graphics  grDevices utils    
-##  [8] datasets  methods   base     
+##  [1] stats4    parallel  methods   grid      stats     graphics  grDevices
+##  [8] utils     datasets  base     
 ## 
 ## other attached packages:
-##  [1] RColorBrewer_1.1-2    HilbertCurve_1.1.3    GenomicRanges_1.20.8 
-##  [4] GenomeInfoDb_1.4.3    IRanges_2.2.9         S4Vectors_0.6.6      
-##  [7] BiocGenerics_0.14.0   gridBase_0.4-7        circlize_0.3.9       
-## [10] ComplexHeatmap_1.11.8 digest_0.6.10         htmltools_0.3.5      
-## [13] GetoptLong_0.1.6      markdown_0.7.7        knitr_1.14           
-## [16] colorout_1.1-2       
+##  [1] HilbertCurve_1.1.3    GenomicRanges_1.20.8  GenomeInfoDb_1.4.3   
+##  [4] IRanges_2.2.9         S4Vectors_0.6.6       BiocGenerics_0.14.0  
+##  [7] gridBase_0.4-7        circlize_0.3.9        ComplexHeatmap_1.11.8
+## [10] digest_0.6.10         htmltools_0.3.5       GetoptLong_0.1.6     
+## [13] markdown_0.7.7        knitr_1.14           
 ## 
 ## loaded via a namespace (and not attached):
 ##  [1] Rcpp_0.12.6          XVector_0.8.0        formatR_1.4         
-##  [4] DEoptimR_1.0-6       plyr_1.8.4           HilbertVis_1.26.0   
-##  [7] class_7.3-14         tools_3.2.3          prabclus_2.2-6      
-## [10] dendextend_1.2.0     mclust_5.2           evaluate_0.9        
-## [13] gtable_0.2.0         lattice_0.20-33      png_0.1-7           
-## [16] mvtnorm_1.0-5        trimcluster_0.1-2    stringr_1.1.0       
-## [19] cluster_2.0.4        GlobalOptions_0.0.10 fpc_2.1-10          
-## [22] diptest_0.75-7       nnet_7.3-12          robustbase_0.92-6   
-## [25] flexmix_2.3-13       reshape2_1.4.1       kernlab_0.9-24      
-## [28] ggplot2_2.1.0        magrittr_1.5         whisker_0.3-2       
-## [31] scales_0.4.0         modeltools_0.2-21    MASS_7.3-45         
-## [34] mime_0.5             shape_1.4.2          colorspace_1.2-6    
-## [37] stringi_1.1.1        munsell_0.4.3        rjson_0.2.15
+##  [4] DEoptimR_1.0-6       RColorBrewer_1.1-2   plyr_1.8.4          
+##  [7] HilbertVis_1.26.0    class_7.3-14         tools_3.2.3         
+## [10] prabclus_2.2-6       dendextend_1.2.0     mclust_5.2          
+## [13] evaluate_0.9         gtable_0.2.0         lattice_0.20-33     
+## [16] png_0.1-7            mvtnorm_1.0-5        trimcluster_0.1-2   
+## [19] stringr_1.1.0        cluster_2.0.4        GlobalOptions_0.0.10
+## [22] fpc_2.1-10           diptest_0.75-7       nnet_7.3-12         
+## [25] robustbase_0.92-6    flexmix_2.3-13       reshape2_1.4.1      
+## [28] kernlab_0.9-24       ggplot2_2.1.0        magrittr_1.5        
+## [31] whisker_0.3-2        scales_0.4.0         modeltools_0.2-21   
+## [34] MASS_7.3-45          mime_0.5             shape_1.4.2         
+## [37] colorspace_1.2-6     stringi_1.1.1        munsell_0.4.3       
+## [40] rjson_0.2.15
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;!-- uid=segmentation_WGBS_dmr --&gt;
@@ -729,31 +728,31 @@ sapply(fs, function(x) paste(round(x/1024), &amp;quot;KB&amp;quot;))
 ## [1] C/en_US.UTF-8/C/C/C/C
 ## 
 ## attached base packages:
-##  [1] stats4    parallel  grid      stats     graphics  grDevices utils    
-##  [8] datasets  methods   base     
+##  [1] stats4    parallel  methods   grid      stats     graphics  grDevices
+##  [8] utils     datasets  base     
 ## 
 ## other attached packages:
-##  [1] RColorBrewer_1.1-2    HilbertCurve_1.1.3    GenomicRanges_1.20.8 
-##  [4] GenomeInfoDb_1.4.3    IRanges_2.2.9         S4Vectors_0.6.6      
-##  [7] BiocGenerics_0.14.0   gridBase_0.4-7        circlize_0.3.9       
-## [10] ComplexHeatmap_1.11.8 digest_0.6.10         htmltools_0.3.5      
-## [13] GetoptLong_0.1.6      markdown_0.7.7        knitr_1.14           
-## [16] colorout_1.1-2       
+##  [1] HilbertCurve_1.1.3    GenomicRanges_1.20.8  GenomeInfoDb_1.4.3   
+##  [4] IRanges_2.2.9         S4Vectors_0.6.6       BiocGenerics_0.14.0  
+##  [7] gridBase_0.4-7        circlize_0.3.9        ComplexHeatmap_1.11.8
+## [10] digest_0.6.10         htmltools_0.3.5       GetoptLong_0.1.6     
+## [13] markdown_0.7.7        knitr_1.14           
 ## 
 ## loaded via a namespace (and not attached):
 ##  [1] Rcpp_0.12.6          XVector_0.8.0        formatR_1.4         
-##  [4] DEoptimR_1.0-6       plyr_1.8.4           HilbertVis_1.26.0   
-##  [7] class_7.3-14         tools_3.2.3          prabclus_2.2-6      
-## [10] dendextend_1.2.0     mclust_5.2           evaluate_0.9        
-## [13] gtable_0.2.0         lattice_0.20-33      png_0.1-7           
-## [16] mvtnorm_1.0-5        trimcluster_0.1-2    stringr_1.1.0       
-## [19] cluster_2.0.4        GlobalOptions_0.0.10 fpc_2.1-10          
-## [22] diptest_0.75-7       nnet_7.3-12          robustbase_0.92-6   
-## [25] flexmix_2.3-13       reshape2_1.4.1       kernlab_0.9-24      
-## [28] ggplot2_2.1.0        magrittr_1.5         whisker_0.3-2       
-## [31] scales_0.4.0         modeltools_0.2-21    MASS_7.3-45         
-## [34] mime_0.5             shape_1.4.2          colorspace_1.2-6    
-## [37] stringi_1.1.1        munsell_0.4.3        rjson_0.2.15
+##  [4] DEoptimR_1.0-6       RColorBrewer_1.1-2   plyr_1.8.4          
+##  [7] HilbertVis_1.26.0    class_7.3-14         tools_3.2.3         
+## [10] prabclus_2.2-6       dendextend_1.2.0     mclust_5.2          
+## [13] evaluate_0.9         gtable_0.2.0         lattice_0.20-33     
+## [16] png_0.1-7            mvtnorm_1.0-5        trimcluster_0.1-2   
+## [19] stringr_1.1.0        cluster_2.0.4        GlobalOptions_0.0.10
+## [22] fpc_2.1-10           diptest_0.75-7       nnet_7.3-12         
+## [25] robustbase_0.92-6    flexmix_2.3-13       reshape2_1.4.1      
+## [28] kernlab_0.9-24       ggplot2_2.1.0        magrittr_1.5        
+## [31] whisker_0.3-2        scales_0.4.0         modeltools_0.2-21   
+## [34] MASS_7.3-45          mime_0.5             shape_1.4.2         
+## [37] colorspace_1.2-6     stringi_1.1.1        munsell_0.4.3       
+## [40] rjson_0.2.15
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;!-- uid=raster_image_in_heatmaps --&gt;
@@ -915,26 +914,26 @@ draw(ht, annotation_legend_list = list(lgd))
 ## [1] C/en_US.UTF-8/C/C/C/C
 ## 
 ## attached base packages:
-##  [1] stats4    parallel  grid      stats     graphics  grDevices utils     datasets  methods  
+##  [1] stats4    parallel  methods   grid      stats     graphics  grDevices utils     datasets 
 ## [10] base     
 ## 
 ## other attached packages:
-##  [1] RColorBrewer_1.1-2    HilbertCurve_1.1.3    GenomicRanges_1.20.8  GenomeInfoDb_1.4.3   
-##  [5] IRanges_2.2.9         S4Vectors_0.6.6       BiocGenerics_0.14.0   gridBase_0.4-7       
-##  [9] circlize_0.3.9        ComplexHeatmap_1.11.8 digest_0.6.10         htmltools_0.3.5      
-## [13] GetoptLong_0.1.6      markdown_0.7.7        knitr_1.14            colorout_1.1-2       
+##  [1] HilbertCurve_1.1.3    GenomicRanges_1.20.8  GenomeInfoDb_1.4.3    IRanges_2.2.9        
+##  [5] S4Vectors_0.6.6       BiocGenerics_0.14.0   gridBase_0.4-7        circlize_0.3.9       
+##  [9] ComplexHeatmap_1.11.8 digest_0.6.10         htmltools_0.3.5       GetoptLong_0.1.6     
+## [13] markdown_0.7.7        knitr_1.14           
 ## 
 ## loaded via a namespace (and not attached):
 ##  [1] Rcpp_0.12.6          XVector_0.8.0        formatR_1.4          DEoptimR_1.0-6      
-##  [5] plyr_1.8.4           HilbertVis_1.26.0    class_7.3-14         tools_3.2.3         
-##  [9] prabclus_2.2-6       dendextend_1.2.0     mclust_5.2           evaluate_0.9        
-## [13] gtable_0.2.0         lattice_0.20-33      png_0.1-7            mvtnorm_1.0-5       
-## [17] trimcluster_0.1-2    stringr_1.1.0        cluster_2.0.4        GlobalOptions_0.0.10
-## [21] fpc_2.1-10           diptest_0.75-7       nnet_7.3-12          robustbase_0.92-6   
-## [25] flexmix_2.3-13       reshape2_1.4.1       kernlab_0.9-24       ggplot2_2.1.0       
-## [29] magrittr_1.5         whisker_0.3-2        scales_0.4.0         modeltools_0.2-21   
-## [33] MASS_7.3-45          mime_0.5             shape_1.4.2          colorspace_1.2-6    
-## [37] stringi_1.1.1        munsell_0.4.3        rjson_0.2.15
+##  [5] RColorBrewer_1.1-2   plyr_1.8.4           HilbertVis_1.26.0    class_7.3-14        
+##  [9] tools_3.2.3          prabclus_2.2-6       dendextend_1.2.0     mclust_5.2          
+## [13] evaluate_0.9         gtable_0.2.0         lattice_0.20-33      png_0.1-7           
+## [17] mvtnorm_1.0-5        trimcluster_0.1-2    stringr_1.1.0        cluster_2.0.4       
+## [21] GlobalOptions_0.0.10 fpc_2.1-10           diptest_0.75-7       nnet_7.3-12         
+## [25] robustbase_0.92-6    flexmix_2.3-13       reshape2_1.4.1       kernlab_0.9-24      
+## [29] ggplot2_2.1.0        magrittr_1.5         whisker_0.3-2        scales_0.4.0        
+## [33] modeltools_0.2-21    MASS_7.3-45          mime_0.5             shape_1.4.2         
+## [37] colorspace_1.2-6     stringi_1.1.1        munsell_0.4.3        rjson_0.2.15
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;!-- uid=more_legends --&gt;
@@ -982,10 +981,10 @@ anno_legend_list
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;pre&gt;&lt;code&gt;## $type
-## frame[GRID.frame.11746] 
+## frame[GRID.frame.559] 
 ## 
 ## $age
-## frame[GRID.frame.11761]
+## frame[GRID.frame.574]
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;Similar, &lt;code&gt;show_heatmap_legend&lt;/code&gt; is set to &lt;code&gt;FALSE&lt;/code&gt; when creating &lt;code&gt;ht&lt;/code&gt; and legend object is extracted afterwards.&lt;/p&gt;
@@ -1016,31 +1015,31 @@ heatmap_legend = color_mapping_legend(ht@matrix_color_mapping, plot = FALSE)
 ## [1] C/en_US.UTF-8/C/C/C/C
 ## 
 ## attached base packages:
-##  [1] stats4    parallel  grid      stats     graphics  grDevices utils    
-##  [8] datasets  methods   base     
+##  [1] stats4    parallel  methods   grid      stats     graphics  grDevices
+##  [8] utils     datasets  base     
 ## 
 ## other attached packages:
-##  [1] RColorBrewer_1.1-2    HilbertCurve_1.1.3    GenomicRanges_1.20.8 
-##  [4] GenomeInfoDb_1.4.3    IRanges_2.2.9         S4Vectors_0.6.6      
-##  [7] BiocGenerics_0.14.0   gridBase_0.4-7        circlize_0.3.9       
-## [10] ComplexHeatmap_1.11.8 digest_0.6.10         htmltools_0.3.5      
-## [13] GetoptLong_0.1.6      markdown_0.7.7        knitr_1.14           
-## [16] colorout_1.1-2       
+##  [1] HilbertCurve_1.1.3    GenomicRanges_1.20.8  GenomeInfoDb_1.4.3   
+##  [4] IRanges_2.2.9         S4Vectors_0.6.6       BiocGenerics_0.14.0  
+##  [7] gridBase_0.4-7        circlize_0.3.9        ComplexHeatmap_1.11.8
+## [10] digest_0.6.10         htmltools_0.3.5       GetoptLong_0.1.6     
+## [13] markdown_0.7.7        knitr_1.14           
 ## 
 ## loaded via a namespace (and not attached):
 ##  [1] Rcpp_0.12.6          XVector_0.8.0        formatR_1.4         
-##  [4] DEoptimR_1.0-6       plyr_1.8.4           HilbertVis_1.26.0   
-##  [7] class_7.3-14         tools_3.2.3          prabclus_2.2-6      
-## [10] dendextend_1.2.0     mclust_5.2           evaluate_0.9        
-## [13] gtable_0.2.0         lattice_0.20-33      png_0.1-7           
-## [16] mvtnorm_1.0-5        trimcluster_0.1-2    stringr_1.1.0       
-## [19] cluster_2.0.4        GlobalOptions_0.0.10 fpc_2.1-10          
-## [22] diptest_0.75-7       nnet_7.3-12          robustbase_0.92-6   
-## [25] flexmix_2.3-13       reshape2_1.4.1       kernlab_0.9-24      
-## [28] ggplot2_2.1.0        magrittr_1.5         whisker_0.3-2       
-## [31] scales_0.4.0         modeltools_0.2-21    MASS_7.3-45         
-## [34] mime_0.5             shape_1.4.2          colorspace_1.2-6    
-## [37] stringi_1.1.1        munsell_0.4.3        rjson_0.2.15
+##  [4] DEoptimR_1.0-6       RColorBrewer_1.1-2   plyr_1.8.4          
+##  [7] HilbertVis_1.26.0    class_7.3-14         tools_3.2.3         
+## [10] prabclus_2.2-6       dendextend_1.2.0     mclust_5.2          
+## [13] evaluate_0.9         gtable_0.2.0         lattice_0.20-33     
+## [16] png_0.1-7            mvtnorm_1.0-5        trimcluster_0.1-2   
+## [19] stringr_1.1.0        cluster_2.0.4        GlobalOptions_0.0.10
+## [22] fpc_2.1-10           diptest_0.75-7       nnet_7.3-12         
+## [25] robustbase_0.92-6    flexmix_2.3-13       reshape2_1.4.1      
+## [28] kernlab_0.9-24       ggplot2_2.1.0        magrittr_1.5        
+## [31] whisker_0.3-2        scales_0.4.0         modeltools_0.2-21   
+## [34] MASS_7.3-45          mime_0.5             shape_1.4.2         
+## [37] colorspace_1.2-6     stringi_1.1.1        munsell_0.4.3       
+## [40] rjson_0.2.15
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;!-- uid=merge_heatmap_and_annotation_legend --&gt;
@@ -1247,31 +1246,31 @@ chordDiagram(df, grid.col = grid.col)
 ## [1] C/en_US.UTF-8/C/C/C/C
 ## 
 ## attached base packages:
-##  [1] stats4    parallel  grid      stats     graphics  grDevices utils    
-##  [8] datasets  methods   base     
+##  [1] stats4    parallel  methods   grid      stats     graphics  grDevices
+##  [8] utils     datasets  base     
 ## 
 ## other attached packages:
-##  [1] RColorBrewer_1.1-2    HilbertCurve_1.1.3    GenomicRanges_1.20.8 
-##  [4] GenomeInfoDb_1.4.3    IRanges_2.2.9         S4Vectors_0.6.6      
-##  [7] BiocGenerics_0.14.0   gridBase_0.4-7        circlize_0.3.9       
-## [10] ComplexHeatmap_1.11.8 digest_0.6.10         htmltools_0.3.5      
-## [13] GetoptLong_0.1.6      markdown_0.7.7        knitr_1.14           
-## [16] colorout_1.1-2       
+##  [1] HilbertCurve_1.1.3    GenomicRanges_1.20.8  GenomeInfoDb_1.4.3   
+##  [4] IRanges_2.2.9         S4Vectors_0.6.6       BiocGenerics_0.14.0  
+##  [7] gridBase_0.4-7        circlize_0.3.9        ComplexHeatmap_1.11.8
+## [10] digest_0.6.10         htmltools_0.3.5       GetoptLong_0.1.6     
+## [13] markdown_0.7.7        knitr_1.14           
 ## 
 ## loaded via a namespace (and not attached):
 ##  [1] Rcpp_0.12.6          XVector_0.8.0        formatR_1.4         
-##  [4] DEoptimR_1.0-6       plyr_1.8.4           HilbertVis_1.26.0   
-##  [7] class_7.3-14         tools_3.2.3          prabclus_2.2-6      
-## [10] dendextend_1.2.0     mclust_5.2           evaluate_0.9        
-## [13] gtable_0.2.0         lattice_0.20-33      png_0.1-7           
-## [16] mvtnorm_1.0-5        trimcluster_0.1-2    stringr_1.1.0       
-## [19] cluster_2.0.4        GlobalOptions_0.0.10 fpc_2.1-10          
-## [22] diptest_0.75-7       nnet_7.3-12          robustbase_0.92-6   
-## [25] flexmix_2.3-13       reshape2_1.4.1       kernlab_0.9-24      
-## [28] ggplot2_2.1.0        magrittr_1.5         whisker_0.3-2       
-## [31] scales_0.4.0         modeltools_0.2-21    MASS_7.3-45         
-## [34] mime_0.5             shape_1.4.2          colorspace_1.2-6    
-## [37] stringi_1.1.1        munsell_0.4.3        rjson_0.2.15
+##  [4] DEoptimR_1.0-6       RColorBrewer_1.1-2   plyr_1.8.4          
+##  [7] HilbertVis_1.26.0    class_7.3-14         tools_3.2.3         
+## [10] prabclus_2.2-6       dendextend_1.2.0     mclust_5.2          
+## [13] evaluate_0.9         gtable_0.2.0         lattice_0.20-33     
+## [16] png_0.1-7            mvtnorm_1.0-5        trimcluster_0.1-2   
+## [19] stringr_1.1.0        cluster_2.0.4        GlobalOptions_0.0.10
+## [22] fpc_2.1-10           diptest_0.75-7       nnet_7.3-12         
+## [25] robustbase_0.92-6    flexmix_2.3-13       reshape2_1.4.1      
+## [28] kernlab_0.9-24       ggplot2_2.1.0        magrittr_1.5        
+## [31] whisker_0.3-2        scales_0.4.0         modeltools_0.2-21   
+## [34] MASS_7.3-45          mime_0.5             shape_1.4.2         
+## [37] colorspace_1.2-6     stringi_1.1.1        munsell_0.4.3       
+## [40] rjson_0.2.15
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;!-- uid=adjust_orders_of_adding_links --&gt;
@@ -1348,27 +1347,26 @@ hc_map(hc, add = TRUE, fill = NA, border = NA)
 ## [1] C/en_US.UTF-8/C/C/C/C
 ## 
 ## attached base packages:
-##  [1] stats4    parallel  grid      stats     graphics  grDevices utils    
-##  [8] datasets  methods   base     
+##  [1] stats4    parallel  methods   grid      stats     graphics  grDevices
+##  [8] utils     datasets  base     
 ## 
 ## other attached packages:
-##  [1] RColorBrewer_1.1-2    HilbertCurve_1.1.3    GenomicRanges_1.20.8 
-##  [4] GenomeInfoDb_1.4.3    IRanges_2.2.9         S4Vectors_0.6.6      
-##  [7] BiocGenerics_0.14.0   gridBase_0.4-7        circlize_0.3.9       
-## [10] ComplexHeatmap_1.11.8 digest_0.6.10         htmltools_0.3.5      
-## [13] GetoptLong_0.1.6      markdown_0.7.7        knitr_1.14           
-## [16] colorout_1.1-2       
+##  [1] HilbertCurve_1.1.3    GenomicRanges_1.20.8  GenomeInfoDb_1.4.3   
+##  [4] IRanges_2.2.9         S4Vectors_0.6.6       BiocGenerics_0.14.0  
+##  [7] gridBase_0.4-7        circlize_0.3.9        ComplexHeatmap_1.11.8
+## [10] digest_0.6.10         htmltools_0.3.5       GetoptLong_0.1.6     
+## [13] markdown_0.7.7        knitr_1.14           
 ## 
 ## loaded via a namespace (and not attached):
 ##  [1] Rcpp_0.12.6          XVector_0.8.0        formatR_1.4         
-##  [4] DEoptimR_1.0-6       plyr_1.8.4           HilbertVis_1.26.0   
-##  [7] class_7.3-14         tools_3.2.3          prabclus_2.2-6      
-## [10] dendextend_1.2.0     mclust_5.2           evaluate_0.9        
-## [13] gtable_0.2.0         lattice_0.20-33      png_0.1-7           
-## [16] mvtnorm_1.0-5        trimcluster_0.1-2    stringr_1.1.0       
-## [19] cluster_2.0.4        GlobalOptions_0.0.10 fpc_2.1-10          
-## [22] diptest_0.75-7       nnet_7.3-12          robustbase_0.92-6   
-## [25] flexmix_2.3-13       reshape2_1.4.1       kernlab_0.9-24      
+##  [4] DEoptimR_1.0-6       RColorBrewer_1.1-2   plyr_1.8.4          
+##  [7] HilbertVis_1.26.0    class_7.3-14         tools_3.2.3         
+## [10] prabclus_2.2-6       dendextend_1.2.0     mclust_5.2          
+## [13] evaluate_0.9         gtable_0.2.0         lattice_0.20-33     
+## [16] png_0.1-7            mvtnorm_1.0-5        trimcluster_0.1-2   
+## [19] stringr_1.1.0        cluster_2.0.4        GlobalOptions_0.0.10
+## [22] fpc_2.1-10           diptest_0.75-7       nnet_7.3-12         
+## [25] robustbase_0.92-6    flexmix_2.3-13       kernlab_0.9-24      
 ## [28] ggplot2_2.1.0        magrittr_1.5         whisker_0.3-2       
 ## [31] scales_0.4.0         modeltools_0.2-21    MASS_7.3-45         
 ## [34] mime_0.5             shape_1.4.2          colorspace_1.2-6    
@@ -1608,31 +1606,28 @@ circos.clear()
 ## [1] C/en_US.UTF-8/C/C/C/C
 ## 
 ## attached base packages:
-##  [1] stats4    parallel  grid      stats     graphics  grDevices utils    
-##  [8] datasets  methods   base     
+## [1] methods   grid      stats     graphics  grDevices utils     datasets 
+## [8] base     
 ## 
 ## other attached packages:
-##  [1] RColorBrewer_1.1-2    HilbertCurve_1.1.3    GenomicRanges_1.20.8 
-##  [4] GenomeInfoDb_1.4.3    IRanges_2.2.9         S4Vectors_0.6.6      
-##  [7] BiocGenerics_0.14.0   gridBase_0.4-7        circlize_0.3.9       
-## [10] ComplexHeatmap_1.11.8 digest_0.6.10         htmltools_0.3.5      
-## [13] GetoptLong_0.1.6      markdown_0.7.7        knitr_1.14           
-## [16] colorout_1.1-2       
+## [1] gridBase_0.4-7        circlize_0.3.9        ComplexHeatmap_1.11.8
+## [4] digest_0.6.10         htmltools_0.3.5       GetoptLong_0.1.6     
+## [7] markdown_0.7.7        knitr_1.14           
 ## 
 ## loaded via a namespace (and not attached):
-##  [1] Rcpp_0.12.6          XVector_0.8.0        formatR_1.4         
-##  [4] DEoptimR_1.0-6       plyr_1.8.4           HilbertVis_1.26.0   
-##  [7] class_7.3-14         tools_3.2.3          prabclus_2.2-6      
-## [10] dendextend_1.2.0     mclust_5.2           evaluate_0.9        
-## [13] gtable_0.2.0         lattice_0.20-33      png_0.1-7           
-## [16] mvtnorm_1.0-5        trimcluster_0.1-2    stringr_1.1.0       
-## [19] cluster_2.0.4        GlobalOptions_0.0.10 fpc_2.1-10          
-## [22] diptest_0.75-7       nnet_7.3-12          robustbase_0.92-6   
-## [25] flexmix_2.3-13       reshape2_1.4.1       kernlab_0.9-24      
-## [28] ggplot2_2.1.0        magrittr_1.5         whisker_0.3-2       
-## [31] scales_0.4.0         modeltools_0.2-21    MASS_7.3-45         
-## [34] mime_0.5             shape_1.4.2          colorspace_1.2-6    
-## [37] stringi_1.1.1        munsell_0.4.3        rjson_0.2.15
+##  [1] Rcpp_0.12.6          formatR_1.4          DEoptimR_1.0-6      
+##  [4] RColorBrewer_1.1-2   plyr_1.8.4           class_7.3-14        
+##  [7] tools_3.2.3          prabclus_2.2-6       dendextend_1.2.0    
+## [10] mclust_5.2           evaluate_0.9         gtable_0.2.0        
+## [13] lattice_0.20-33      mvtnorm_1.0-5        trimcluster_0.1-2   
+## [16] stringr_1.1.0        cluster_2.0.4        GlobalOptions_0.0.10
+## [19] fpc_2.1-10           stats4_3.2.3         diptest_0.75-7      
+## [22] nnet_7.3-12          robustbase_0.92-6    flexmix_2.3-13      
+## [25] kernlab_0.9-24       ggplot2_2.1.0        magrittr_1.5        
+## [28] whisker_0.3-2        scales_0.4.0         modeltools_0.2-21   
+## [31] MASS_7.3-45          mime_0.5             shape_1.4.2         
+## [34] colorspace_1.2-6     stringi_1.1.1        munsell_0.4.3       
+## [37] rjson_0.2.15
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;!-- uid=Visualize_chromatin_states_transtitions --&gt;
@@ -1739,31 +1734,28 @@ highlight.sector(colnames(mat2), track.index = 1, col = &amp;quot;blue&amp;quot;
 ## [1] C/en_US.UTF-8/C/C/C/C
 ## 
 ## attached base packages:
-##  [1] stats4    parallel  grid      stats     graphics  grDevices utils    
-##  [8] datasets  methods   base     
+## [1] methods   grid      stats     graphics  grDevices utils     datasets 
+## [8] base     
 ## 
 ## other attached packages:
-##  [1] RColorBrewer_1.1-2    HilbertCurve_1.1.3    GenomicRanges_1.20.8 
-##  [4] GenomeInfoDb_1.4.3    IRanges_2.2.9         S4Vectors_0.6.6      
-##  [7] BiocGenerics_0.14.0   gridBase_0.4-7        circlize_0.3.9       
-## [10] ComplexHeatmap_1.11.8 digest_0.6.10         htmltools_0.3.5      
-## [13] GetoptLong_0.1.6      markdown_0.7.7        knitr_1.14           
-## [16] colorout_1.1-2       
+## [1] circlize_0.3.9        ComplexHeatmap_1.11.8 digest_0.6.10        
+## [4] htmltools_0.3.5       GetoptLong_0.1.6      markdown_0.7.7       
+## [7] knitr_1.14           
 ## 
 ## loaded via a namespace (and not attached):
-##  [1] Rcpp_0.12.6          XVector_0.8.0        formatR_1.4         
-##  [4] DEoptimR_1.0-6       plyr_1.8.4           HilbertVis_1.26.0   
-##  [7] class_7.3-14         tools_3.2.3          prabclus_2.2-6      
-## [10] dendextend_1.2.0     mclust_5.2           evaluate_0.9        
-## [13] gtable_0.2.0         lattice_0.20-33      png_0.1-7           
-## [16] mvtnorm_1.0-5        trimcluster_0.1-2    stringr_1.1.0       
-## [19] cluster_2.0.4        GlobalOptions_0.0.10 fpc_2.1-10          
-## [22] diptest_0.75-7       nnet_7.3-12          robustbase_0.92-6   
-## [25] flexmix_2.3-13       reshape2_1.4.1       kernlab_0.9-24      
-## [28] ggplot2_2.1.0        magrittr_1.5         whisker_0.3-2       
-## [31] scales_0.4.0         modeltools_0.2-21    MASS_7.3-45         
-## [34] mime_0.5             shape_1.4.2          colorspace_1.2-6    
-## [37] stringi_1.1.1        munsell_0.4.3        rjson_0.2.15
+##  [1] Rcpp_0.12.6          formatR_1.4          DEoptimR_1.0-6      
+##  [4] RColorBrewer_1.1-2   plyr_1.8.4           class_7.3-14        
+##  [7] tools_3.2.3          prabclus_2.2-6       dendextend_1.2.0    
+## [10] mclust_5.2           evaluate_0.9         gtable_0.2.0        
+## [13] lattice_0.20-33      mvtnorm_1.0-5        trimcluster_0.1-2   
+## [16] stringr_1.1.0        cluster_2.0.4        GlobalOptions_0.0.10
+## [19] fpc_2.1-10           stats4_3.2.3         diptest_0.75-7      
+## [22] nnet_7.3-12          robustbase_0.92-6    flexmix_2.3-13      
+## [25] kernlab_0.9-24       ggplot2_2.1.0        magrittr_1.5        
+## [28] whisker_0.3-2        scales_0.4.0         modeltools_0.2-21   
+## [31] MASS_7.3-45          mime_0.5             shape_1.4.2         
+## [34] colorspace_1.2-6     stringi_1.1.1        munsell_0.4.3       
+## [37] rjson_0.2.15
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;!-- uid=Multiple_Groups_Chord_Diagram --&gt;
@@ -1851,31 +1843,27 @@ rowAnnotation(row_barplot = row_anno_barplot(n_mutated_patients, ylim = c(0, max
 ## [1] C/en_US.UTF-8/C/C/C/C
 ## 
 ## attached base packages:
-##  [1] stats4    parallel  grid      stats     graphics  grDevices utils    
-##  [8] datasets  methods   base     
+## [1] methods   grid      stats     graphics  grDevices utils     datasets 
+## [8] base     
 ## 
 ## other attached packages:
-##  [1] RColorBrewer_1.1-2    HilbertCurve_1.1.3    GenomicRanges_1.20.8 
-##  [4] GenomeInfoDb_1.4.3    IRanges_2.2.9         S4Vectors_0.6.6      
-##  [7] BiocGenerics_0.14.0   gridBase_0.4-7        circlize_0.3.9       
-## [10] ComplexHeatmap_1.11.8 digest_0.6.10         htmltools_0.3.5      
-## [13] GetoptLong_0.1.6      markdown_0.7.7        knitr_1.14           
-## [16] colorout_1.1-2       
+## [1] ComplexHeatmap_1.11.8 digest_0.6.10         htmltools_0.3.5      
+## [4] GetoptLong_0.1.6      markdown_0.7.7        knitr_1.14           
 ## 
 ## loaded via a namespace (and not attached):
-##  [1] Rcpp_0.12.6          XVector_0.8.0        formatR_1.4         
-##  [4] DEoptimR_1.0-6       plyr_1.8.4           HilbertVis_1.26.0   
-##  [7] class_7.3-14         tools_3.2.3          prabclus_2.2-6      
-## [10] dendextend_1.2.0     mclust_5.2           evaluate_0.9        
-## [13] gtable_0.2.0         lattice_0.20-33      png_0.1-7           
-## [16] mvtnorm_1.0-5        trimcluster_0.1-2    stringr_1.1.0       
-## [19] cluster_2.0.4        GlobalOptions_0.0.10 fpc_2.1-10          
-## [22] diptest_0.75-7       nnet_7.3-12          robustbase_0.92-6   
-## [25] flexmix_2.3-13       reshape2_1.4.1       kernlab_0.9-24      
-## [28] ggplot2_2.1.0        magrittr_1.5         whisker_0.3-2       
-## [31] scales_0.4.0         modeltools_0.2-21    MASS_7.3-45         
-## [34] mime_0.5             shape_1.4.2          colorspace_1.2-6    
-## [37] stringi_1.1.1        munsell_0.4.3        rjson_0.2.15
+##  [1] Rcpp_0.12.6          formatR_1.4          DEoptimR_1.0-6      
+##  [4] RColorBrewer_1.1-2   plyr_1.8.4           class_7.3-14        
+##  [7] tools_3.2.3          prabclus_2.2-6       dendextend_1.2.0    
+## [10] mclust_5.2           evaluate_0.9         gtable_0.2.0        
+## [13] lattice_0.20-33      mvtnorm_1.0-5        trimcluster_0.1-2   
+## [16] stringr_1.1.0        cluster_2.0.4        GlobalOptions_0.0.10
+## [19] fpc_2.1-10           stats4_3.2.3         diptest_0.75-7      
+## [22] nnet_7.3-12          robustbase_0.92-6    flexmix_2.3-13      
+## [25] kernlab_0.9-24       ggplot2_2.1.0        magrittr_1.5        
+## [28] whisker_0.3-2        scales_0.4.0         modeltools_0.2-21   
+## [31] MASS_7.3-45          mime_0.5             shape_1.4.2         
+## [34] circlize_0.3.9       colorspace_1.2-6     stringi_1.1.1       
+## [37] munsell_0.4.3        rjson_0.2.15
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;!-- uid=Customize_barplots_for_the_oncoPrint --&gt;
@@ -1895,7 +1883,20 @@ rowAnnotation(row_barplot = row_anno_barplot(n_mutated_patients, ylim = c(0, max
 at the bottom of the heatmap, the annotations will be put below the column names.&lt;/p&gt;
 
 &lt;pre&gt;&lt;code class="r"&gt;library(ComplexHeatmap)
-set.seed(123)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code&gt;## Loading required package: grid
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code&gt;## Warning in .doLoadActions(where, attach): trying to execute load actions
+## without &amp;#39;methods&amp;#39; package
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code&gt;## Warning: replacing previous import by &amp;#39;magrittr::%&amp;gt;%&amp;#39; when loading
+## &amp;#39;dendextend&amp;#39;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code class="r"&gt;set.seed(123)
 mat = matrix(rnorm(100), 10)
 foo = sample(letters[1:2], 10, replace = TRUE)
 colnames(mat) = sapply(letters[1:10], function(x) paste(rep(x, 10), collapse = &amp;quot;&amp;quot;))
