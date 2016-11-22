@@ -1513,7 +1513,7 @@ y = runif(40, -2, 2)
 &lt;pre&gt;&lt;code class="r"&gt;for(d in 0:360) circular_scan(d, 30, 2, x + runif(40, -0.05, 0.05), y + runif(40, -0.05, 0.05))
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;&lt;video   loop&gt;&lt;source src="figure/unnamed-chunk-3-.webm" /&gt;&lt;p&gt;video of chunk unnamed-chunk-3&lt;/p&gt;&lt;/video&gt;&lt;/p&gt;
+&lt;p&gt;&lt;video   loop&gt;&lt;source src="unnamed-chunk-3-.webm" /&gt;&lt;p&gt;video of chunk unnamed-chunk-3&lt;/p&gt;&lt;/video&gt;&lt;/p&gt;
 
 &lt;!-- uid=circular_scan --&gt;
 
