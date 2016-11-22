@@ -6,6 +6,105 @@
   <description>Zuguang Gu's blog</description>
 
 <item>
+<title>Visualize positive and negative signals in the enriched heatmap</title>
+<link>http://zuguang.de/blog/html/visualize_signals_by_sign_in_enrichedheatmap.html</link>
+<pubDate>Tue, 22 Nov 2016 23:42:18 CET</pubDate>
+<description>
+
+
+&lt;p&gt;&lt;a href="https://github.com/jokergoo/EnrichedHeatmap"&gt;Enriched heatmaps&lt;/a&gt; are used to visualize the enrichment
+of genomic signals on a set of genomic targets of interest. It is broadly used to visualize e.g. how 
+histone marks are enriched to specific sites.&lt;/p&gt;
+
+&lt;p&gt;Sometimes we want to visualize the general correlation around certain genomic targets or how the difference
+between two subgroups looks like in the vicinity of e.g. gene TSS. In this case, the signals contain both
+positive and negative value and it makes more sense to visualize the enrichment for the positive and 
+negative signals separatedly. &lt;/p&gt;
+
+&lt;p&gt;In following example, variable &lt;code&gt;mat_H3K4me1&lt;/code&gt; contains correlation between H3K4me1 signal and 
+expression of corresponding genes in (-5kb, 10kb)of the gene TSS.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;## Warning in .doLoadActions(where, attach): trying to execute load actions
+## without &amp;#39;methods&amp;#39; package
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code&gt;## Warning: replacing previous import by &amp;#39;magrittr::%&amp;gt;%&amp;#39; when loading
+## &amp;#39;dendextend&amp;#39;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code&gt;## Creating a generic function for &amp;#39;nchar&amp;#39; from package &amp;#39;base&amp;#39; in package &amp;#39;S4Vectors&amp;#39;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code class="r"&gt;library(EnrichedHeatmap)
+load(paste0(system.file(&amp;quot;extdata&amp;quot;, &amp;quot;H3K4me1_corr_normalize_to_tss.RData&amp;quot;, package = &amp;quot;EnrichedHeatmap&amp;quot;)))
+mat_H3K4me1
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code&gt;## Normalize  to target:
+##   Upstream 5000 bp (100 windows)
+##   Downstream 10000 bp (200 windows)
+##   Not include target regions
+##   677 signal regions
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code class="r"&gt;quantile(mat_H3K4me1)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code&gt;##          0%         25%         50%         75%        100% 
+## -0.77089656  0.00000000  0.03763074  0.30214785  0.86717996
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;To visualize the pattern of positive correlation and negative correlation, one way is to separate into
+two matrix and visualize them separately:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="r"&gt;mat_pos = mat_H3K4me1
+mat_pos[mat_pos &amp;lt; 0] = 0
+mat_neg = mat_H3K4me1
+mat_neg[mat_neg &amp;gt; 0] = 0
+
+cor_col_fun = colorRamp2(c(-1, 0, 1), c(&amp;quot;darkgreen&amp;quot;, &amp;quot;white&amp;quot;, &amp;quot;red&amp;quot;))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code&gt;## Error in eval(expr, envir, enclos): could not find function &amp;quot;colorRamp2&amp;quot;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code class="r"&gt;ylim = range(c(colMeans(mat_pos), colMeans(abs(mat_neg))))
+EnrichedHeatmap(mat_pos, col = cor_col_fun, name = &amp;quot;pos_corr&amp;quot;,
+    top_annotation = HeatmapAnnotation(pos_line = anno_enriched(gp = gpar(col = &amp;quot;red&amp;quot;), 
+        ylim = ylim)),
+    top_annotation_height = unit(2, &amp;quot;cm&amp;quot;),
+    column_title = &amp;quot;pos_corr&amp;quot;) +
+EnrichedHeatmap(mat_neg, col = cor_col_fun, name = &amp;quot;neg_corr&amp;quot;,
+    top_annotation = HeatmapAnnotation(pos_line = anno_enriched(gp = gpar(col = &amp;quot;darkgreen&amp;quot;), 
+        ylim = ylim, value = &amp;quot;abs_mean&amp;quot;)),
+    top_annotation_height = unit(2, &amp;quot;cm&amp;quot;),
+    column_title = &amp;quot;neg_corr&amp;quot;)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code&gt;## Error in Heatmap(mat, row_order = od, cluster_columns = FALSE, cluster_rows = cluster_rows, : object &amp;#39;cor_col_fun&amp;#39; not found
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;From version 1.5.1 of &lt;strong&gt;EnrichedHeatmap&lt;/strong&gt; package, in &lt;code&gt;anno_enriched()&lt;/code&gt;, there are two non-standard 
+parameters &lt;code&gt;neg_col&lt;/code&gt; and &lt;code&gt;pos_col&lt;/code&gt; for &lt;code&gt;gp&lt;/code&gt;. If these two are set, the enrichment lines are drawn 
+for the positive and negative signals separatedly, and you don&amp;#39;t need to separate the matrix into
+two matrix.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="r"&gt;EnrichedHeatmap(mat_H3K4me1, col = cor_col_fun, name = &amp;quot;corr_H3K4me1&amp;quot;,
+    top_annotation = HeatmapAnnotation(line = anno_enriched(gp = gpar(neg_col = &amp;quot;darkgreen&amp;quot;, pos_col = &amp;quot;red&amp;quot;))),
+    top_annotation_height = unit(2, &amp;quot;cm&amp;quot;),
+    column_title = &amp;quot;correlation&amp;quot;)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code&gt;## Error in Heatmap(mat, row_order = od, cluster_columns = FALSE, cluster_rows = cluster_rows, : object &amp;#39;cor_col_fun&amp;#39; not found
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;!-- uid=visualize_signals_by_sign_in_enrichedheatmap --&gt;
+
+
+</description>
+</item>
+
+<item>
 <title>Use closure to store variables locally</title>
 <link>http://zuguang.de/blog/html/use_closure_to_store_variables_locally.html</link>
 <pubDate>Tue, 22 Nov 2016 18:45:28 CET</pubDate>
@@ -231,7 +330,7 @@ chordDiagram(df, grid.col = grid.col)
 </item>
 
 <item>
-<title>Visualize chromatin state transtitions</title>
+<title>Visualize chromatin state transitions</title>
 <link>http://zuguang.de/blog/html/Visualize_chromatin_states_transtitions.html</link>
 <pubDate>Tue, 22 Nov 2016 18:27:29 CET</pubDate>
 <description>
@@ -251,7 +350,13 @@ a chromatin state is assigned to the corresponding genomic bin if it is recurren
 &lt;p&gt;The processed data is stored as &lt;a href="../../data/chromatin_transition.RData"&gt;chromatin_transition.RData&lt;/a&gt;.&lt;/p&gt;
 
 &lt;pre&gt;&lt;code class="r"&gt;library(circlize)
-load(&amp;quot;../data/chromatin_transition.RData&amp;quot;)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code&gt;## Warning in .doLoadActions(where, attach): trying to execute load actions
+## without &amp;#39;methods&amp;#39; package
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code class="r"&gt;load(&amp;quot;../data/chromatin_transition.RData&amp;quot;)
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;There are three matrix: &lt;code&gt;mat&lt;/code&gt;, &lt;code&gt;meth_mat_1&lt;/code&gt; and &lt;code&gt;meth_mat_2&lt;/code&gt; which are:&lt;/p&gt;
@@ -278,11 +383,11 @@ to &amp;ldquo;TssAFlnk&amp;rdquo; state in group 2. On the digonal are the uncha
 &lt;pre&gt;&lt;code class="r"&gt;meth_mat_1[1:4, 1:4]
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;pre&gt;&lt;code&gt;##          TssA TssAFlnk TxFlnk   Tx
-## TssA     0.16     0.16   0.19 0.27
-## TssAFlnk 0.26     0.27   0.36 0.34
-## TxFlnk     NA     0.37   0.34 0.48
-## Tx       0.83     0.78   0.58 0.66
+&lt;pre&gt;&lt;code&gt;##               TssA  TssAFlnk    TxFlnk        Tx
+## TssA     0.1647232 0.1580874 0.1917435 0.2690045
+## TssAFlnk 0.2591677 0.2689880 0.3616242 0.3411387
+## TxFlnk          NA 0.3697514 0.3360386 0.4752722
+## Tx       0.8268626 0.7822987 0.5799682 0.6595322
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;Normally, majority in the genome are unchanged states, thus, we should only look at the regions
@@ -292,7 +397,7 @@ in which their states are changed.&lt;/p&gt;
 sum(diag(mat))/sum(mat)
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;pre&gt;&lt;code&gt;## [1] 0.62
+&lt;pre&gt;&lt;code&gt;## [1] 0.6192262
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;pre&gt;&lt;code class="r"&gt;# remove the unchanged states
@@ -441,6 +546,10 @@ circos.clear()
 &lt;p&gt;&lt;strong&gt;Please see the figure in the original post.&lt;/strong&gt;&lt;/p&gt;
 
 &lt;p&gt;A complete plot with legends looks like:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;## Warning: replacing previous import by &amp;#39;magrittr::%&amp;gt;%&amp;#39; when loading
+## &amp;#39;dendextend&amp;#39;
+&lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;&lt;strong&gt;Please see the figure in the original post.&lt;/strong&gt;&lt;/p&gt;
 
@@ -1430,50 +1539,6 @@ Heatmap(mat, show_column_names = FALSE, bottom_annotation = ha2)
 &lt;p&gt;&lt;strong&gt;Please see the figure in the original post.&lt;/strong&gt;&lt;/p&gt;
 
 &lt;!-- uid=Add_Column_names_below_Bottom_Annotations --&gt;
-
-
-</description>
-</item>
-
-<item>
-<title>Build a static website and blog by knitr and rmarkdown</title>
-<link>http://zuguang.de/blog/html/website_knitr.html</link>
-<pubDate>Mon, 21 Nov 2016 19:16:50 CET</pubDate>
-<description>
-
-
-&lt;p&gt;There is already very nice solutions to build a static website and blog
-based on &lt;a href="https://help.github.com/articles/using-jekyll-with-pages/"&gt;Jekyll&lt;/a&gt; and host on &lt;a href="http://github.com"&gt;GitHub&lt;/a&gt;.
-However, I still have problems to make a real functional website by learning those online tutorials. Actually
-it is not that difficult to write my own scripts to generate static HTML pages.
-Also it is easy to support &lt;strong&gt;knitr&lt;/strong&gt; package to automatically generate a HTML document with
-executing R code on the fly.&lt;/p&gt;
-
-&lt;p&gt;Take my website for example, there are &lt;code&gt;index.html&lt;/code&gt;, &lt;code&gt;software.html&lt;/code&gt;, &lt;code&gt;publications.html&lt;/code&gt; which
-are converted from &lt;a href="https://raw.githubusercontent.com/jokergoo/jokergoo.github.io/master/index.md"&gt;&lt;code&gt;index.md&lt;/code&gt;&lt;/a&gt;, 
-&lt;a href="https://raw.githubusercontent.com/jokergoo/jokergoo.github.io/master/software.md"&gt;&lt;code&gt;software.md&lt;/code&gt;&lt;/a&gt;, 
-&lt;a href="https://raw.githubusercontent.com/jokergoo/jokergoo.github.io/master/publications.md"&gt;&lt;code&gt;publications.md&lt;/code&gt;&lt;/a&gt; respectively. 
-&lt;a href="https://github.com/jokergoo/jokergoo.github.io/blob/master/generate_website.R"&gt;A general script&lt;/a&gt; takes
-care of the common HTML head and foot for each HTML document, reads the &lt;code&gt;.md&lt;/code&gt; files and convert to the HTML fragment.&lt;/p&gt;
-
-&lt;p&gt;For the blog part, there is a sub-folder called &lt;code&gt;blog/&lt;/code&gt; and posts in &lt;code&gt;.md&lt;/code&gt; or &lt;code&gt;.Rmd&lt;/code&gt; format are put in.
-If the file name of the post ends with &lt;code&gt;.Rmd&lt;/code&gt;, &lt;code&gt;knit()&lt;/code&gt; is first called and converts into HTML fragment by &lt;code&gt;markdownToHTML()&lt;/code&gt;
-afterwards, while if the file name of the post ends with &lt;code&gt;.md&lt;/code&gt;, &lt;code&gt;markdownToHTML()&lt;/code&gt; is simply called to convert
-to HTML fragment.&lt;/p&gt;
-
-&lt;p&gt;There is a tiny &amp;ldquo;database&amp;rdquo; (&lt;code&gt;post_info&lt;/code&gt;) which records some basic information for a post, e.g. create time, last
-modified time so that post without changes does not need to be re-generated. &lt;/p&gt;
-
-&lt;p&gt;&lt;a href="https://en.wikipedia.org/wiki/Inode"&gt;Inode&lt;/a&gt; is used as the unique identifier of files. The drawback is 
-the HTML pages can only be generated in a same computer.&lt;/p&gt;
-
-&lt;p&gt;After all posts are generated, title for each post is extracted as well as the creating time,
-which will be used to generate &lt;code&gt;blog.html&lt;/code&gt;.&lt;/p&gt;
-
-&lt;p&gt;If comments system is to be supported, after the HTML generation of each post, the Javascript fragment of &lt;a href="https://disqus.com/home/"&gt;Disqus&lt;/a&gt;
-can be inserted before &lt;code&gt;&amp;lt;/body&amp;gt;&lt;/code&gt;.&lt;/p&gt;
-
-&lt;!-- uid=website_knitr --&gt;
 
 
 </description>

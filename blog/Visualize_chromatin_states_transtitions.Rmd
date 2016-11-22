@@ -1,4 +1,4 @@
-Visualize chromatin state transtitions
+Visualize chromatin state transitions
 =========================================
 
 A chromatin state transition matrix shows how much the chromatin state in the genome
