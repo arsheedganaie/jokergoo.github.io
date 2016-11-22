@@ -6,7 +6,7 @@ suppressPackageStartupMessages(library(HilbertCurve))
 suppressPackageStartupMessages(library(GenomicRanges))
 ```
 
-Making Hilbert curve for genomic data with "pixel" mode provides a high resolution way
+Making Hilbert curve for genomic data under "pixel" mode provides a high resolution way
 to visualize patterns both in a global and local scale. Under "pixel" mode, the curve
 is stored as an RGB matrix, and it is added to the graphic device as a raster image.
 
@@ -57,10 +57,5 @@ hc = GenomicHilbertCurve(mode = "normal", level = 6, newpage = FALSE)
 hc_map(hc, add = TRUE, fill = NA, border = NA)
 ```
 
-## Session info
-
-```{r}
-sessionInfo()
-```
 
 <!-- uid=add_labels_to_hc -->

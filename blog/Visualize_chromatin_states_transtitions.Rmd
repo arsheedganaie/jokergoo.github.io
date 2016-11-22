@@ -301,10 +301,5 @@ upViewport()
 upViewport()
 ```
 
-## Session info
-
-```{r}
-sessionInfo()
-```
 
 <!-- uid=Visualize_chromatin_states_transtitions -->

@@ -53,10 +53,5 @@ Finally, `draw()` is called explicitely and a list of both heatmap legend and an
 draw(ht, heatmap_legend_list = c(anno_legend_list, list(heatmap_legend)))
 ```
 
-## Session Info
-
-```{r}
-sessionInfo()
-```
 
 <!-- uid=merge_heatmap_and_annotation_legend -->

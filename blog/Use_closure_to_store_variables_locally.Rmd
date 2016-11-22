@@ -16,11 +16,11 @@ for(i in 1:n_track) {
 	})
 	obj = add_obj(obj, new_track)
 }
-plot_tracks(obj)
+plot_all_tracks(obj)
 ```
 
-However, `i` in the self-defined functions does not have the value you expect. Actually `i` always has
-the value `n_track`. Let's do following simplified experiment:
+However, `i` in the self-defined functions does not have the value you expect. Actually the value of `i` 
+is always `n_track`. Let's do following simplified experiment:
 
 ```{r}
 f_list = list()
@@ -33,7 +33,7 @@ for(k in 1:4) {
 }
 ```
 
-Unfortunately, the function always gets the value of 4 which is the last number of the for loop. 
+Unfortunately, the function always gets the value of 4 which is the last iteration in the for loop. 
 
 The reasion is when the function is defined, the variables inside the function will not be evaluated unless they
 are executed, so in the `function() print(i)`, the value of `i` is not recorded when it is defined, and when it is called,

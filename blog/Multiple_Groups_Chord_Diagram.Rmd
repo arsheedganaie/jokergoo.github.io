@@ -1,10 +1,10 @@
-Multiple Groups Chord Diagram
+Multiple-group chord diagram
 ==============================
 
-By default `chordDiagram()` function in **circlize** package visualize
-relations between two groups (i.e. rows to columns if the input is an adjacency matrix
-or column 1 to column 2 if the input is an adjacency list). However, it is easy to visualize
-relations from more than 2 groups.
+By default `chordDiagram()` function in **circlize** package visualizes
+relations between two groups (i.e. from rows to columns if the input is an adjacency matrix
+or from column 1 to column 2 if the input is an adjacency list). However, it is easy to visualize
+relations among more than 2 groups.
 
 In this post I will demonstrate how to visualize relations from three groups. The example
 here are matrix as inputs, but the principle should be the same with adjacency data frames.
@@ -65,10 +65,5 @@ highlight.sector(colnames(mat2), track.index = 1, col = "blue", text = "C", nice
 circos.clear()
 ```
 
-## Session Info
-
-```{r}
-sessionInfo()
-```
 
 <!-- uid=Multiple_Groups_Chord_Diagram -->

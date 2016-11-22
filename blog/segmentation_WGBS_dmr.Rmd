@@ -244,10 +244,4 @@ eval(parse(text = chunks[["last"]]))
 circos.clear()
 ```
 
-## Session info
-
-```{r}
-sessionInfo()
-```
-
 <!-- uid=segmentation_WGBS_dmr -->

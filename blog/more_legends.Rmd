@@ -100,10 +100,4 @@ lgd = Legend(at = c("class1", "class2"), type = "points", legend_gp = gpar(col =
 draw(ht, annotation_legend_list = list(lgd))
 ```
 
-## Session Info
-
-```{r}
-sessionInfo()
-```
-
 <!-- uid=more_legends -->

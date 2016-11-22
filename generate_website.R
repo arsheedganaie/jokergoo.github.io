@@ -130,7 +130,7 @@ for(i in seq_along(md_files)) {
 	
 	# if it is a new file
 	if(md_uid[i] == "" || !md_uid[i] %in% post_info$uid) {
-
+		cat("==\n")
 		# uid = digest(qq("@{md_files[i]}_@{md_last_modified[i]}"), algo = "md5")
 		if(md_uid[i] == "") {
 			uid = gsub("\\.R?md$", "", md_files[i])
@@ -182,12 +182,12 @@ for(i in seq_along(md_files)) {
 		k = which(post_info$uid %in% md_uid[i])
 		# if it is modified since last time
 		if(md_last_modified[i] > post_info$last_modified_time[k] || all) {
-
+			cat("==\n")
 			qqcat("@{md_last_modified[i]} > @{post_info$last_modified_time[k]}\n")
 			post_info$last_modified_time[k] = md_last_modified[i]
 
 			title_url = paste0("html/", post_info$file_name[k])
-			file.remove(qq("@{title_url}.html"))
+			if(file.exists(qq("@{title_url}.html"))) file.remove(qq("@{title_url}.html"))
 
 			if(grepl("\\.Rmd$", md_files[i])) {
 				knit(md_files[i], qq("md_files[i].md"), quiet = TRUE)
@@ -215,9 +215,8 @@ deleted_md_uid = setdiff(post_info$uid, md_uid2)
 if(length(deleted_md_uid) > 0) {
 	l = post_info$uid %in% deleted_md_uid
 	post_info = lapply(post_info, function(x) x[!l])
+	qqcat("delete @{deleted_md_uid}.\n")
 }
-qqcat("delete @{deleted_md_uid}.\n")
-
 save(post_info, file = ".post_info.RData")
 setwd("..")
 

@@ -1,7 +1,7 @@
 Visualize mean signals in row clusters by ComplexHeatmap
 ==============================================
 
-In this post, we will demonstrate how to visualize mean signals in row clusters by **ComplexHeatmap** pacakge.
+In this post, we will demonstrate how to visualize mean signals in row clusters by **ComplexHeatmap** package.
 
 First we load the packages and generate the random matrix.
 
@@ -25,13 +25,13 @@ mat = cbind(rbind(matrix(rnorm(64, -1), 8), matrix(rnorm(64, 1), 8), matrix(rnor
 The random matrix contains three distinct subgroups by rows and following is how it looks by means of heatmap.
 
 ```{r}
-Heatmap(mat)
+Heatmap(mat, name = "foo")
 ```
 
 Next we are going to do little bit more to enhance the visual effect on the row clusters:
 
 1. split the heatmap by rows to separate row clusters.
-2. show and compare mean signals in row clusters. 
+2. show and compare mean signals in the three row clusters. 
 
 We apply k-means clustering on rows. Although you can specify it by `km` in `Heatmap()` function, since
 the partitioning information wil be used in several places, we calculate it in the first place.
@@ -79,15 +79,11 @@ between signal lines and row clusters, we add a color bar on the right of the ma
 Heatmap(mat, name = "foo", column_dend_side = "bottom", top_annotation = ha, 
     top_annotation_height = unit(2, "cm"), split = partition, show_row_names = FALSE) +
 Heatmap(partition, col = structure(colors, names = as.character(1:km)), show_row_names = FALSE, 
-    show_heatmap_legend = FALSE, name = "")
+    show_heatmap_legend = FALSE, name = "", width = unit(5, "mm"))
 
-decorate_annotation("col_mean", {grid.text("mean\nsignal", unit(-10, "mm"), rot = 90, just = "bottom")})
-```
-
-## Session Info
-
-```{r}
-sessionInfo()
+decorate_annotation("col_mean", {
+    grid.text("mean\nsignal", unit(-10, "mm"), rot = 90, just = "bottom")
+})
 ```
 
 <!-- uid=summarize_col_signals -->

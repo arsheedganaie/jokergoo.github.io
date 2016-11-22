@@ -5,7 +5,7 @@ Customize barplots for the oncoPrint
 suppressPackageStartupMessages(library(ComplexHeatmap))
 ```
 
-For the `oncoPrint()` function in the **circlize** package, by default, there are barplots
+For the `oncoPrint()` function in the **ComplexHeatmap** package, by default, there are barplots
 on top which visualize occurance of different types of genomic mutations in patients and 
 barplots in the right which visualize occurance of mutations in genes. Since it is common
 that each gene may have more than one type of mutations in a patients, the height of bars sometimes
@@ -35,7 +35,8 @@ oncoPrint(mat, get_type = function(x) strsplit(x, ";")[[1]],
     ), col = col)
 ```
 
-The method is rather simple, we first suppress the default column barplots and row barplots,
+You can see the height of the first bar is 4 instead of 3. If we want to put a bar with height of 3,
+actually the method is rather simple, we first suppress the default column barplots and row barplots,
 then define new column barplots and row barplots, assign to `top_annotation` and by using
 `rowAnnotation()` separately.
 
@@ -61,12 +62,6 @@ oncoPrint(mat, get_type = function(x) strsplit(x, ";")[[1]],
     top_annotation_height = unit(2, "cm")) +
 rowAnnotation(row_barplot = row_anno_barplot(n_mutated_patients, ylim = c(0, max(n_mutated_patients)), 
 	axis = TRUE, axis_side = "top"), width = unit(2, "cm"))
-```
-
-## Session Info
-
-```{r}
-sessionInfo()
 ```
 
 <!-- uid=Customize_barplots_for_the_oncoPrint -->

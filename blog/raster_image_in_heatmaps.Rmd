@@ -3,10 +3,11 @@ Support raster image in heatmaps
 
 Saving heatmaps in PDF format is kind of best parctice to preserve the quality. However,
 when there are too many rows (say, > 10000), the output PDF file size would be huge and it takes
-time and memory to read the plot.
+time and memory to read and show the plot.
 
 Rendering heatmaps as raster images will effectively reduce
-the file size. In `Heatmap()` function, there are four options which control how to generate
+the file size. In [**ComplexHeatmap**](https://github.com/jokergoo/ComplexHeatmap) package, 
+`Heatmap()` function, there are four options which control how to generate
 the raster image: `use_raster`, `raster_device`, `raster_quality`, `raster_device_param`. 
 
 ```{r matrix}
@@ -14,7 +15,7 @@ set.seed(123)
 mat = matrix(rnorm(10000*100), ncol = 100)
 ```
 
-Following make the heatmap with and without raster images.
+Following makes heatmap with and without raster images.
 
 ```{r code, eval = FALSE}
 library(ComplexHeatmap)
@@ -71,10 +72,5 @@ fs[-1]/fs[1]
 invisible(file.remove(all_files))
 ```
 
-## Session Info
-
-```{r}
-sessionInfo()
-```
 
 <!-- uid=raster_image_in_heatmaps -->

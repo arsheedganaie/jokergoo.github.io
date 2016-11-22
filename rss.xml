@@ -8,7 +8,7 @@
 <item>
 <title>Use closure to store variables locally</title>
 <link>http://zuguang.de/blog/html/use_closure_to_store_variables_locally.html</link>
-<pubDate>Mon, 21 Nov 2016 19:16:50 CET</pubDate>
+<pubDate>Tue, 22 Nov 2016 18:45:28 CET</pubDate>
 <description>
 
 
@@ -26,11 +26,11 @@ function is applied to execute all the graphic functions. Following code shows a
     })
     obj = add_obj(obj, new_track)
 }
-plot_tracks(obj)
+plot_all_tracks(obj)
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;However, &lt;code&gt;i&lt;/code&gt; in the self-defined functions does not have the value you expect. Actually &lt;code&gt;i&lt;/code&gt; always has
-the value &lt;code&gt;n_track&lt;/code&gt;. Let&amp;#39;s do following simplified experiment:&lt;/p&gt;
+&lt;p&gt;However, &lt;code&gt;i&lt;/code&gt; in the self-defined functions does not have the value you expect. Actually the value of &lt;code&gt;i&lt;/code&gt; 
+is always &lt;code&gt;n_track&lt;/code&gt;. Let&amp;#39;s do following simplified experiment:&lt;/p&gt;
 
 &lt;pre&gt;&lt;code class="r"&gt;f_list = list()
 for(i in 1:4) {
@@ -48,7 +48,7 @@ for(k in 1:4) {
 ## [1] 4
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;Unfortunately, the function always gets the value of 4 which is the last number of the for loop. &lt;/p&gt;
+&lt;p&gt;Unfortunately, the function always gets the value of 4 which is the last iteration in the for loop. &lt;/p&gt;
 
 &lt;p&gt;The reasion is when the function is defined, the variables inside the function will not be evaluated unless they
 are executed, so in the &lt;code&gt;function() print(i)&lt;/code&gt;, the value of &lt;code&gt;i&lt;/code&gt; is not recorded when it is defined, and when it is called,
@@ -82,44 +82,508 @@ for(k in 1:4) {
 </item>
 
 <item>
-<title>Build a static website and blog by knitr and rmarkdown</title>
-<link>http://zuguang.de/blog/html/website_knitr.html</link>
-<pubDate>Mon, 21 Nov 2016 19:16:50 CET</pubDate>
+<title>Adjust order or adding links to the Chord diagram</title>
+<link>http://zuguang.de/blog/html/adjust_orders_of_adding_links.html</link>
+<pubDate>Tue, 22 Nov 2016 18:27:33 CET</pubDate>
 <description>
 
 
-&lt;p&gt;There is already very nice solutions to build a static website and blog
-based on &lt;a href="https://help.github.com/articles/using-jekyll-with-pages/"&gt;Jekyll&lt;/a&gt; and host on &lt;a href="http://github.com"&gt;GitHub&lt;/a&gt;.
-However, I still have problems to make a real functional website by learning those online tutorials. Actually
-it is not that difficult to write my own scripts to generate static HTML pages.
-Also it is easy to support &lt;strong&gt;knitr&lt;/strong&gt; package to automatically generate a HTML document with
-executing R code on the fly.&lt;/p&gt;
+&lt;p&gt;Assuming following matrix:&lt;/p&gt;
 
-&lt;p&gt;Take my website for example, there are &lt;code&gt;index.html&lt;/code&gt;, &lt;code&gt;software.html&lt;/code&gt;, &lt;code&gt;publications.html&lt;/code&gt; which
-are converted from &lt;a href="https://raw.githubusercontent.com/jokergoo/jokergoo.github.io/master/index.md"&gt;&lt;code&gt;index.md&lt;/code&gt;&lt;/a&gt;, 
-&lt;a href="https://raw.githubusercontent.com/jokergoo/jokergoo.github.io/master/software.md"&gt;&lt;code&gt;software.md&lt;/code&gt;&lt;/a&gt;, 
-&lt;a href="https://raw.githubusercontent.com/jokergoo/jokergoo.github.io/master/publications.md"&gt;&lt;code&gt;publications.md&lt;/code&gt;&lt;/a&gt; respectively. 
-&lt;a href="https://github.com/jokergoo/jokergoo.github.io/blob/master/generate_website.R"&gt;A general script&lt;/a&gt; takes
-care of the common HTML head and foot for each HTML document, reads the &lt;code&gt;.md&lt;/code&gt; files and convert to the HTML fragment.&lt;/p&gt;
+&lt;pre&gt;&lt;code class="r"&gt;set.seed(123)
+mat = matrix(sample(16, 16), 4, byrow = TRUE)
+rownames(mat) = paste0(&amp;quot;R&amp;quot;, 1:4)
+colnames(mat) = paste0(&amp;quot;C&amp;quot;, 1:4)
+mat
+&lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;For the blog part, there is a sub-folder called &lt;code&gt;blog/&lt;/code&gt; and posts in &lt;code&gt;.md&lt;/code&gt; or &lt;code&gt;.Rmd&lt;/code&gt; format are put in.
-If the file name of the post ends with &lt;code&gt;.Rmd&lt;/code&gt;, &lt;code&gt;knit()&lt;/code&gt; is first called and converts into HTML fragment by &lt;code&gt;markdownToHTML()&lt;/code&gt;
-afterwards, while if the file name of the post ends with &lt;code&gt;.md&lt;/code&gt;, &lt;code&gt;markdownToHTML()&lt;/code&gt; is simply called to convert
-to HTML fragment.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;##    C1 C2 C3 C4
+## R1  5 12  6 15
+## R2 13  1 14  9
+## R3 16  4 10  3
+## R4  8  2 11  7
+&lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;There is a tiny &amp;ldquo;database&amp;rdquo; (&lt;code&gt;post_info&lt;/code&gt;) which records some basic information for a post, e.g. create time, last
-modified time so that post without changes does not need to be re-generated. &lt;/p&gt;
+&lt;p&gt;The order of adding links is:&lt;/p&gt;
 
-&lt;p&gt;&lt;a href="https://en.wikipedia.org/wiki/Inode"&gt;Inode&lt;/a&gt; is used as the unique identifier of files. The drawback is 
-the HTML pages can only be generated in a same computer.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;R1 -&amp;gt; C1
+R2 -&amp;gt; C1
+R3 -&amp;gt; C1
+R4 -&amp;gt; C1
+R1 -&amp;gt; C2
+...
+R4 -&amp;gt; C4
+&lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;After all posts are generated, title for each post is extracted as well as the creating time,
-which will be used to generate &lt;code&gt;blog.html&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;Actually if the input is a matrix, the matrix will be converted to a data frame:&lt;/p&gt;
 
-&lt;p&gt;If comments system is to be supported, after the HTML generation of each post, the Javascript fragment of &lt;a href="https://disqus.com/home/"&gt;Disqus&lt;/a&gt;
-can be inserted before &lt;code&gt;&amp;lt;/body&amp;gt;&lt;/code&gt;.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;##    Var1 Var2 value
+## 1    R1   C1     5
+## 2    R2   C1    13
+## 3    R3   C1    16
+## 4    R4   C1     8
+## 5    R1   C2    12
+## 6    R2   C2     1
+## 7    R3   C2     4
+## 8    R4   C2     2
+## 9    R1   C3     6
+## 10   R2   C3    14
+## 11   R3   C3    10
+## 12   R4   C3    11
+## 13   R1   C4    15
+## 14   R2   C4     9
+## 15   R3   C4     3
+## 16   R4   C4     7
+&lt;/code&gt;&lt;/pre&gt;
 
-&lt;!-- uid=website_knitr --&gt;
+&lt;p&gt;and add links for the first record to the last.&lt;/p&gt;
+
+&lt;p&gt;There are several scenarios that we need to adjust the default order:&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;we want to put the widest link on the most top,&lt;/li&gt;
+&lt;li&gt;we want to put the non-transparent links on the top.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;These two scenarios are all for emphasizing certain links. If we have the data frame which
+contains the interactions, we can adjust the order of rows to adjust the order of adding links
+to the Chord diagram.&lt;/p&gt;
+
+&lt;p&gt;If it is a matrix, we can use &lt;code&gt;melt()&lt;/code&gt; from &lt;strong&gt;reshape2&lt;/strong&gt; package to convert it to a data frame:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="r"&gt;df = reshape2::melt(mat)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;To make it simple, we define colors for sectors:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="r"&gt;grid.col = c(&amp;quot;#00000040&amp;quot;, &amp;quot;red&amp;quot;, &amp;quot;#00FF0040&amp;quot;, &amp;quot;#0000FF40&amp;quot;, &amp;quot;orange&amp;quot;, &amp;quot;pink&amp;quot;, &amp;quot;yellow&amp;quot;, &amp;quot;grey&amp;quot;)
+names(grid.col) = c(rownames(mat), colnames(mat))
+grid.col
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code&gt;##          R1          R2          R3          R4          C1          C2 
+## &amp;quot;#00000040&amp;quot;       &amp;quot;red&amp;quot; &amp;quot;#00FF0040&amp;quot; &amp;quot;#0000FF40&amp;quot;    &amp;quot;orange&amp;quot;      &amp;quot;pink&amp;quot; 
+##          C3          C4 
+##    &amp;quot;yellow&amp;quot;      &amp;quot;grey&amp;quot;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Following is the default Chord diagram. As you can see links from &amp;ldquo;R2&amp;rdquo; are complete red, it is
+covered by links from &amp;ldquo;R3&amp;rdquo; and &amp;ldquo;R4&amp;rdquo; because &amp;ldquo;R3&amp;rdquo; and &amp;ldquo;R4&amp;rdquo; links are drawn later than &amp;ldquo;R2&amp;rdquo; links.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="r"&gt;library(circlize)
+chordDiagram(df, grid.col = grid.col)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;strong&gt;Please see the figure in the original post.&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;Next we adjust the order of rows of &lt;code&gt;df&lt;/code&gt; to put &amp;ldquo;R2&amp;rdquo; links to the end, and then make the plot:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="r"&gt;df2 = df[c(which(df[[1]] == &amp;quot;R1&amp;quot;), which(df[[1]] == &amp;quot;R3&amp;quot;), which(df[[1]] == &amp;quot;R4&amp;quot;), which(df[[1]] == &amp;quot;R2&amp;quot;)), ]
+chordDiagram(df2, grid.col = grid.col)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;strong&gt;Please see the figure in the original post.&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;Now the &amp;ldquo;R2&amp;rdquo; links are on the top, but the order of sectors changed that &amp;ldquo;R2&amp;rdquo; becomes the last sector in all &amp;ldquo;R*&amp;rdquo; sectors.
+This problem can be simply solved by explictly setting &lt;code&gt;order&lt;/code&gt; options:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="r"&gt;chordDiagram(df2, grid.col = grid.col, order = c(paste0(&amp;quot;R&amp;quot;, 1:4), paste0(&amp;quot;C&amp;quot;, 1:4)))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;strong&gt;Please see the figure in the original post.&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;In a same way, if you want to put the widest link on the very top, just reorder the rows of the data frame by 
+the associated absolute values.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="r"&gt;df3 = df[order(abs(df[[3]])), ]
+chordDiagram(df3, grid.col = grid.col, order = c(paste0(&amp;quot;R&amp;quot;, 1:4), paste0(&amp;quot;C&amp;quot;, 1:4)))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;strong&gt;Please see the figure in the original post.&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;However, there is one serious problem that the order of rows also affect the positioning of links on a sector. As you 
+can see in above plot, the order of links on a sector is not very optimized that links are twisted. We want 
+the left second red link to be moved to the most right on sector &amp;ldquo;R2&amp;rdquo;.&lt;/p&gt;
+
+&lt;p&gt;From version 0.3.9, if the input is a data frame, the &lt;code&gt;chordDiagram()&lt;/code&gt; recognizes a &lt;code&gt;rank&lt;/code&gt; column which defines the 
+order of adding links (so here rank == 1 means draw first).&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="r"&gt;df$rank = rank(abs(df[[3]]))
+chordDiagram(df, grid.col = grid.col)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;strong&gt;Please see the figure in the original post.&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;Or to put non-transparent links on the top:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="r"&gt;df$rank = ifelse(df[[1]] == &amp;quot;R2&amp;quot;, 2, 1)
+chordDiagram(df, grid.col = grid.col)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;strong&gt;Please see the figure in the original post.&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;I am happy that you can control the order of adding link while not change the structure of the diagram.&lt;/p&gt;
+
+&lt;!-- uid=adjust_orders_of_adding_links --&gt;
+
+
+</description>
+</item>
+
+<item>
+<title>Visualize chromatin state transtitions</title>
+<link>http://zuguang.de/blog/html/Visualize_chromatin_states_transtitions.html</link>
+<pubDate>Tue, 22 Nov 2016 18:27:29 CET</pubDate>
+<description>
+
+
+&lt;p&gt;A chromatin state transition matrix shows how much the chromatin state in the genome
+has been changed from e.g. one sample to another. In our &lt;a href="http://msb.embopress.org/content/12/3/861"&gt;recent paper&lt;/a&gt; 
+we demonstrated how chromatin states change between smoking people and non-smoking people 
+by means of &lt;a href="http://d3dwu2jylmmhzr.cloudfront.net/content/msb/12/3/861/F8.large.jpg"&gt;Chord Diagram&lt;/a&gt;.
+In this post, I will demonstrate how to make such plot by the &lt;strong&gt;circlize&lt;/strong&gt; package 
+and enhance it by adding methylation information.&lt;/p&gt;
+
+&lt;p&gt;The data demonstrated in this post is processed from &lt;a href="http://www.roadmapepigenomics.org/"&gt;Roadmap data&lt;/a&gt;. The
+chromatin states &lt;a href="http://egg2.wustl.edu/roadmap/web_portal/chr_state_learning.html#core_15state"&gt;are learned from five core chromatin marks&lt;/a&gt;. Roadmap samples are separated into two groups based on expression profile. In each group,
+a chromatin state is assigned to the corresponding genomic bin if it is recurrent in at least half of the samples.&lt;/p&gt;
+
+&lt;p&gt;The processed data is stored as &lt;a href="../../data/chromatin_transition.RData"&gt;chromatin_transition.RData&lt;/a&gt;.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="r"&gt;library(circlize)
+load(&amp;quot;../data/chromatin_transition.RData&amp;quot;)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;There are three matrix: &lt;code&gt;mat&lt;/code&gt;, &lt;code&gt;meth_mat_1&lt;/code&gt; and &lt;code&gt;meth_mat_2&lt;/code&gt; which are:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;mat&lt;/code&gt;: chromatin state transition matrix. Rows correspond to states in group 1 and columns
+correspond to group 2. The value in the matrix are total base pairs that transite from one group to the other.
+E.g. there are in total 79600 bp which are in &amp;ldquo;TssA&amp;rdquo; state in group 1 and they change 
+to &amp;ldquo;TssAFlnk&amp;rdquo; state in group 2. On the digonal are the unchanged states.&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;meth_mat_1&lt;/code&gt;: mean methylation in group 1 in each category.&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;meth_mat_2&lt;/code&gt;: mean methylation in group 2 in each category.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;pre&gt;&lt;code class="r"&gt;mat[1:4, 1:4]
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code&gt;##            TssA TssAFlnk TxFlnk     Tx
+## TssA     497200    79600  13400   1800
+## TssAFlnk  56400   233200   5000    800
+## TxFlnk        0      400  43000   1800
+## Tx          800      200    200 166400
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code class="r"&gt;meth_mat_1[1:4, 1:4]
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code&gt;##          TssA TssAFlnk TxFlnk   Tx
+## TssA     0.16     0.16   0.19 0.27
+## TssAFlnk 0.26     0.27   0.36 0.34
+## TxFlnk     NA     0.37   0.34 0.48
+## Tx       0.83     0.78   0.58 0.66
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Normally, majority in the genome are unchanged states, thus, we should only look at the regions
+in which their states are changed.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="r"&gt;# proportion of the unchanges states in the genome
+sum(diag(mat))/sum(mat)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code&gt;## [1] 0.62
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code class="r"&gt;# remove the unchanged states
+diag(mat) = 0
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;When making the plot, actually rows and columns are different (because one is from group 1 and the other is from group 2),
+thus we give them different names and the original names are stored in &lt;code&gt;all_states&lt;/code&gt;.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="r"&gt;all_states = rownames(mat)
+n_states = nrow(mat)
+
+rownames(mat) = paste0(&amp;quot;R_&amp;quot;, seq_len(n_states))
+colnames(mat) = paste0(&amp;quot;C_&amp;quot;, seq_len(n_states))
+
+dimnames(meth_mat_1) = dimnames(mat)
+dimnames(meth_mat_2) = dimnames(mat)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Next we set the colors. &lt;code&gt;colmat&lt;/code&gt; is the color of the links and the colors
+are represent as hex code. Links have more transparent (&lt;code&gt;A0&lt;/code&gt;) if they
+contain few transitions (&amp;lt; 70th percentile) because we don&amp;#39;t want it
+to disturb the visualization of the major transitions.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="r"&gt;state_col = c(&amp;quot;TssA&amp;quot; = &amp;quot;#E41A1C&amp;quot;,
+              &amp;quot;TssAFlnk&amp;quot; = &amp;quot;#E41A1C&amp;quot;,
+              &amp;quot;TxFlnk&amp;quot; = &amp;quot;#E41A1C&amp;quot;,
+              &amp;quot;Tx&amp;quot; = &amp;quot;#E41A1C&amp;quot;,
+              &amp;quot;TxWk&amp;quot; = &amp;quot;#E41A1C&amp;quot;,
+              &amp;quot;EnhG&amp;quot; = &amp;quot;#E41A1C&amp;quot;,
+              &amp;quot;Enh&amp;quot; = &amp;quot;#E41A1C&amp;quot;,
+              &amp;quot;ZNF/Rpts&amp;quot; = &amp;quot;#E41A1C&amp;quot;,
+              &amp;quot;Het&amp;quot; = &amp;quot;#377EB8&amp;quot;,
+              &amp;quot;TssBiv&amp;quot; = &amp;quot;#377EB8&amp;quot;,
+              &amp;quot;BivFlnk&amp;quot; = &amp;quot;#377EB8&amp;quot;,
+              &amp;quot;EnhBiv&amp;quot; = &amp;quot;#377EB8&amp;quot;,
+              &amp;quot;ReprPC&amp;quot; = &amp;quot;#377EB8&amp;quot;,
+              &amp;quot;ReprPCWk&amp;quot; = &amp;quot;#377EB8&amp;quot;,
+              &amp;quot;Quies&amp;quot; = &amp;quot;black&amp;quot;)
+
+# one for rows and one for columns
+state_col2 = c(state_col, state_col)
+names(state_col2) = c(rownames(mat), colnames(mat))
+
+colmat = rep(state_col2[rownames(mat)], n_states)
+colmat = rgb(t(col2rgb(colmat)), maxColorValue = 255)
+
+qati = quantile(mat, 0.7)
+colmat[mat &amp;gt; qati] = paste0(colmat[mat &amp;gt; qati], &amp;quot;A0&amp;quot;)
+colmat[mat &amp;lt;= qati] = paste0(colmat[mat &amp;lt;= qati], &amp;quot;20&amp;quot;)
+dim(colmat) = dim(mat)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Now we can use &lt;code&gt;chordDiagram()&lt;/code&gt; function to make the plot. Here we set one pre-allocated
+track in which the methylation information will be put.&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;chordDiagram()&lt;/code&gt; returns a data frame which contains coordinates for all links which will
+be used later.&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;de&lt;/code&gt; is the degree for the &amp;ldquo;gap&amp;rdquo; between group 1 and group 2.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="r"&gt;de = 360 - (360 - 20 - 30) - 30
+circos.par(start.degree = -de/4, gap.degree = c(rep(1, n_states-1), de/2, rep(1, n_states-1), de/2))
+
+cdm_res = chordDiagram(mat, col = colmat, grid.col = state_col2,
+    directional = TRUE, annotationTrack = &amp;quot;grid&amp;quot;, preAllocateTracks = list(track.height = 0.1))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;strong&gt;Please see the figure in the original post.&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;If the degree for a sector is larger than 3 degrees, the index for the state and axis is added.
+Note since there is already one pre-allocated track, the circular rectangles are in the second track (&lt;code&gt;track.index = 2&lt;/code&gt;).&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="r"&gt;for(sn in get.all.sector.index()) {
+    if(abs(get.cell.meta.data(&amp;quot;cell.start.degree&amp;quot;, sector.index = sn) - 
+           get.cell.meta.data(&amp;quot;cell.end.degree&amp;quot;, sector.index = sn)) &amp;gt; 3) {
+        xcenter = get.cell.meta.data(&amp;quot;xcenter&amp;quot;, sector.index = sn, track.index = 2)
+        ycenter = get.cell.meta.data(&amp;quot;ycenter&amp;quot;, sector.index = sn, track.index = 2)
+        i_state = as.numeric(gsub(&amp;quot;(C|R)_&amp;quot;, &amp;quot;&amp;quot;, sn))
+        circos.text(xcenter, ycenter, i_state, col = &amp;quot;white&amp;quot;, font = 2, cex = 0.7, 
+            sector.index = sn, track.index = 2, adj = c(0.5, 0.5), niceFacing = TRUE)
+        circos.axis(sector.index = sn, track.index = 2, major.tick.percentage = 0.2, 
+            labels.away.percentage = 0.2, labels.cex = 0.5)
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;strong&gt;Please see the figure in the original post.&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;On the top half, it is easy to see the proportion of different transitions in group 1 that come to every state in group 2.
+However, it is not straightforward for the states in the bottom half to see the proportion of different
+states in group 2 they transite to. This can be solved by adding small circular rectangles. In following example, 
+the newly added circular rectangles in the bottom half shows e.g. how much the state 15 in group 1 has been transited
+to different states in group 2.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="r"&gt;for(i in seq_len(nrow(cdm_res))) {
+    if(cdm_res$value[i] &amp;gt; 0) {
+        circos.rect(cdm_res[i, &amp;quot;x1&amp;quot;], -0.5, cdm_res[i, &amp;quot;x1&amp;quot;] - abs(cdm_res[i, &amp;quot;value&amp;quot;]), -0.7, 
+            col = state_col2[cdm_res$cn[i]], border = state_col2[cdm_res$cn[i]],
+            sector.index = cdm_res$rn[i], track.index = 2)
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;strong&gt;Please see the figure in the original post.&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;Methylation in each category is put on the most outside of the circle. On this track, we will
+put two paralle rectangles which are mean methylation and methylation difference between group 1
+and group 2. Basically, on the bottom, we show &lt;code&gt;meth_mat_2 - meth_mat_1&lt;/code&gt; and on the top we show
+&lt;code&gt;meth_mat_1 - meth_mat_2&lt;/code&gt;.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="r"&gt;abs_max = quantile(abs(c(meth_mat_1, meth_mat_2) - 0.5), 0.95, na.rm = TRUE)
+col_fun = colorRamp2(c(0.5 - abs_max, 0.5, 0.5 + abs_max), c(&amp;quot;blue&amp;quot;, &amp;quot;white&amp;quot;, &amp;quot;red&amp;quot;))
+col_fun2 = colorRamp2(c(-abs_max, 0, abs_max), c(&amp;quot;green&amp;quot;, &amp;quot;white&amp;quot;, &amp;quot;orange&amp;quot;))
+
+ylim = get.cell.meta.data(&amp;quot;ylim&amp;quot;, sector.index = rownames(mat)[1], track.index = 1)
+y1 = ylim[1] + (ylim[2] - ylim[1])*0.4
+y2 = ylim[2]
+for(i in seq_len(nrow(cdm_res))) {
+    if(cdm_res$value[i] &amp;gt; 0) {
+        circos.rect(cdm_res[i, &amp;quot;x1&amp;quot;], y1, cdm_res[i, &amp;quot;x1&amp;quot;] - abs(cdm_res[i, &amp;quot;value&amp;quot;]), y1 + (y2-y1)*0.45, 
+            col = col_fun(meth_mat_1[cdm_res$rn[i], cdm_res$cn[i]]), 
+            border = col_fun(meth_mat_1[cdm_res$rn[i], cdm_res$cn[i]]),
+            sector.index = cdm_res$rn[i], track.index = 1)
+
+        circos.rect(cdm_res[i, &amp;quot;x1&amp;quot;], y1 + (y2-y1)*0.55, cdm_res[i, &amp;quot;x1&amp;quot;] - abs(cdm_res[i, &amp;quot;value&amp;quot;]), y2, 
+            col = col_fun2(meth_mat_2[cdm_res$rn[i], cdm_res$cn[i]] - meth_mat_1[cdm_res$rn[i], cdm_res$cn[i]]), 
+            border = col_fun2(meth_mat_2[cdm_res$rn[i], cdm_res$cn[i]] - meth_mat_1[cdm_res$rn[i], cdm_res$cn[i]]),
+            sector.index = cdm_res$rn[i], track.index = 1)
+
+        circos.rect(cdm_res[i, &amp;quot;x2&amp;quot;], y1, cdm_res[i, &amp;quot;x2&amp;quot;] - abs(cdm_res[i, &amp;quot;value&amp;quot;]), y1 + (y2-y1)*0.45, 
+            col = col_fun(meth_mat_2[cdm_res$rn[i], cdm_res$cn[i]]), 
+            border = col_fun(meth_mat_2[cdm_res$rn[i], cdm_res$cn[i]]),
+            sector.index = cdm_res$cn[i], track.index = 1)
+
+        circos.rect(cdm_res[i, &amp;quot;x2&amp;quot;], y1 + (y2-y1)*0.55, cdm_res[i, &amp;quot;x2&amp;quot;] - abs(cdm_res[i, &amp;quot;value&amp;quot;]), y2, 
+            col = col_fun2(meth_mat_1[cdm_res$rn[i], cdm_res$cn[i]] - meth_mat_2[cdm_res$rn[i], cdm_res$cn[i]]), 
+            border = col_fun2(meth_mat_1[cdm_res$rn[i], cdm_res$cn[i]] - meth_mat_2[cdm_res$rn[i], cdm_res$cn[i]]),
+            sector.index = cdm_res$cn[i], track.index = 1)
+    }
+}
+
+circos.clear()
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;strong&gt;Please see the figure in the original post.&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;A complete plot with legends looks like:&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Please see the figure in the original post.&lt;/strong&gt;&lt;/p&gt;
+
+&lt;!-- uid=Visualize_chromatin_states_transtitions --&gt;
+
+
+</description>
+</item>
+
+<item>
+<title>Merge heatmap and annotation legends into a same column</title>
+<link>http://zuguang.de/blog/html/merge_heatmap_and_annotation_legend.html</link>
+<pubDate>Tue, 22 Nov 2016 18:19:20 CET</pubDate>
+<description>
+
+
+&lt;p&gt;In &lt;strong&gt;ComplexHeatmap&lt;/strong&gt; package, legends for heatmap and annotations are differently treated
+and they will be put in different places. However, if there are not too many heatmaps and annotations,
+separating these two types of legends will be kind of waste of spaces.&lt;/p&gt;
+
+&lt;p&gt;In &lt;code&gt;draw()&lt;/code&gt; method of &lt;code&gt;HeatmapList&lt;/code&gt; class, there is an option &lt;code&gt;heatmap_legend_list&lt;/code&gt; (or &lt;code&gt;annotation_legend_list&lt;/code&gt;) which accepts
+additional self-defined legends (in a form of &lt;code&gt;grob&lt;/code&gt; objects). Thus, one strategy to merge
+heatmap legends and annotation legends is to extract the legends first and suppress plotting legends, 
+later we construct a list of legends and send to &lt;code&gt;heatmap_legend_list&lt;/code&gt; argument.&lt;/p&gt;
+
+&lt;p&gt;In following example, there is only one heatmap and two simple column annotations.
+When constructing column annotaiton &lt;code&gt;ha&lt;/code&gt;, &lt;code&gt;show_legend&lt;/code&gt; is set to &lt;code&gt;FALSE&lt;/code&gt; to suppress annotation legends.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="r"&gt;library(ComplexHeatmap)
+library(circlize)
+df = data.frame(type = c(rep(&amp;quot;a&amp;quot;, 5), rep(&amp;quot;b&amp;quot;, 5)),
+                age = sample(1:20, 10))
+
+ha = HeatmapAnnotation(df = df,
+    col = list(type = c(&amp;quot;a&amp;quot; = &amp;quot;red&amp;quot;, &amp;quot;b&amp;quot; = &amp;quot;blue&amp;quot;),
+               age = colorRamp2(c(0, 20), c(&amp;quot;white&amp;quot;, &amp;quot;red&amp;quot;))),
+    show_legend = FALSE
+)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Color mapping information is stored in &lt;code&gt;ha&lt;/code&gt; and we can extract legends from &lt;code&gt;ha&lt;/code&gt; object.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="r"&gt;anno_legend_list = lapply(ha@anno_list[c(&amp;quot;type&amp;quot;, &amp;quot;age&amp;quot;)], 
+    function(anno) color_mapping_legend(anno@color_mapping, plot = FALSE))
+anno_legend_list
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code&gt;## $type
+## frame[GRID.frame.559] 
+## 
+## $age
+## frame[GRID.frame.574]
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Similar, &lt;code&gt;show_heatmap_legend&lt;/code&gt; is set to &lt;code&gt;FALSE&lt;/code&gt; when creating &lt;code&gt;ht&lt;/code&gt; and legend object is extracted afterwards.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="r"&gt;mat = matrix(rnorm(80, 2), 8, 10)
+ht = Heatmap(mat, name = &amp;quot;ht&amp;quot;, top_annotation = ha, show_heatmap_legend = FALSE)
+heatmap_legend = color_mapping_legend(ht@matrix_color_mapping, plot = FALSE)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Finally, &lt;code&gt;draw()&lt;/code&gt; is called explicitely and a list of both heatmap legend and annotation legends are sent to
+&lt;code&gt;heatmap_legend_list&lt;/code&gt; argument.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="r"&gt;draw(ht, heatmap_legend_list = c(anno_legend_list, list(heatmap_legend)))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;strong&gt;Please see the figure in the original post.&lt;/strong&gt;&lt;/p&gt;
+
+&lt;!-- uid=merge_heatmap_and_annotation_legend --&gt;
+
+
+</description>
+</item>
+
+<item>
+<title>Customize barplots for the oncoPrint</title>
+<link>http://zuguang.de/blog/html/Customize_barplots_for_the_oncoPrint.html</link>
+<pubDate>Tue, 22 Nov 2016 17:58:18 CET</pubDate>
+<description>
+
+
+&lt;p&gt;For the &lt;code&gt;oncoPrint()&lt;/code&gt; function in the &lt;strong&gt;ComplexHeatmap&lt;/strong&gt; package, by default, there are barplots
+on top which visualize occurance of different types of genomic mutations in patients and 
+barplots in the right which visualize occurance of mutations in genes. Since it is common
+that each gene may have more than one type of mutations in a patients, the height of bars sometimes
+is larger than the number of genes or patients that are mutated.&lt;/p&gt;
+
+&lt;p&gt;If the aim is only to look at the number of mutated genes and patients regardless of different
+types of mutations, it is easy to customize the column barplots and row barplots for the 
+oncoPrint.&lt;/p&gt;
+
+&lt;p&gt;First, we plot a oncoPrint with default style:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="r"&gt;mat = read.table(textConnection(
+&amp;quot;,s1,s2,s3
+g1,snv;indel,snv,indel
+g2,,snv;indel,snv
+g3,snv,,indel;snv&amp;quot;), row.names = 1, header = TRUE, sep = &amp;quot;,&amp;quot;, stringsAsFactors = FALSE)
+mat = as.matrix(mat)
+
+col = c(snv = &amp;quot;red&amp;quot;, indel = &amp;quot;blue&amp;quot;)
+
+library(ComplexHeatmap)
+oncoPrint(mat, get_type = function(x) strsplit(x, &amp;quot;;&amp;quot;)[[1]],
+    alter_fun = list(
+        snv = function(x, y, w, h) grid.rect(x, y, w*0.9, h*0.9, gp = gpar(fill = col[&amp;quot;snv&amp;quot;], col = NA)),
+        indel = function(x, y, w, h) grid.rect(x, y, w*0.9, h*0.4, gp = gpar(fill = col[&amp;quot;indel&amp;quot;], col = NA))
+    ), col = col)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;strong&gt;Please see the figure in the original post.&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;You can see the height of the first bar is 4 instead of 3. If we want to put a bar with height of 3,
+actually the method is rather simple, we first suppress the default column barplots and row barplots,
+then define new column barplots and row barplots, assign to &lt;code&gt;top_annotation&lt;/code&gt; and by using
+&lt;code&gt;rowAnnotation()&lt;/code&gt; separately.&lt;/p&gt;
+
+&lt;p&gt;How many geness are mutated and how many patients are mutated.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="r"&gt;n_mutated_patients = apply(mat, 1, function(x) sum(x != &amp;quot;&amp;quot;))
+n_mutated_genes = apply(mat, 2, function(x) sum(x != &amp;quot;&amp;quot;))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Default column barplots are replaced by a new &lt;code&gt;HeatmapAnnotation&lt;/code&gt; object and 
+and row barplots are turned off by setting &lt;code&gt;show_row_barplot = FALSE&lt;/code&gt;, then
+a new row annotation is added by &lt;code&gt;rowAnnotation()&lt;/code&gt;.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="r"&gt;oncoPrint(mat, get_type = function(x) strsplit(x, &amp;quot;;&amp;quot;)[[1]],
+    alter_fun = list(
+        snv = function(x, y, w, h) grid.rect(x, y, w*0.9, h*0.9, gp = gpar(fill = col[&amp;quot;snv&amp;quot;], col = NA)),
+        indel = function(x, y, w, h) grid.rect(x, y, w*0.9, h*0.4, gp = gpar(fill = col[&amp;quot;indel&amp;quot;], col = NA))
+    ), col = col, show_row_barplot = FALSE, 
+    top_annotation = HeatmapAnnotation(column_barplot = anno_barplot(n_mutated_genes, 
+        axis = TRUE, ylim = c(0, max(n_mutated_genes)))),
+    top_annotation_height = unit(2, &amp;quot;cm&amp;quot;)) +
+rowAnnotation(row_barplot = row_anno_barplot(n_mutated_patients, ylim = c(0, max(n_mutated_patients)), 
+    axis = TRUE, axis_side = &amp;quot;top&amp;quot;), width = unit(2, &amp;quot;cm&amp;quot;))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;strong&gt;Please see the figure in the original post.&lt;/strong&gt;&lt;/p&gt;
+
+&lt;!-- uid=Customize_barplots_for_the_oncoPrint --&gt;
 
 
 </description>
@@ -128,11 +592,11 @@ can be inserted before &lt;code&gt;&amp;lt;/body&amp;gt;&lt;/code&gt;.&lt;/p&gt;
 <item>
 <title>Visualize mean signals in row clusters by ComplexHeatmap</title>
 <link>http://zuguang.de/blog/html/summarize_col_signals.html</link>
-<pubDate>Mon, 21 Nov 2016 19:16:48 CET</pubDate>
+<pubDate>Tue, 22 Nov 2016 17:53:49 CET</pubDate>
 <description>
 
 
-&lt;p&gt;In this post, we will demonstrate how to visualize mean signals in row clusters by &lt;strong&gt;ComplexHeatmap&lt;/strong&gt; pacakge.&lt;/p&gt;
+&lt;p&gt;In this post, we will demonstrate how to visualize mean signals in row clusters by &lt;strong&gt;ComplexHeatmap&lt;/strong&gt; package.&lt;/p&gt;
 
 &lt;p&gt;First we load the packages and generate the random matrix.&lt;/p&gt;
 
@@ -149,7 +613,7 @@ mat = cbind(rbind(matrix(rnorm(64, -1), 8), matrix(rnorm(64, 1), 8), matrix(rnor
 
 &lt;p&gt;The random matrix contains three distinct subgroups by rows and following is how it looks by means of heatmap.&lt;/p&gt;
 
-&lt;pre&gt;&lt;code class="r"&gt;Heatmap(mat)
+&lt;pre&gt;&lt;code class="r"&gt;Heatmap(mat, name = &amp;quot;foo&amp;quot;)
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;&lt;strong&gt;Please see the figure in the original post.&lt;/strong&gt;&lt;/p&gt;
@@ -158,7 +622,7 @@ mat = cbind(rbind(matrix(rnorm(64, -1), 8), matrix(rnorm(64, 1), 8), matrix(rnor
 
 &lt;ol&gt;
 &lt;li&gt;split the heatmap by rows to separate row clusters.&lt;/li&gt;
-&lt;li&gt;show and compare mean signals in row clusters. &lt;/li&gt;
+&lt;li&gt;show and compare mean signals in the three row clusters. &lt;/li&gt;
 &lt;/ol&gt;
 
 &lt;p&gt;We apply k-means clustering on rows. Although you can specify it by &lt;code&gt;km&lt;/code&gt; in &lt;code&gt;Heatmap()&lt;/code&gt; function, since
@@ -206,51 +670,14 @@ between signal lines and row clusters, we add a color bar on the right of the ma
 &lt;pre&gt;&lt;code class="r"&gt;Heatmap(mat, name = &amp;quot;foo&amp;quot;, column_dend_side = &amp;quot;bottom&amp;quot;, top_annotation = ha, 
     top_annotation_height = unit(2, &amp;quot;cm&amp;quot;), split = partition, show_row_names = FALSE) +
 Heatmap(partition, col = structure(colors, names = as.character(1:km)), show_row_names = FALSE, 
-    show_heatmap_legend = FALSE, name = &amp;quot;&amp;quot;)
+    show_heatmap_legend = FALSE, name = &amp;quot;&amp;quot;, width = unit(5, &amp;quot;mm&amp;quot;))
 
-decorate_annotation(&amp;quot;col_mean&amp;quot;, {grid.text(&amp;quot;mean\nsignal&amp;quot;, unit(-10, &amp;quot;mm&amp;quot;), rot = 90, just = &amp;quot;bottom&amp;quot;)})
+decorate_annotation(&amp;quot;col_mean&amp;quot;, {
+    grid.text(&amp;quot;mean\nsignal&amp;quot;, unit(-10, &amp;quot;mm&amp;quot;), rot = 90, just = &amp;quot;bottom&amp;quot;)
+})
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;&lt;strong&gt;Please see the figure in the original post.&lt;/strong&gt;&lt;/p&gt;
-
-&lt;h2&gt;Session Info&lt;/h2&gt;
-
-&lt;pre&gt;&lt;code class="r"&gt;sessionInfo()
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;pre&gt;&lt;code&gt;## R version 3.2.3 (2015-12-10)
-## Platform: x86_64-apple-darwin13.4.0 (64-bit)
-## Running under: OS X 10.12.1 (unknown)
-## 
-## locale:
-## [1] C/en_US.UTF-8/C/C/C/C
-## 
-## attached base packages:
-##  [1] stats4    parallel  methods   grid      stats     graphics  grDevices
-##  [8] utils     datasets  base     
-## 
-## other attached packages:
-##  [1] RColorBrewer_1.1-2    HilbertCurve_1.1.3    GenomicRanges_1.20.8 
-##  [4] GenomeInfoDb_1.4.3    IRanges_2.2.9         S4Vectors_0.6.6      
-##  [7] BiocGenerics_0.14.0   gridBase_0.4-7        circlize_0.3.9       
-## [10] ComplexHeatmap_1.11.8 digest_0.6.10         htmltools_0.3.5      
-## [13] GetoptLong_0.1.6      markdown_0.7.7        knitr_1.14           
-## 
-## loaded via a namespace (and not attached):
-##  [1] Rcpp_0.12.6          XVector_0.8.0        formatR_1.4         
-##  [4] DEoptimR_1.0-6       plyr_1.8.4           HilbertVis_1.26.0   
-##  [7] class_7.3-14         tools_3.2.3          prabclus_2.2-6      
-## [10] dendextend_1.2.0     mclust_5.2           evaluate_0.9        
-## [13] gtable_0.2.0         lattice_0.20-33      png_0.1-7           
-## [16] mvtnorm_1.0-5        trimcluster_0.1-2    stringr_1.1.0       
-## [19] cluster_2.0.4        GlobalOptions_0.0.10 fpc_2.1-10          
-## [22] diptest_0.75-7       nnet_7.3-12          robustbase_0.92-6   
-## [25] flexmix_2.3-13       reshape2_1.4.1       kernlab_0.9-24      
-## [28] ggplot2_2.1.0        magrittr_1.5         whisker_0.3-2       
-## [31] scales_0.4.0         modeltools_0.2-21    MASS_7.3-45         
-## [34] mime_0.5             shape_1.4.2          colorspace_1.2-6    
-## [37] stringi_1.1.1        munsell_0.4.3        rjson_0.2.15
-&lt;/code&gt;&lt;/pre&gt;
 
 &lt;!-- uid=summarize_col_signals --&gt;
 
@@ -259,110 +686,146 @@ decorate_annotation(&amp;quot;col_mean&amp;quot;, {grid.text(&amp;quot;mean\nsig
 </item>
 
 <item>
-<title>Reverse x-axis in the circular layout</title>
-<link>http://zuguang.de/blog/html/reverse_xaxis.html</link>
-<pubDate>Mon, 21 Nov 2016 19:15:51 CET</pubDate>
+<title>ComplexHeatmap Supports More Types of Legends</title>
+<link>http://zuguang.de/blog/html/more_legends.html</link>
+<pubDate>Tue, 22 Nov 2016 17:46:53 CET</pubDate>
 <description>
 
 
-&lt;p&gt;In &lt;em&gt;circlize&lt;/em&gt; package, x-axis in always clockwise in each sector, no matter it
-is on the top of the circle or at the bottom. However, you can manually convert
-the original positions on x-axis to pretend you have a reversed xaxis. Take folling example:&lt;/p&gt;
+&lt;p&gt;From version 1.9.7, &lt;strong&gt;ComplexHeatmap&lt;/strong&gt; package supports more types of legends. Basic improvements are:&lt;/p&gt;
 
-&lt;pre&gt;&lt;code class="r"&gt;library(circlize)
-circos.par(gap.degree = c(10, 10), start.degree = -5)
-circos.initialize(factors = c(&amp;quot;a&amp;quot;, &amp;quot;b&amp;quot;), xlim = c(0, 1))
-circos.trackPlotRegion(ylim = c(0, 1), panel.fun = function(x, y) {
-    circos.axis(major.at = seq(0, 1, by = 0.1))
-})
-circos.rect(0.2, 0.2, 0.4, 0.4, col = &amp;quot;red&amp;quot;, sector.index = &amp;quot;a&amp;quot;)
-circos.link(&amp;quot;a&amp;quot;, 0.3, &amp;quot;b&amp;quot;, 0.7)
+&lt;ol&gt;
+&lt;li&gt;position of title can be adjusted. There are now four optinos: &lt;code&gt;topleft&lt;/code&gt;, &lt;code&gt;topcenter&lt;/code&gt;, &lt;code&gt;leftcenter&lt;/code&gt; and &lt;code&gt;lefttop&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;when there are too many levels for a legend, they can be arranged as an array&lt;/li&gt;
+&lt;li&gt;height or width of continuous color bar can be adjusted&lt;/li&gt;
+&lt;li&gt;the continuous color bar can be set as vertical or horizontal&lt;/li&gt;
+&lt;li&gt;legends of points or lines can also be generated.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;First let&amp;#39;s generate a random matrix:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="r"&gt;set.seed(123)
+mat = matrix(rnorm(100), 10)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Now we generate legends with different styles:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="r"&gt;library(ComplexHeatmap)
+Heatmap(mat, name = &amp;quot;fooooo&amp;quot;)
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;&lt;strong&gt;Please see the figure in the original post.&lt;/strong&gt;&lt;/p&gt;
 
-&lt;pre&gt;&lt;code class="r"&gt;circos.clear()
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;In the bottom sector, the order of x-axis seems not very convinient to read.
-Actually we can make some transformation on the original coordinates on x-axis.
-In following we defined &lt;code&gt;reverse_xaxis()&lt;/code&gt; which flips the axis.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="r"&gt;reverse_xaxis = function(x, xlim) {
-    (xlim[2] - xlim[1]) - (x - xlim[1]) + xlim[1]
-}
-reverse_xaxis(seq(0, 1, by = 0.1), xlim = c(0, 1))
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;pre&gt;&lt;code&gt;##  [1] 1.0 0.9 0.8 0.7 0.6 0.5 0.4 0.3 0.2 0.1 0.0
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Now we apply &lt;code&gt;reverse_xaxis()&lt;/code&gt; to all the coordinates in the sectors we want to
-flip.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="r"&gt;circos.par(gap.degree = c(10, 10), start.degree = -5)
-circos.initialize(factors = c(&amp;quot;a&amp;quot;, &amp;quot;b&amp;quot;), xlim = c(0, 1))
-circos.trackPlotRegion(ylim = c(0, 1), panel.fun = function(x, y) {
-    sector.index = get.cell.meta.data(&amp;quot;sector.index&amp;quot;)
-    xlim =  get.cell.meta.data(&amp;quot;xlim&amp;quot;)
-    if(sector.index == &amp;quot;a&amp;quot;) {
-        circos.axis(major.at = seq(0, 1, by = 0.1), labels = reverse_xaxis(seq(0, 1, by = 0.1), xlim))
-        circos.rect(reverse_xaxis(0.2, xlim), 0.2, reverse_xaxis(0.4, xlim), 0.4, 
-            col = &amp;quot;red&amp;quot;, sector.index = &amp;quot;a&amp;quot;)
-    } else {
-        circos.axis(major.at = seq(0, 1, by = 0.1))
-    }
-})
-xlim = get.cell.meta.data(&amp;quot;xlim&amp;quot;, sector.index = &amp;quot;a&amp;quot;)
-circos.link(&amp;quot;a&amp;quot;, reverse_xaxis(0.3, xlim), &amp;quot;b&amp;quot;, 0.7)
+&lt;pre&gt;&lt;code class="r"&gt;Heatmap(mat, name = &amp;quot;fooooo&amp;quot;, heatmap_legend_param = list(title_position = &amp;quot;topcenter&amp;quot;))
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;&lt;strong&gt;Please see the figure in the original post.&lt;/strong&gt;&lt;/p&gt;
 
-&lt;pre&gt;&lt;code class="r"&gt;circos.clear()
+&lt;pre&gt;&lt;code class="r"&gt;Heatmap(mat, name = &amp;quot;fooooo&amp;quot;, heatmap_legend_param = list(color_bar = &amp;quot;continuous&amp;quot;))
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;h2&gt;Session info&lt;/h2&gt;
+&lt;p&gt;&lt;strong&gt;Please see the figure in the original post.&lt;/strong&gt;&lt;/p&gt;
 
-&lt;pre&gt;&lt;code class="r"&gt;sessionInfo()
+&lt;pre&gt;&lt;code class="r"&gt;Heatmap(mat, name = &amp;quot;fooooo&amp;quot;, heatmap_legend_param = list(color_bar = &amp;quot;continuous&amp;quot;, 
+    legend_height = unit(5, &amp;quot;cm&amp;quot;)))
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;pre&gt;&lt;code&gt;## R version 3.2.3 (2015-12-10)
-## Platform: x86_64-apple-darwin13.4.0 (64-bit)
-## Running under: OS X 10.12.1 (unknown)
-## 
-## locale:
-## [1] C/en_US.UTF-8/C/C/C/C
-## 
-## attached base packages:
-##  [1] stats4    parallel  methods   grid      stats     graphics  grDevices
-##  [8] utils     datasets  base     
-## 
-## other attached packages:
-##  [1] HilbertCurve_1.1.3    GenomicRanges_1.20.8  GenomeInfoDb_1.4.3   
-##  [4] IRanges_2.2.9         S4Vectors_0.6.6       BiocGenerics_0.14.0  
-##  [7] gridBase_0.4-7        circlize_0.3.9        ComplexHeatmap_1.11.8
-## [10] digest_0.6.10         htmltools_0.3.5       GetoptLong_0.1.6     
-## [13] markdown_0.7.7        knitr_1.14           
-## 
-## loaded via a namespace (and not attached):
-##  [1] Rcpp_0.12.6          XVector_0.8.0        formatR_1.4         
-##  [4] DEoptimR_1.0-6       RColorBrewer_1.1-2   plyr_1.8.4          
-##  [7] HilbertVis_1.26.0    class_7.3-14         tools_3.2.3         
-## [10] prabclus_2.2-6       dendextend_1.2.0     mclust_5.2          
-## [13] evaluate_0.9         gtable_0.2.0         lattice_0.20-33     
-## [16] png_0.1-7            mvtnorm_1.0-5        trimcluster_0.1-2   
-## [19] stringr_1.1.0        cluster_2.0.4        GlobalOptions_0.0.10
-## [22] fpc_2.1-10           diptest_0.75-7       nnet_7.3-12         
-## [25] robustbase_0.92-6    flexmix_2.3-13       reshape2_1.4.1      
-## [28] kernlab_0.9-24       ggplot2_2.1.0        magrittr_1.5        
-## [31] whisker_0.3-2        scales_0.4.0         modeltools_0.2-21   
-## [34] MASS_7.3-45          mime_0.5             shape_1.4.2         
-## [37] colorspace_1.2-6     stringi_1.1.1        munsell_0.4.3       
-## [40] rjson_0.2.15
+&lt;p&gt;&lt;strong&gt;Please see the figure in the original post.&lt;/strong&gt;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="r"&gt;Heatmap(mat, name = &amp;quot;fooooo&amp;quot;, heatmap_legend_param = list(color_bar = &amp;quot;continuous&amp;quot;, 
+    at = quantile(mat, c(0, 0.5, 1)), labels = c(&amp;quot;low&amp;quot;, &amp;quot;median&amp;quot;, &amp;quot;high&amp;quot;),
+    legend_height = unit(5, &amp;quot;cm&amp;quot;)))
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;!-- uid=reverse_xaxis --&gt;
+&lt;p&gt;&lt;strong&gt;Please see the figure in the original post.&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;Next we put the legend at the bottom of the heatmap:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="r"&gt;ht = Heatmap(mat, name = &amp;quot;fooooo&amp;quot;)
+draw(ht, heatmap_legend_side = &amp;quot;bottom&amp;quot;)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;strong&gt;Please see the figure in the original post.&lt;/strong&gt;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="r"&gt;ht = Heatmap(mat, name = &amp;quot;fooooo&amp;quot;, heatmap_legend_param = list(title_position = &amp;quot;topcenter&amp;quot;,
+    color_bar = &amp;quot;continuous&amp;quot;, legend_direction = &amp;quot;horizontal&amp;quot;))
+draw(ht, heatmap_legend_side = &amp;quot;bottom&amp;quot;)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;strong&gt;Please see the figure in the original post.&lt;/strong&gt;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="r"&gt;ht = Heatmap(mat, name = &amp;quot;fooooo&amp;quot;, heatmap_legend_param = list(title_position = &amp;quot;lefttop&amp;quot;,
+    color_bar = &amp;quot;continuous&amp;quot;, legend_direction = &amp;quot;horizontal&amp;quot;))
+draw(ht, heatmap_legend_side = &amp;quot;bottom&amp;quot;)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;strong&gt;Please see the figure in the original post.&lt;/strong&gt;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="r"&gt;ht = Heatmap(mat, name = &amp;quot;fooooo&amp;quot;, heatmap_legend_param = list(title_position = &amp;quot;topcenter&amp;quot;,
+    color_bar = &amp;quot;continuous&amp;quot;, legend_direction = &amp;quot;horizontal&amp;quot;))
+draw(ht, heatmap_legend_side = &amp;quot;bottom&amp;quot;)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;strong&gt;Please see the figure in the original post.&lt;/strong&gt;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="r"&gt;ht = Heatmap(mat, name = &amp;quot;fooooo&amp;quot;, heatmap_legend_param = list(title_position = &amp;quot;topcenter&amp;quot;,
+    title = &amp;quot;bar&amp;quot;, color_bar = &amp;quot;continuous&amp;quot;, legend_direction = &amp;quot;horizontal&amp;quot;, 
+    at = quantile(mat, c(0, 0.5, 1)), labels = c(&amp;quot;low&amp;quot;, &amp;quot;median&amp;quot;, &amp;quot;high&amp;quot;), 
+    legend_width = unit(5, &amp;quot;cm&amp;quot;)))
+draw(ht, heatmap_legend_side = &amp;quot;bottom&amp;quot;)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;strong&gt;Please see the figure in the original post.&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;If we have a character matrix:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="r"&gt;cmat = matrix(sample(letters[1:12], 100, replace = TRUE), 10)
+colors = structure(circlize::rand_color(12), names = letters[1:12])
+Heatmap(cmat, name = &amp;quot;fooooo&amp;quot;, col = colors)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;strong&gt;Please see the figure in the original post.&lt;/strong&gt;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="r"&gt;Heatmap(cmat, name = &amp;quot;fooooo&amp;quot;, col = colors, heatmap_legend_param = list(ncol = 2))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;strong&gt;Please see the figure in the original post.&lt;/strong&gt;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="r"&gt;Heatmap(cmat, name = &amp;quot;fooooo&amp;quot;, col = colors, heatmap_legend_param = list(title_position = &amp;quot;topcenter&amp;quot;, 
+    nrow = 4))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;strong&gt;Please see the figure in the original post.&lt;/strong&gt;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="r"&gt;ht = Heatmap(cmat, name = &amp;quot;fooooo&amp;quot;, col = colors, heatmap_legend_param = list(title_position = &amp;quot;topcenter&amp;quot;, 
+    nrow = 2))
+draw(ht, heatmap_legend_side = &amp;quot;bottom&amp;quot;)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;strong&gt;Please see the figure in the original post.&lt;/strong&gt;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="r"&gt;ht = Heatmap(cmat, name = &amp;quot;fooooo&amp;quot;, col = colors, heatmap_legend_param = list(title_position = &amp;quot;leftcenter&amp;quot;, 
+    nrow = 1))
+draw(ht, heatmap_legend_side = &amp;quot;bottom&amp;quot;)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;strong&gt;Please see the figure in the original post.&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;The same rules apply to the annotation legends.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;ComplexHeatmap&lt;/strong&gt; only automatically generates legends for heatmaps and annotations, however, the new added
+function &lt;code&gt;Legend()&lt;/code&gt; also generate a &lt;code&gt;grob&lt;/code&gt; object which contains more general legends, e.g. points or lines.
+These legends can be used for self-defined annotations.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="r"&gt;ha = HeatmapAnnotation(pt = anno_points(runif(10), gp = gpar(col = rep(2:3, 5))))
+ht = Heatmap(mat, name = &amp;quot;fooooo&amp;quot;, top_annotation = ha)
+lgd = Legend(at = c(&amp;quot;class1&amp;quot;, &amp;quot;class2&amp;quot;), type = &amp;quot;points&amp;quot;, legend_gp = gpar(col = 2:3), title = &amp;quot;Class&amp;quot;)
+draw(ht, annotation_legend_list = list(lgd))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;strong&gt;Please see the figure in the original post.&lt;/strong&gt;&lt;/p&gt;
+
+&lt;!-- uid=more_legends --&gt;
 
 
 </description>
@@ -371,7 +834,7 @@ circos.link(&amp;quot;a&amp;quot;, reverse_xaxis(0.3, xlim), &amp;quot;b&amp;quo
 <item>
 <title>Circular visualization of DMRs from tagmentation-based WGBS</title>
 <link>http://zuguang.de/blog/html/segmentation_WGBS_dmr.html</link>
-<pubDate>Mon, 21 Nov 2016 19:15:51 CET</pubDate>
+<pubDate>Tue, 22 Nov 2016 17:45:17 CET</pubDate>
 <description>
 
 
@@ -591,46 +1054,6 @@ par(new = FALSE)
 
 &lt;p&gt;&lt;strong&gt;Please see the figure in the original post.&lt;/strong&gt;&lt;/p&gt;
 
-&lt;h2&gt;Session info&lt;/h2&gt;
-
-&lt;pre&gt;&lt;code class="r"&gt;sessionInfo()
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;pre&gt;&lt;code&gt;## R version 3.2.3 (2015-12-10)
-## Platform: x86_64-apple-darwin13.4.0 (64-bit)
-## Running under: OS X 10.12.1 (unknown)
-## 
-## locale:
-## [1] C/en_US.UTF-8/C/C/C/C
-## 
-## attached base packages:
-##  [1] stats4    parallel  methods   grid      stats     graphics  grDevices
-##  [8] utils     datasets  base     
-## 
-## other attached packages:
-##  [1] HilbertCurve_1.1.3    GenomicRanges_1.20.8  GenomeInfoDb_1.4.3   
-##  [4] IRanges_2.2.9         S4Vectors_0.6.6       BiocGenerics_0.14.0  
-##  [7] gridBase_0.4-7        circlize_0.3.9        ComplexHeatmap_1.11.8
-## [10] digest_0.6.10         htmltools_0.3.5       GetoptLong_0.1.6     
-## [13] markdown_0.7.7        knitr_1.14           
-## 
-## loaded via a namespace (and not attached):
-##  [1] Rcpp_0.12.6          XVector_0.8.0        formatR_1.4         
-##  [4] DEoptimR_1.0-6       RColorBrewer_1.1-2   plyr_1.8.4          
-##  [7] HilbertVis_1.26.0    class_7.3-14         tools_3.2.3         
-## [10] prabclus_2.2-6       dendextend_1.2.0     mclust_5.2          
-## [13] evaluate_0.9         gtable_0.2.0         lattice_0.20-33     
-## [16] png_0.1-7            mvtnorm_1.0-5        trimcluster_0.1-2   
-## [19] stringr_1.1.0        cluster_2.0.4        GlobalOptions_0.0.10
-## [22] fpc_2.1-10           diptest_0.75-7       nnet_7.3-12         
-## [25] robustbase_0.92-6    flexmix_2.3-13       reshape2_1.4.1      
-## [28] kernlab_0.9-24       ggplot2_2.1.0        magrittr_1.5        
-## [31] whisker_0.3-2        scales_0.4.0         modeltools_0.2-21   
-## [34] MASS_7.3-45          mime_0.5             shape_1.4.2         
-## [37] colorspace_1.2-6     stringi_1.1.1        munsell_0.4.3       
-## [40] rjson_0.2.15
-&lt;/code&gt;&lt;/pre&gt;
-
 &lt;!-- uid=segmentation_WGBS_dmr --&gt;
 
 
@@ -640,23 +1063,24 @@ par(new = FALSE)
 <item>
 <title>Support raster image in heatmaps</title>
 <link>http://zuguang.de/blog/html/raster_image_in_heatmaps.html</link>
-<pubDate>Mon, 21 Nov 2016 19:13:52 CET</pubDate>
+<pubDate>Tue, 22 Nov 2016 17:43:53 CET</pubDate>
 <description>
 
 
 &lt;p&gt;Saving heatmaps in PDF format is kind of best parctice to preserve the quality. However,
 when there are too many rows (say, &amp;gt; 10000), the output PDF file size would be huge and it takes
-time and memory to read the plot.&lt;/p&gt;
+time and memory to read and show the plot.&lt;/p&gt;
 
 &lt;p&gt;Rendering heatmaps as raster images will effectively reduce
-the file size. In &lt;code&gt;Heatmap()&lt;/code&gt; function, there are four options which control how to generate
+the file size. In &lt;a href="https://github.com/jokergoo/ComplexHeatmap"&gt;&lt;strong&gt;ComplexHeatmap&lt;/strong&gt;&lt;/a&gt; package, 
+&lt;code&gt;Heatmap()&lt;/code&gt; function, there are four options which control how to generate
 the raster image: &lt;code&gt;use_raster&lt;/code&gt;, &lt;code&gt;raster_device&lt;/code&gt;, &lt;code&gt;raster_quality&lt;/code&gt;, &lt;code&gt;raster_device_param&lt;/code&gt;. &lt;/p&gt;
 
 &lt;pre&gt;&lt;code class="r"&gt;set.seed(123)
 mat = matrix(rnorm(10000*100), ncol = 100)
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;Following make the heatmap with and without raster images.&lt;/p&gt;
+&lt;p&gt;Following makes heatmap with and without raster images.&lt;/p&gt;
 
 &lt;pre&gt;&lt;code class="r"&gt;library(ComplexHeatmap)
 pdf(&amp;quot;heatmap.pdf&amp;quot;, width = 8, height = 8)
@@ -715,565 +1139,7 @@ sapply(fs, function(x) paste(round(x/1024), &amp;quot;KB&amp;quot;))
 ##                           0.115
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;h2&gt;Session Info&lt;/h2&gt;
-
-&lt;pre&gt;&lt;code class="r"&gt;sessionInfo()
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;pre&gt;&lt;code&gt;## R version 3.2.3 (2015-12-10)
-## Platform: x86_64-apple-darwin13.4.0 (64-bit)
-## Running under: OS X 10.12.1 (unknown)
-## 
-## locale:
-## [1] C/en_US.UTF-8/C/C/C/C
-## 
-## attached base packages:
-##  [1] stats4    parallel  methods   grid      stats     graphics  grDevices
-##  [8] utils     datasets  base     
-## 
-## other attached packages:
-##  [1] HilbertCurve_1.1.3    GenomicRanges_1.20.8  GenomeInfoDb_1.4.3   
-##  [4] IRanges_2.2.9         S4Vectors_0.6.6       BiocGenerics_0.14.0  
-##  [7] gridBase_0.4-7        circlize_0.3.9        ComplexHeatmap_1.11.8
-## [10] digest_0.6.10         htmltools_0.3.5       GetoptLong_0.1.6     
-## [13] markdown_0.7.7        knitr_1.14           
-## 
-## loaded via a namespace (and not attached):
-##  [1] Rcpp_0.12.6          XVector_0.8.0        formatR_1.4         
-##  [4] DEoptimR_1.0-6       RColorBrewer_1.1-2   plyr_1.8.4          
-##  [7] HilbertVis_1.26.0    class_7.3-14         tools_3.2.3         
-## [10] prabclus_2.2-6       dendextend_1.2.0     mclust_5.2          
-## [13] evaluate_0.9         gtable_0.2.0         lattice_0.20-33     
-## [16] png_0.1-7            mvtnorm_1.0-5        trimcluster_0.1-2   
-## [19] stringr_1.1.0        cluster_2.0.4        GlobalOptions_0.0.10
-## [22] fpc_2.1-10           diptest_0.75-7       nnet_7.3-12         
-## [25] robustbase_0.92-6    flexmix_2.3-13       reshape2_1.4.1      
-## [28] kernlab_0.9-24       ggplot2_2.1.0        magrittr_1.5        
-## [31] whisker_0.3-2        scales_0.4.0         modeltools_0.2-21   
-## [34] MASS_7.3-45          mime_0.5             shape_1.4.2         
-## [37] colorspace_1.2-6     stringi_1.1.1        munsell_0.4.3       
-## [40] rjson_0.2.15
-&lt;/code&gt;&lt;/pre&gt;
-
 &lt;!-- uid=raster_image_in_heatmaps --&gt;
-
-
-</description>
-</item>
-
-<item>
-<title>ComplexHeatmap Supports More Types of Legends</title>
-<link>http://zuguang.de/blog/html/more_legends.html</link>
-<pubDate>Mon, 21 Nov 2016 19:13:37 CET</pubDate>
-<description>
-
-
-&lt;p&gt;From version 1.9.7, &lt;strong&gt;ComplexHeatmap&lt;/strong&gt; package supports more types of legends. Basic improvements are:&lt;/p&gt;
-
-&lt;ol&gt;
-&lt;li&gt;position of title can be adjusted. There are now four optinos: &lt;code&gt;topleft&lt;/code&gt;, &lt;code&gt;topcenter&lt;/code&gt;, &lt;code&gt;leftcenter&lt;/code&gt; and &lt;code&gt;lefttop&lt;/code&gt;&lt;/li&gt;
-&lt;li&gt;when there are too many levels for a legend, they can be arranged as an array&lt;/li&gt;
-&lt;li&gt;height or width of continuous color bar can be adjusted&lt;/li&gt;
-&lt;li&gt;the continuous color bar can be set as vertical or horizontal&lt;/li&gt;
-&lt;li&gt;legends of points or lines can also be generated.&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;p&gt;First let&amp;#39;s generate a random matrix:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="r"&gt;set.seed(123)
-mat = matrix(rnorm(100), 10)
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Now we generate legends with different styles:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="r"&gt;library(ComplexHeatmap)
-Heatmap(mat, name = &amp;quot;fooooo&amp;quot;)
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;&lt;strong&gt;Please see the figure in the original post.&lt;/strong&gt;&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="r"&gt;Heatmap(mat, name = &amp;quot;fooooo&amp;quot;, heatmap_legend_param = list(title_position = &amp;quot;topcenter&amp;quot;))
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;&lt;strong&gt;Please see the figure in the original post.&lt;/strong&gt;&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="r"&gt;Heatmap(mat, name = &amp;quot;fooooo&amp;quot;, heatmap_legend_param = list(color_bar = &amp;quot;continuous&amp;quot;))
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;&lt;strong&gt;Please see the figure in the original post.&lt;/strong&gt;&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="r"&gt;Heatmap(mat, name = &amp;quot;fooooo&amp;quot;, heatmap_legend_param = list(color_bar = &amp;quot;continuous&amp;quot;, 
-    legend_height = unit(5, &amp;quot;cm&amp;quot;)))
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;&lt;strong&gt;Please see the figure in the original post.&lt;/strong&gt;&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="r"&gt;Heatmap(mat, name = &amp;quot;fooooo&amp;quot;, heatmap_legend_param = list(color_bar = &amp;quot;continuous&amp;quot;, 
-    at = quantile(mat, c(0, 0.5, 1)), labels = c(&amp;quot;low&amp;quot;, &amp;quot;median&amp;quot;, &amp;quot;high&amp;quot;),
-    legend_height = unit(5, &amp;quot;cm&amp;quot;)))
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;&lt;strong&gt;Please see the figure in the original post.&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;Next we put the legend at the bottom of the heatmap:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="r"&gt;ht = Heatmap(mat, name = &amp;quot;fooooo&amp;quot;)
-draw(ht, heatmap_legend_side = &amp;quot;bottom&amp;quot;)
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;&lt;strong&gt;Please see the figure in the original post.&lt;/strong&gt;&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="r"&gt;ht = Heatmap(mat, name = &amp;quot;fooooo&amp;quot;, heatmap_legend_param = list(title_position = &amp;quot;topcenter&amp;quot;,
-    color_bar = &amp;quot;continuous&amp;quot;, legend_direction = &amp;quot;horizontal&amp;quot;))
-draw(ht, heatmap_legend_side = &amp;quot;bottom&amp;quot;)
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;&lt;strong&gt;Please see the figure in the original post.&lt;/strong&gt;&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="r"&gt;ht = Heatmap(mat, name = &amp;quot;fooooo&amp;quot;, heatmap_legend_param = list(title_position = &amp;quot;lefttop&amp;quot;,
-    color_bar = &amp;quot;continuous&amp;quot;, legend_direction = &amp;quot;horizontal&amp;quot;))
-draw(ht, heatmap_legend_side = &amp;quot;bottom&amp;quot;)
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;&lt;strong&gt;Please see the figure in the original post.&lt;/strong&gt;&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="r"&gt;ht = Heatmap(mat, name = &amp;quot;fooooo&amp;quot;, heatmap_legend_param = list(title_position = &amp;quot;topcenter&amp;quot;,
-    color_bar = &amp;quot;continuous&amp;quot;, legend_direction = &amp;quot;horizontal&amp;quot;))
-draw(ht, heatmap_legend_side = &amp;quot;bottom&amp;quot;)
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;&lt;strong&gt;Please see the figure in the original post.&lt;/strong&gt;&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="r"&gt;ht = Heatmap(mat, name = &amp;quot;fooooo&amp;quot;, heatmap_legend_param = list(title_position = &amp;quot;topcenter&amp;quot;,
-    title = &amp;quot;bar&amp;quot;, color_bar = &amp;quot;continuous&amp;quot;, legend_direction = &amp;quot;horizontal&amp;quot;, 
-    at = quantile(mat, c(0, 0.5, 1)), labels = c(&amp;quot;low&amp;quot;, &amp;quot;median&amp;quot;, &amp;quot;high&amp;quot;), 
-    legend_width = unit(5, &amp;quot;cm&amp;quot;)))
-draw(ht, heatmap_legend_side = &amp;quot;bottom&amp;quot;)
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;&lt;strong&gt;Please see the figure in the original post.&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;If we have a character matrix:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="r"&gt;cmat = matrix(sample(letters[1:12], 100, replace = TRUE), 10)
-colors = structure(circlize::rand_color(12), names = letters[1:12])
-Heatmap(cmat, name = &amp;quot;fooooo&amp;quot;, col = colors)
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;&lt;strong&gt;Please see the figure in the original post.&lt;/strong&gt;&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="r"&gt;Heatmap(cmat, name = &amp;quot;fooooo&amp;quot;, col = colors, heatmap_legend_param = list(ncol = 2))
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;&lt;strong&gt;Please see the figure in the original post.&lt;/strong&gt;&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="r"&gt;Heatmap(cmat, name = &amp;quot;fooooo&amp;quot;, col = colors, heatmap_legend_param = list(title_position = &amp;quot;topcenter&amp;quot;, 
-    nrow = 4))
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;&lt;strong&gt;Please see the figure in the original post.&lt;/strong&gt;&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="r"&gt;ht = Heatmap(cmat, name = &amp;quot;fooooo&amp;quot;, col = colors, heatmap_legend_param = list(title_position = &amp;quot;topcenter&amp;quot;, 
-    nrow = 2))
-draw(ht, heatmap_legend_side = &amp;quot;bottom&amp;quot;)
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;&lt;strong&gt;Please see the figure in the original post.&lt;/strong&gt;&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="r"&gt;ht = Heatmap(cmat, name = &amp;quot;fooooo&amp;quot;, col = colors, heatmap_legend_param = list(title_position = &amp;quot;leftcenter&amp;quot;, 
-    nrow = 1))
-draw(ht, heatmap_legend_side = &amp;quot;bottom&amp;quot;)
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;&lt;strong&gt;Please see the figure in the original post.&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;The same rules apply to the annotation legends.&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;ComplexHeatmap&lt;/strong&gt; only automatically generates legends for heatmaps and annotations, however, the new added
-function &lt;code&gt;Legend()&lt;/code&gt; also generate a &lt;code&gt;grob&lt;/code&gt; object which contains more general legends, e.g. points or lines.
-These legends can be used for self-defined annotations.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="r"&gt;ha = HeatmapAnnotation(pt = anno_points(runif(10), gp = gpar(col = rep(2:3, 5))))
-ht = Heatmap(mat, name = &amp;quot;fooooo&amp;quot;, top_annotation = ha)
-lgd = Legend(at = c(&amp;quot;class1&amp;quot;, &amp;quot;class2&amp;quot;), type = &amp;quot;points&amp;quot;, legend_gp = gpar(col = 2:3), title = &amp;quot;Class&amp;quot;)
-draw(ht, annotation_legend_list = list(lgd))
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;&lt;strong&gt;Please see the figure in the original post.&lt;/strong&gt;&lt;/p&gt;
-
-&lt;h2&gt;Session Info&lt;/h2&gt;
-
-&lt;pre&gt;&lt;code class="r"&gt;sessionInfo()
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;pre&gt;&lt;code&gt;## R version 3.2.3 (2015-12-10)
-## Platform: x86_64-apple-darwin13.4.0 (64-bit)
-## Running under: OS X 10.12.1 (unknown)
-## 
-## locale:
-## [1] C/en_US.UTF-8/C/C/C/C
-## 
-## attached base packages:
-##  [1] stats4    parallel  methods   grid      stats     graphics  grDevices utils     datasets 
-## [10] base     
-## 
-## other attached packages:
-##  [1] HilbertCurve_1.1.3    GenomicRanges_1.20.8  GenomeInfoDb_1.4.3    IRanges_2.2.9        
-##  [5] S4Vectors_0.6.6       BiocGenerics_0.14.0   gridBase_0.4-7        circlize_0.3.9       
-##  [9] ComplexHeatmap_1.11.8 digest_0.6.10         htmltools_0.3.5       GetoptLong_0.1.6     
-## [13] markdown_0.7.7        knitr_1.14           
-## 
-## loaded via a namespace (and not attached):
-##  [1] Rcpp_0.12.6          XVector_0.8.0        formatR_1.4          DEoptimR_1.0-6      
-##  [5] RColorBrewer_1.1-2   plyr_1.8.4           HilbertVis_1.26.0    class_7.3-14        
-##  [9] tools_3.2.3          prabclus_2.2-6       dendextend_1.2.0     mclust_5.2          
-## [13] evaluate_0.9         gtable_0.2.0         lattice_0.20-33      png_0.1-7           
-## [17] mvtnorm_1.0-5        trimcluster_0.1-2    stringr_1.1.0        cluster_2.0.4       
-## [21] GlobalOptions_0.0.10 fpc_2.1-10           diptest_0.75-7       nnet_7.3-12         
-## [25] robustbase_0.92-6    flexmix_2.3-13       reshape2_1.4.1       kernlab_0.9-24      
-## [29] ggplot2_2.1.0        magrittr_1.5         whisker_0.3-2        scales_0.4.0        
-## [33] modeltools_0.2-21    MASS_7.3-45          mime_0.5             shape_1.4.2         
-## [37] colorspace_1.2-6     stringi_1.1.1        munsell_0.4.3        rjson_0.2.15
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;!-- uid=more_legends --&gt;
-
-
-</description>
-</item>
-
-<item>
-<title>Merge heatmap and annotation legends into a same column</title>
-<link>http://zuguang.de/blog/html/merge_heatmap_and_annotation_legend.html</link>
-<pubDate>Mon, 21 Nov 2016 19:13:36 CET</pubDate>
-<description>
-
-
-&lt;p&gt;In &lt;strong&gt;ComplexHeatmap&lt;/strong&gt; package, legends for heatmap and annotations are differently treated
-and they will be put in different places. However, if there are not too many heatmaps and annotations,
-separating these two types of legends will be kind of waste of spaces.&lt;/p&gt;
-
-&lt;p&gt;In &lt;code&gt;draw()&lt;/code&gt; method of &lt;code&gt;HeatmapList&lt;/code&gt; class, there is an option &lt;code&gt;heatmap_legend_list&lt;/code&gt; (or &lt;code&gt;annotation_legend_list&lt;/code&gt;) which accepts
-additional self-defined legends (in a form of &lt;code&gt;grob&lt;/code&gt; objects). Thus, one strategy to merge
-heatmap legends and annotation legends is to extract the legends first and suppress plotting legends, 
-later we construct a list of legends and send to &lt;code&gt;heatmap_legend_list&lt;/code&gt; argument.&lt;/p&gt;
-
-&lt;p&gt;In following example, there is only one heatmap and two simple column annotations.
-When constructing column annotaiton &lt;code&gt;ha&lt;/code&gt;, &lt;code&gt;show_legend&lt;/code&gt; is set to &lt;code&gt;FALSE&lt;/code&gt; to suppress annotation legends.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="r"&gt;library(ComplexHeatmap)
-library(circlize)
-df = data.frame(type = c(rep(&amp;quot;a&amp;quot;, 5), rep(&amp;quot;b&amp;quot;, 5)),
-                age = sample(1:20, 10))
-
-ha = HeatmapAnnotation(df = df,
-    col = list(type = c(&amp;quot;a&amp;quot; = &amp;quot;red&amp;quot;, &amp;quot;b&amp;quot; = &amp;quot;blue&amp;quot;),
-               age = colorRamp2(c(0, 20), c(&amp;quot;white&amp;quot;, &amp;quot;red&amp;quot;))),
-    show_legend = FALSE
-)
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Color mapping information is stored in &lt;code&gt;ha&lt;/code&gt; and we can extract legends from &lt;code&gt;ha&lt;/code&gt; object.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="r"&gt;anno_legend_list = lapply(ha@anno_list[c(&amp;quot;type&amp;quot;, &amp;quot;age&amp;quot;)], 
-    function(anno) color_mapping_legend(anno@color_mapping, plot = FALSE))
-anno_legend_list
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;pre&gt;&lt;code&gt;## $type
-## frame[GRID.frame.559] 
-## 
-## $age
-## frame[GRID.frame.574]
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Similar, &lt;code&gt;show_heatmap_legend&lt;/code&gt; is set to &lt;code&gt;FALSE&lt;/code&gt; when creating &lt;code&gt;ht&lt;/code&gt; and legend object is extracted afterwards.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="r"&gt;mat = matrix(rnorm(80, 2), 8, 10)
-ht = Heatmap(mat, name = &amp;quot;ht&amp;quot;, top_annotation = ha, show_heatmap_legend = FALSE)
-heatmap_legend = color_mapping_legend(ht@matrix_color_mapping, plot = FALSE)
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Finally, &lt;code&gt;draw()&lt;/code&gt; is called explicitely and a list of both heatmap legend and annotation legends are sent to
-&lt;code&gt;heatmap_legend_list&lt;/code&gt; argument.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="r"&gt;draw(ht, heatmap_legend_list = c(anno_legend_list, list(heatmap_legend)))
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;&lt;strong&gt;Please see the figure in the original post.&lt;/strong&gt;&lt;/p&gt;
-
-&lt;h2&gt;Session Info&lt;/h2&gt;
-
-&lt;pre&gt;&lt;code class="r"&gt;sessionInfo()
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;pre&gt;&lt;code&gt;## R version 3.2.3 (2015-12-10)
-## Platform: x86_64-apple-darwin13.4.0 (64-bit)
-## Running under: OS X 10.12.1 (unknown)
-## 
-## locale:
-## [1] C/en_US.UTF-8/C/C/C/C
-## 
-## attached base packages:
-##  [1] stats4    parallel  methods   grid      stats     graphics  grDevices
-##  [8] utils     datasets  base     
-## 
-## other attached packages:
-##  [1] HilbertCurve_1.1.3    GenomicRanges_1.20.8  GenomeInfoDb_1.4.3   
-##  [4] IRanges_2.2.9         S4Vectors_0.6.6       BiocGenerics_0.14.0  
-##  [7] gridBase_0.4-7        circlize_0.3.9        ComplexHeatmap_1.11.8
-## [10] digest_0.6.10         htmltools_0.3.5       GetoptLong_0.1.6     
-## [13] markdown_0.7.7        knitr_1.14           
-## 
-## loaded via a namespace (and not attached):
-##  [1] Rcpp_0.12.6          XVector_0.8.0        formatR_1.4         
-##  [4] DEoptimR_1.0-6       RColorBrewer_1.1-2   plyr_1.8.4          
-##  [7] HilbertVis_1.26.0    class_7.3-14         tools_3.2.3         
-## [10] prabclus_2.2-6       dendextend_1.2.0     mclust_5.2          
-## [13] evaluate_0.9         gtable_0.2.0         lattice_0.20-33     
-## [16] png_0.1-7            mvtnorm_1.0-5        trimcluster_0.1-2   
-## [19] stringr_1.1.0        cluster_2.0.4        GlobalOptions_0.0.10
-## [22] fpc_2.1-10           diptest_0.75-7       nnet_7.3-12         
-## [25] robustbase_0.92-6    flexmix_2.3-13       reshape2_1.4.1      
-## [28] kernlab_0.9-24       ggplot2_2.1.0        magrittr_1.5        
-## [31] whisker_0.3-2        scales_0.4.0         modeltools_0.2-21   
-## [34] MASS_7.3-45          mime_0.5             shape_1.4.2         
-## [37] colorspace_1.2-6     stringi_1.1.1        munsell_0.4.3       
-## [40] rjson_0.2.15
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;!-- uid=merge_heatmap_and_annotation_legend --&gt;
-
-
-</description>
-</item>
-
-<item>
-<title>Circular scan</title>
-<link>http://zuguang.de/blog/html/circular_scan.html</link>
-<pubDate>Mon, 21 Nov 2016 19:13:20 CET</pubDate>
-<description>
-
-
-&lt;pre&gt;&lt;code class="r"&gt;library(circlize)
-circular_scan = function(theta, width, r, x, y) {
-    theta1 = theta %% 360  # enforce theta in [0, 360)
-    theta2 = (theta + width) %% 360
-    theta_p = circlize:::as.degree(atan(y/x)) # ranging [-90, 90]
-    theta_p = ifelse(x &amp;lt; 0, theta_p + 180, theta_p)
-    theta_p = theta_p %% 360
-    r_p = sqrt(x^2 + y^2)
-    # rotate to put bottom edge at x-axis
-    offset = 360 - theta1
-    l = (theta_p + offset) %% 360 &amp;gt;= (theta1 + offset) %% 360 &amp;amp;
-        (theta_p + offset) %% 360 &amp;lt;= (theta2 + offset) %% 360 &amp;amp;
-        r_p &amp;lt;= r
-
-    par(mar = c(1, 1, 1, 1))
-    plot(NULL, xlim = c(-r, r), ylim = c(-r, r), axes = FALSE, ann = FALSE)
-    draw.sector(start.degree = theta, end.degree = theta + width, rou1 = r, clock.wise = FALSE, col = &amp;quot;grey&amp;quot;)
-    points(x, y, col = ifelse(l, &amp;quot;red&amp;quot;, &amp;quot;grey&amp;quot;), pch = 16)
-}
-
-x = runif(40, -2, 2)
-y = runif(40, -2, 2)
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;pre&gt;&lt;code class="r"&gt;for(d in 0:360) circular_scan(d, 30, 2, x + runif(40, -0.05, 0.05), y + runif(40, -0.05, 0.05))
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;&lt;video   loop&gt;&lt;source src="figure/unnamed-chunk-3-.webm" /&gt;&lt;p&gt;video of chunk unnamed-chunk-3&lt;/p&gt;&lt;/video&gt;&lt;/p&gt;
-
-&lt;!-- uid=circular_scan --&gt;
-
-
-</description>
-</item>
-
-<item>
-<title>Adjust order or adding links to the Chord diagram</title>
-<link>http://zuguang.de/blog/html/adjust_orders_of_adding_links.html</link>
-<pubDate>Mon, 21 Nov 2016 19:13:15 CET</pubDate>
-<description>
-
-
-&lt;p&gt;Assuming following matrix:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="r"&gt;set.seed(123)
-mat = matrix(sample(16, 16), 4, byrow = TRUE)
-rownames(mat) = paste0(&amp;quot;R&amp;quot;, 1:4)
-colnames(mat) = paste0(&amp;quot;C&amp;quot;, 1:4)
-mat
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;pre&gt;&lt;code&gt;##    C1 C2 C3 C4
-## R1  5 12  6 15
-## R2 13  1 14  9
-## R3 16  4 10  3
-## R4  8  2 11  7
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;The order of adding links is:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;R1 -&amp;gt; C1
-R2 -&amp;gt; C1
-R3 -&amp;gt; C1
-R4 -&amp;gt; C1
-R1 -&amp;gt; C2
-...
-R4 -&amp;gt; C4
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Actually if the input is a matrix, the matrix will be converted to a data frame:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;##    Var1 Var2 value
-## 1    R1   C1     5
-## 2    R2   C1    13
-## 3    R3   C1    16
-## 4    R4   C1     8
-## 5    R1   C2    12
-## 6    R2   C2     1
-## 7    R3   C2     4
-## 8    R4   C2     2
-## 9    R1   C3     6
-## 10   R2   C3    14
-## 11   R3   C3    10
-## 12   R4   C3    11
-## 13   R1   C4    15
-## 14   R2   C4     9
-## 15   R3   C4     3
-## 16   R4   C4     7
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;and add links for the first record to the last.&lt;/p&gt;
-
-&lt;p&gt;There are several scenarios that we need to adjust the default order:&lt;/p&gt;
-
-&lt;ol&gt;
-&lt;li&gt;we want to put the widest link on the most top,&lt;/li&gt;
-&lt;li&gt;we want to put the non-transparent links on the top.&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;p&gt;These two scenarios are all for emphasizing certain links. If we have the data frame which
-contains the interactions, we can adjust the order of rows to adjust the order of adding links
-to the Chord diagram.&lt;/p&gt;
-
-&lt;p&gt;If it is a matrix, we can use &lt;code&gt;melt()&lt;/code&gt; from &lt;strong&gt;reshape2&lt;/strong&gt; package to convert it to a data frame:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="r"&gt;df = reshape2::melt(mat)
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;To make it simple, we define colors for sectors:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="r"&gt;grid.col = c(&amp;quot;#00000040&amp;quot;, &amp;quot;red&amp;quot;, &amp;quot;#00FF0040&amp;quot;, &amp;quot;#0000FF40&amp;quot;, &amp;quot;orange&amp;quot;, &amp;quot;pink&amp;quot;, &amp;quot;yellow&amp;quot;, &amp;quot;grey&amp;quot;)
-names(grid.col) = c(rownames(mat), colnames(mat))
-grid.col
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;pre&gt;&lt;code&gt;##          R1          R2          R3          R4          C1          C2 
-## &amp;quot;#00000040&amp;quot;       &amp;quot;red&amp;quot; &amp;quot;#00FF0040&amp;quot; &amp;quot;#0000FF40&amp;quot;    &amp;quot;orange&amp;quot;      &amp;quot;pink&amp;quot; 
-##          C3          C4 
-##    &amp;quot;yellow&amp;quot;      &amp;quot;grey&amp;quot;
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Following is the default Chord diagram. As you can see links from &amp;ldquo;R2&amp;rdquo; are complete red, it is
-covered by links from &amp;ldquo;R3&amp;rdquo; and &amp;ldquo;R4&amp;rdquo; because &amp;ldquo;R3&amp;rdquo; and &amp;ldquo;R4&amp;rdquo; links are drawn later than &amp;ldquo;R2&amp;rdquo; links.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="r"&gt;library(circlize)
-chordDiagram(df, grid.col = grid.col)
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;&lt;strong&gt;Please see the figure in the original post.&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;Next we adjust the order of rows of &lt;code&gt;df&lt;/code&gt; to put &amp;ldquo;R2&amp;rdquo; links to the end, and then make the plot:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="r"&gt;df2 = df[c(which(df[[1]] == &amp;quot;R1&amp;quot;), which(df[[1]] == &amp;quot;R3&amp;quot;), which(df[[1]] == &amp;quot;R4&amp;quot;), which(df[[1]] == &amp;quot;R2&amp;quot;)), ]
-chordDiagram(df2, grid.col = grid.col)
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;&lt;strong&gt;Please see the figure in the original post.&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;Now the &amp;ldquo;R2&amp;rdquo; links are on the top, but the order of sectors changed that &amp;ldquo;R2&amp;rdquo; becomes the last sector in all &amp;ldquo;R*&amp;rdquo; sectors.
-This problem can be simply solved by explictly setting &lt;code&gt;order&lt;/code&gt; options:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="r"&gt;chordDiagram(df2, grid.col = grid.col, order = c(paste0(&amp;quot;R&amp;quot;, 1:4), paste0(&amp;quot;C&amp;quot;, 1:4)))
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;&lt;strong&gt;Please see the figure in the original post.&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;In a same way, if you want to put the widest link on the very top, just reorder the rows of the data frame by 
-the associated absolute values.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="r"&gt;df3 = df[order(abs(df[[3]])), ]
-chordDiagram(df3, grid.col = grid.col, order = c(paste0(&amp;quot;R&amp;quot;, 1:4), paste0(&amp;quot;C&amp;quot;, 1:4)))
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;&lt;strong&gt;Please see the figure in the original post.&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;However, there is one serious problem that the order of rows also affect the positioning of links on a sector. As you 
-can see in above plot, the order of links on a sector is not very optimized that links are twisted. We want 
-the left second red link to be moved to the most right on sector &amp;ldquo;R2&amp;rdquo;.&lt;/p&gt;
-
-&lt;p&gt;From version 0.3.9, if the input is a data frame, the &lt;code&gt;chordDiagram()&lt;/code&gt; recognizes a &lt;code&gt;rank&lt;/code&gt; column which defines the 
-order of adding links (so here rank == 1 means draw first).&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="r"&gt;df$rank = rank(abs(df[[3]]))
-chordDiagram(df, grid.col = grid.col)
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;&lt;strong&gt;Please see the figure in the original post.&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;Or to put non-transparent links on the top:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="r"&gt;df$rank = ifelse(df[[1]] == &amp;quot;R2&amp;quot;, 2, 1)
-chordDiagram(df, grid.col = grid.col)
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;&lt;strong&gt;Please see the figure in the original post.&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;I am happy that you can control the order of adding link while not change the structure of the diagram.&lt;/p&gt;
-
-&lt;h2&gt;Session info&lt;/h2&gt;
-
-&lt;pre&gt;&lt;code class="r"&gt;sessionInfo()
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;pre&gt;&lt;code&gt;## R version 3.2.3 (2015-12-10)
-## Platform: x86_64-apple-darwin13.4.0 (64-bit)
-## Running under: OS X 10.12.1 (unknown)
-## 
-## locale:
-## [1] C/en_US.UTF-8/C/C/C/C
-## 
-## attached base packages:
-##  [1] stats4    parallel  methods   grid      stats     graphics  grDevices
-##  [8] utils     datasets  base     
-## 
-## other attached packages:
-##  [1] HilbertCurve_1.1.3    GenomicRanges_1.20.8  GenomeInfoDb_1.4.3   
-##  [4] IRanges_2.2.9         S4Vectors_0.6.6       BiocGenerics_0.14.0  
-##  [7] gridBase_0.4-7        circlize_0.3.9        ComplexHeatmap_1.11.8
-## [10] digest_0.6.10         htmltools_0.3.5       GetoptLong_0.1.6     
-## [13] markdown_0.7.7        knitr_1.14           
-## 
-## loaded via a namespace (and not attached):
-##  [1] Rcpp_0.12.6          XVector_0.8.0        formatR_1.4         
-##  [4] DEoptimR_1.0-6       RColorBrewer_1.1-2   plyr_1.8.4          
-##  [7] HilbertVis_1.26.0    class_7.3-14         tools_3.2.3         
-## [10] prabclus_2.2-6       dendextend_1.2.0     mclust_5.2          
-## [13] evaluate_0.9         gtable_0.2.0         lattice_0.20-33     
-## [16] png_0.1-7            mvtnorm_1.0-5        trimcluster_0.1-2   
-## [19] stringr_1.1.0        cluster_2.0.4        GlobalOptions_0.0.10
-## [22] fpc_2.1-10           diptest_0.75-7       nnet_7.3-12         
-## [25] robustbase_0.92-6    flexmix_2.3-13       reshape2_1.4.1      
-## [28] kernlab_0.9-24       ggplot2_2.1.0        magrittr_1.5        
-## [31] whisker_0.3-2        scales_0.4.0         modeltools_0.2-21   
-## [34] MASS_7.3-45          mime_0.5             shape_1.4.2         
-## [37] colorspace_1.2-6     stringi_1.1.1        munsell_0.4.3       
-## [40] rjson_0.2.15
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;!-- uid=adjust_orders_of_adding_links --&gt;
 
 
 </description>
@@ -1282,11 +1148,11 @@ chordDiagram(df, grid.col = grid.col)
 <item>
 <title>Add labels to a genomic Hilbert curve under pixel mode</title>
 <link>http://zuguang.de/blog/html/add_labels_to_hc.html</link>
-<pubDate>Mon, 21 Nov 2016 19:11:40 CET</pubDate>
+<pubDate>Tue, 22 Nov 2016 17:37:32 CET</pubDate>
 <description>
 
 
-&lt;p&gt;Making Hilbert curve for genomic data with &amp;ldquo;pixel&amp;rdquo; mode provides a high resolution way
+&lt;p&gt;Making Hilbert curve for genomic data under &amp;ldquo;pixel&amp;rdquo; mode provides a high resolution way
 to visualize patterns both in a global and local scale. Under &amp;ldquo;pixel&amp;rdquo; mode, the curve
 is stored as an RGB matrix, and it is added to the graphic device as a raster image.&lt;/p&gt;
 
@@ -1334,45 +1200,6 @@ hc_map(hc, add = TRUE, fill = NA, border = NA)
 
 &lt;p&gt;&lt;strong&gt;Please see the figure in the original post.&lt;/strong&gt;&lt;/p&gt;
 
-&lt;h2&gt;Session info&lt;/h2&gt;
-
-&lt;pre&gt;&lt;code class="r"&gt;sessionInfo()
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;pre&gt;&lt;code&gt;## R version 3.2.3 (2015-12-10)
-## Platform: x86_64-apple-darwin13.4.0 (64-bit)
-## Running under: OS X 10.12.1 (unknown)
-## 
-## locale:
-## [1] C/en_US.UTF-8/C/C/C/C
-## 
-## attached base packages:
-##  [1] stats4    parallel  methods   grid      stats     graphics  grDevices
-##  [8] utils     datasets  base     
-## 
-## other attached packages:
-##  [1] HilbertCurve_1.1.3    GenomicRanges_1.20.8  GenomeInfoDb_1.4.3   
-##  [4] IRanges_2.2.9         S4Vectors_0.6.6       BiocGenerics_0.14.0  
-##  [7] gridBase_0.4-7        circlize_0.3.9        ComplexHeatmap_1.11.8
-## [10] digest_0.6.10         htmltools_0.3.5       GetoptLong_0.1.6     
-## [13] markdown_0.7.7        knitr_1.14           
-## 
-## loaded via a namespace (and not attached):
-##  [1] Rcpp_0.12.6          XVector_0.8.0        formatR_1.4         
-##  [4] DEoptimR_1.0-6       RColorBrewer_1.1-2   plyr_1.8.4          
-##  [7] HilbertVis_1.26.0    class_7.3-14         tools_3.2.3         
-## [10] prabclus_2.2-6       dendextend_1.2.0     mclust_5.2          
-## [13] evaluate_0.9         gtable_0.2.0         lattice_0.20-33     
-## [16] png_0.1-7            mvtnorm_1.0-5        trimcluster_0.1-2   
-## [19] stringr_1.1.0        cluster_2.0.4        GlobalOptions_0.0.10
-## [22] fpc_2.1-10           diptest_0.75-7       nnet_7.3-12         
-## [25] robustbase_0.92-6    flexmix_2.3-13       kernlab_0.9-24      
-## [28] ggplot2_2.1.0        magrittr_1.5         whisker_0.3-2       
-## [31] scales_0.4.0         modeltools_0.2-21    MASS_7.3-45         
-## [34] mime_0.5             shape_1.4.2          colorspace_1.2-6    
-## [37] stringi_1.1.1        munsell_0.4.3        rjson_0.2.15
-&lt;/code&gt;&lt;/pre&gt;
-
 &lt;!-- uid=add_labels_to_hc --&gt;
 
 
@@ -1380,273 +1207,16 @@ hc_map(hc, add = TRUE, fill = NA, border = NA)
 </item>
 
 <item>
-<title>Visualize chromatin state transtitions</title>
-<link>http://zuguang.de/blog/html/Visualize_chromatin_states_transtitions.html</link>
-<pubDate>Mon, 21 Nov 2016 19:11:05 CET</pubDate>
-<description>
-
-
-&lt;p&gt;A chromatin state transition matrix shows how much the chromatin state in the genome
-has been changed from e.g. one sample to another. In our &lt;a href="http://msb.embopress.org/content/12/3/861"&gt;recent paper&lt;/a&gt; 
-we demonstrated how chromatin states change between smoking people and non-smoking people 
-by means of &lt;a href="http://d3dwu2jylmmhzr.cloudfront.net/content/msb/12/3/861/F8.large.jpg"&gt;Chord Diagram&lt;/a&gt;.
-In this post, I will demonstrate how to make such plot by the &lt;strong&gt;circlize&lt;/strong&gt; package 
-and enhance it by adding methylation information.&lt;/p&gt;
-
-&lt;p&gt;The data demonstrated in this post is processed from &lt;a href="http://www.roadmapepigenomics.org/"&gt;Roadmap data&lt;/a&gt;. The
-chromatin states &lt;a href="http://egg2.wustl.edu/roadmap/web_portal/chr_state_learning.html#core_15state"&gt;are learned from five core chromatin marks&lt;/a&gt;. Roadmap samples are separated into two groups based on expression profile. In each group,
-a chromatin state is assigned to the corresponding genomic bin if it is recurrent in at least half of the samples.&lt;/p&gt;
-
-&lt;p&gt;The processed data is stored as &lt;a href="../../data/chromatin_transition.RData"&gt;chromatin_transition.RData&lt;/a&gt;.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="r"&gt;library(circlize)
-load(&amp;quot;../data/chromatin_transition.RData&amp;quot;)
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;There are three matrix: &lt;code&gt;mat&lt;/code&gt;, &lt;code&gt;meth_mat_1&lt;/code&gt; and &lt;code&gt;meth_mat_2&lt;/code&gt; which are:&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;code&gt;mat&lt;/code&gt;: chromatin state transition matrix. Rows correspond to states in group 1 and columns
-correspond to group 2. The value in the matrix are total base pairs that transite from one group to the other.
-E.g. there are in total 79600 bp which are in &amp;ldquo;TssA&amp;rdquo; state in group 1 and they change 
-to &amp;ldquo;TssAFlnk&amp;rdquo; state in group 2. On the digonal are the unchanged states.&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;meth_mat_1&lt;/code&gt;: mean methylation in group 1 in each category.&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;meth_mat_2&lt;/code&gt;: mean methylation in group 2 in each category.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;pre&gt;&lt;code class="r"&gt;mat[1:4, 1:4]
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;pre&gt;&lt;code&gt;##            TssA TssAFlnk TxFlnk     Tx
-## TssA     497200    79600  13400   1800
-## TssAFlnk  56400   233200   5000    800
-## TxFlnk        0      400  43000   1800
-## Tx          800      200    200 166400
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;pre&gt;&lt;code class="r"&gt;meth_mat_1[1:4, 1:4]
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;pre&gt;&lt;code&gt;##          TssA TssAFlnk TxFlnk   Tx
-## TssA     0.16     0.16   0.19 0.27
-## TssAFlnk 0.26     0.27   0.36 0.34
-## TxFlnk     NA     0.37   0.34 0.48
-## Tx       0.83     0.78   0.58 0.66
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Normally, majority in the genome are unchanged states, thus, we should only look at the regions
-in which their states are changed.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="r"&gt;# proportion of the unchanges states in the genome
-sum(diag(mat))/sum(mat)
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;pre&gt;&lt;code&gt;## [1] 0.62
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;pre&gt;&lt;code class="r"&gt;# remove the unchanged states
-diag(mat) = 0
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;When making the plot, actually rows and columns are different (because one is from group 1 and the other is from group 2),
-thus we give them different names and the original names are stored in &lt;code&gt;all_states&lt;/code&gt;.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="r"&gt;all_states = rownames(mat)
-n_states = nrow(mat)
-
-rownames(mat) = paste0(&amp;quot;R_&amp;quot;, seq_len(n_states))
-colnames(mat) = paste0(&amp;quot;C_&amp;quot;, seq_len(n_states))
-
-dimnames(meth_mat_1) = dimnames(mat)
-dimnames(meth_mat_2) = dimnames(mat)
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Next we set the colors. &lt;code&gt;colmat&lt;/code&gt; is the color of the links and the colors
-are represent as hex code. Links have more transparent (&lt;code&gt;A0&lt;/code&gt;) if they
-contain few transitions (&amp;lt; 70th percentile) because we don&amp;#39;t want it
-to disturb the visualization of the major transitions.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="r"&gt;state_col = c(&amp;quot;TssA&amp;quot; = &amp;quot;#E41A1C&amp;quot;,
-              &amp;quot;TssAFlnk&amp;quot; = &amp;quot;#E41A1C&amp;quot;,
-              &amp;quot;TxFlnk&amp;quot; = &amp;quot;#E41A1C&amp;quot;,
-              &amp;quot;Tx&amp;quot; = &amp;quot;#E41A1C&amp;quot;,
-              &amp;quot;TxWk&amp;quot; = &amp;quot;#E41A1C&amp;quot;,
-              &amp;quot;EnhG&amp;quot; = &amp;quot;#E41A1C&amp;quot;,
-              &amp;quot;Enh&amp;quot; = &amp;quot;#E41A1C&amp;quot;,
-              &amp;quot;ZNF/Rpts&amp;quot; = &amp;quot;#E41A1C&amp;quot;,
-              &amp;quot;Het&amp;quot; = &amp;quot;#377EB8&amp;quot;,
-              &amp;quot;TssBiv&amp;quot; = &amp;quot;#377EB8&amp;quot;,
-              &amp;quot;BivFlnk&amp;quot; = &amp;quot;#377EB8&amp;quot;,
-              &amp;quot;EnhBiv&amp;quot; = &amp;quot;#377EB8&amp;quot;,
-              &amp;quot;ReprPC&amp;quot; = &amp;quot;#377EB8&amp;quot;,
-              &amp;quot;ReprPCWk&amp;quot; = &amp;quot;#377EB8&amp;quot;,
-              &amp;quot;Quies&amp;quot; = &amp;quot;black&amp;quot;)
-
-# one for rows and one for columns
-state_col2 = c(state_col, state_col)
-names(state_col2) = c(rownames(mat), colnames(mat))
-
-colmat = rep(state_col2[rownames(mat)], n_states)
-colmat = rgb(t(col2rgb(colmat)), maxColorValue = 255)
-
-qati = quantile(mat, 0.7)
-colmat[mat &amp;gt; qati] = paste0(colmat[mat &amp;gt; qati], &amp;quot;A0&amp;quot;)
-colmat[mat &amp;lt;= qati] = paste0(colmat[mat &amp;lt;= qati], &amp;quot;20&amp;quot;)
-dim(colmat) = dim(mat)
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Now we can use &lt;code&gt;chordDiagram()&lt;/code&gt; function to make the plot. Here we set one pre-allocated
-track in which the methylation information will be put.&lt;/p&gt;
-
-&lt;p&gt;&lt;code&gt;chordDiagram()&lt;/code&gt; returns a data frame which contains coordinates for all links which will
-be used later.&lt;/p&gt;
-
-&lt;p&gt;&lt;code&gt;de&lt;/code&gt; is the degree for the &amp;ldquo;gap&amp;rdquo; between group 1 and group 2.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="r"&gt;de = 360 - (360 - 20 - 30) - 30
-circos.par(start.degree = -de/4, gap.degree = c(rep(1, n_states-1), de/2, rep(1, n_states-1), de/2))
-
-cdm_res = chordDiagram(mat, col = colmat, grid.col = state_col2,
-    directional = TRUE, annotationTrack = &amp;quot;grid&amp;quot;, preAllocateTracks = list(track.height = 0.1))
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;&lt;strong&gt;Please see the figure in the original post.&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;If the degree for a sector is larger than 3 degrees, the index for the state and axis is added.
-Note since there is already one pre-allocated track, the circular rectangles are in the second track (&lt;code&gt;track.index = 2&lt;/code&gt;).&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="r"&gt;for(sn in get.all.sector.index()) {
-    if(abs(get.cell.meta.data(&amp;quot;cell.start.degree&amp;quot;, sector.index = sn) - 
-           get.cell.meta.data(&amp;quot;cell.end.degree&amp;quot;, sector.index = sn)) &amp;gt; 3) {
-        xcenter = get.cell.meta.data(&amp;quot;xcenter&amp;quot;, sector.index = sn, track.index = 2)
-        ycenter = get.cell.meta.data(&amp;quot;ycenter&amp;quot;, sector.index = sn, track.index = 2)
-        i_state = as.numeric(gsub(&amp;quot;(C|R)_&amp;quot;, &amp;quot;&amp;quot;, sn))
-        circos.text(xcenter, ycenter, i_state, col = &amp;quot;white&amp;quot;, font = 2, cex = 0.7, 
-            sector.index = sn, track.index = 2, adj = c(0.5, 0.5), niceFacing = TRUE)
-        circos.axis(sector.index = sn, track.index = 2, major.tick.percentage = 0.2, 
-            labels.away.percentage = 0.2, labels.cex = 0.5)
-    }
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;&lt;strong&gt;Please see the figure in the original post.&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;On the top half, it is easy to see the proportion of different transitions in group 1 that come to every state in group 2.
-However, it is not straightforward for the states in the bottom half to see the proportion of different
-states in group 2 they transite to. This can be solved by adding small circular rectangles. In following example, 
-the newly added circular rectangles in the bottom half shows e.g. how much the state 15 in group 1 has been transited
-to different states in group 2.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="r"&gt;for(i in seq_len(nrow(cdm_res))) {
-    if(cdm_res$value[i] &amp;gt; 0) {
-        circos.rect(cdm_res[i, &amp;quot;x1&amp;quot;], -0.5, cdm_res[i, &amp;quot;x1&amp;quot;] - abs(cdm_res[i, &amp;quot;value&amp;quot;]), -0.7, 
-            col = state_col2[cdm_res$cn[i]], border = state_col2[cdm_res$cn[i]],
-            sector.index = cdm_res$rn[i], track.index = 2)
-    }
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;&lt;strong&gt;Please see the figure in the original post.&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;Methylation in each category is put on the most outside of the circle. On this track, we will
-put two paralle rectangles which are mean methylation and methylation difference between group 1
-and group 2. Basically, on the bottom, we show &lt;code&gt;meth_mat_2 - meth_mat_1&lt;/code&gt; and on the top we show
-&lt;code&gt;meth_mat_1 - meth_mat_2&lt;/code&gt;.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="r"&gt;abs_max = quantile(abs(c(meth_mat_1, meth_mat_2) - 0.5), 0.95, na.rm = TRUE)
-col_fun = colorRamp2(c(0.5 - abs_max, 0.5, 0.5 + abs_max), c(&amp;quot;blue&amp;quot;, &amp;quot;white&amp;quot;, &amp;quot;red&amp;quot;))
-col_fun2 = colorRamp2(c(-abs_max, 0, abs_max), c(&amp;quot;green&amp;quot;, &amp;quot;white&amp;quot;, &amp;quot;orange&amp;quot;))
-
-ylim = get.cell.meta.data(&amp;quot;ylim&amp;quot;, sector.index = rownames(mat)[1], track.index = 1)
-y1 = ylim[1] + (ylim[2] - ylim[1])*0.4
-y2 = ylim[2]
-for(i in seq_len(nrow(cdm_res))) {
-    if(cdm_res$value[i] &amp;gt; 0) {
-        circos.rect(cdm_res[i, &amp;quot;x1&amp;quot;], y1, cdm_res[i, &amp;quot;x1&amp;quot;] - abs(cdm_res[i, &amp;quot;value&amp;quot;]), y1 + (y2-y1)*0.45, 
-            col = col_fun(meth_mat_1[cdm_res$rn[i], cdm_res$cn[i]]), 
-            border = col_fun(meth_mat_1[cdm_res$rn[i], cdm_res$cn[i]]),
-            sector.index = cdm_res$rn[i], track.index = 1)
-
-        circos.rect(cdm_res[i, &amp;quot;x1&amp;quot;], y1 + (y2-y1)*0.55, cdm_res[i, &amp;quot;x1&amp;quot;] - abs(cdm_res[i, &amp;quot;value&amp;quot;]), y2, 
-            col = col_fun2(meth_mat_2[cdm_res$rn[i], cdm_res$cn[i]] - meth_mat_1[cdm_res$rn[i], cdm_res$cn[i]]), 
-            border = col_fun2(meth_mat_2[cdm_res$rn[i], cdm_res$cn[i]] - meth_mat_1[cdm_res$rn[i], cdm_res$cn[i]]),
-            sector.index = cdm_res$rn[i], track.index = 1)
-
-        circos.rect(cdm_res[i, &amp;quot;x2&amp;quot;], y1, cdm_res[i, &amp;quot;x2&amp;quot;] - abs(cdm_res[i, &amp;quot;value&amp;quot;]), y1 + (y2-y1)*0.45, 
-            col = col_fun(meth_mat_2[cdm_res$rn[i], cdm_res$cn[i]]), 
-            border = col_fun(meth_mat_2[cdm_res$rn[i], cdm_res$cn[i]]),
-            sector.index = cdm_res$cn[i], track.index = 1)
-
-        circos.rect(cdm_res[i, &amp;quot;x2&amp;quot;], y1 + (y2-y1)*0.55, cdm_res[i, &amp;quot;x2&amp;quot;] - abs(cdm_res[i, &amp;quot;value&amp;quot;]), y2, 
-            col = col_fun2(meth_mat_1[cdm_res$rn[i], cdm_res$cn[i]] - meth_mat_2[cdm_res$rn[i], cdm_res$cn[i]]), 
-            border = col_fun2(meth_mat_1[cdm_res$rn[i], cdm_res$cn[i]] - meth_mat_2[cdm_res$rn[i], cdm_res$cn[i]]),
-            sector.index = cdm_res$cn[i], track.index = 1)
-    }
-}
-
-circos.clear()
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;&lt;strong&gt;Please see the figure in the original post.&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;A complete plot with legends looks like:&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;Please see the figure in the original post.&lt;/strong&gt;&lt;/p&gt;
-
-&lt;h2&gt;Session info&lt;/h2&gt;
-
-&lt;pre&gt;&lt;code class="r"&gt;sessionInfo()
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;pre&gt;&lt;code&gt;## R version 3.2.3 (2015-12-10)
-## Platform: x86_64-apple-darwin13.4.0 (64-bit)
-## Running under: OS X 10.12.1 (unknown)
-## 
-## locale:
-## [1] C/en_US.UTF-8/C/C/C/C
-## 
-## attached base packages:
-## [1] methods   grid      stats     graphics  grDevices utils     datasets 
-## [8] base     
-## 
-## other attached packages:
-## [1] gridBase_0.4-7        circlize_0.3.9        ComplexHeatmap_1.11.8
-## [4] digest_0.6.10         htmltools_0.3.5       GetoptLong_0.1.6     
-## [7] markdown_0.7.7        knitr_1.14           
-## 
-## loaded via a namespace (and not attached):
-##  [1] Rcpp_0.12.6          formatR_1.4          DEoptimR_1.0-6      
-##  [4] RColorBrewer_1.1-2   plyr_1.8.4           class_7.3-14        
-##  [7] tools_3.2.3          prabclus_2.2-6       dendextend_1.2.0    
-## [10] mclust_5.2           evaluate_0.9         gtable_0.2.0        
-## [13] lattice_0.20-33      mvtnorm_1.0-5        trimcluster_0.1-2   
-## [16] stringr_1.1.0        cluster_2.0.4        GlobalOptions_0.0.10
-## [19] fpc_2.1-10           stats4_3.2.3         diptest_0.75-7      
-## [22] nnet_7.3-12          robustbase_0.92-6    flexmix_2.3-13      
-## [25] kernlab_0.9-24       ggplot2_2.1.0        magrittr_1.5        
-## [28] whisker_0.3-2        scales_0.4.0         modeltools_0.2-21   
-## [31] MASS_7.3-45          mime_0.5             shape_1.4.2         
-## [34] colorspace_1.2-6     stringi_1.1.1        munsell_0.4.3       
-## [37] rjson_0.2.15
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;!-- uid=Visualize_chromatin_states_transtitions --&gt;
-
-
-</description>
-</item>
-
-<item>
-<title>Multiple Groups Chord Diagram</title>
+<title>Multiple-group chord diagram</title>
 <link>http://zuguang.de/blog/html/Multiple_Groups_Chord_Diagram.html</link>
-<pubDate>Mon, 21 Nov 2016 19:11:02 CET</pubDate>
+<pubDate>Tue, 22 Nov 2016 17:28:21 CET</pubDate>
 <description>
 
 
-&lt;p&gt;By default &lt;code&gt;chordDiagram()&lt;/code&gt; function in &lt;strong&gt;circlize&lt;/strong&gt; package visualize
-relations between two groups (i.e. rows to columns if the input is an adjacency matrix
-or column 1 to column 2 if the input is an adjacency list). However, it is easy to visualize
-relations from more than 2 groups.&lt;/p&gt;
+&lt;p&gt;By default &lt;code&gt;chordDiagram()&lt;/code&gt; function in &lt;strong&gt;circlize&lt;/strong&gt; package visualizes
+relations between two groups (i.e. from rows to columns if the input is an adjacency matrix
+or from column 1 to column 2 if the input is an adjacency list). However, it is easy to visualize
+relations among more than 2 groups.&lt;/p&gt;
 
 &lt;p&gt;In this post I will demonstrate how to visualize relations from three groups. The example
 here are matrix as inputs, but the principle should be the same with adjacency data frames.&lt;/p&gt;
@@ -1721,43 +1291,6 @@ highlight.sector(colnames(mat2), track.index = 1, col = &amp;quot;blue&amp;quot;
 &lt;pre&gt;&lt;code class="r"&gt;circos.clear()
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;h2&gt;Session Info&lt;/h2&gt;
-
-&lt;pre&gt;&lt;code class="r"&gt;sessionInfo()
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;pre&gt;&lt;code&gt;## R version 3.2.3 (2015-12-10)
-## Platform: x86_64-apple-darwin13.4.0 (64-bit)
-## Running under: OS X 10.12.1 (unknown)
-## 
-## locale:
-## [1] C/en_US.UTF-8/C/C/C/C
-## 
-## attached base packages:
-## [1] methods   grid      stats     graphics  grDevices utils     datasets 
-## [8] base     
-## 
-## other attached packages:
-## [1] circlize_0.3.9        ComplexHeatmap_1.11.8 digest_0.6.10        
-## [4] htmltools_0.3.5       GetoptLong_0.1.6      markdown_0.7.7       
-## [7] knitr_1.14           
-## 
-## loaded via a namespace (and not attached):
-##  [1] Rcpp_0.12.6          formatR_1.4          DEoptimR_1.0-6      
-##  [4] RColorBrewer_1.1-2   plyr_1.8.4           class_7.3-14        
-##  [7] tools_3.2.3          prabclus_2.2-6       dendextend_1.2.0    
-## [10] mclust_5.2           evaluate_0.9         gtable_0.2.0        
-## [13] lattice_0.20-33      mvtnorm_1.0-5        trimcluster_0.1-2   
-## [16] stringr_1.1.0        cluster_2.0.4        GlobalOptions_0.0.10
-## [19] fpc_2.1-10           stats4_3.2.3         diptest_0.75-7      
-## [22] nnet_7.3-12          robustbase_0.92-6    flexmix_2.3-13      
-## [25] kernlab_0.9-24       ggplot2_2.1.0        magrittr_1.5        
-## [28] whisker_0.3-2        scales_0.4.0         modeltools_0.2-21   
-## [31] MASS_7.3-45          mime_0.5             shape_1.4.2         
-## [34] colorspace_1.2-6     stringi_1.1.1        munsell_0.4.3       
-## [37] rjson_0.2.15
-&lt;/code&gt;&lt;/pre&gt;
-
 &lt;!-- uid=Multiple_Groups_Chord_Diagram --&gt;
 
 
@@ -1765,122 +1298,94 @@ highlight.sector(colnames(mat2), track.index = 1, col = &amp;quot;blue&amp;quot;
 </item>
 
 <item>
-<title>Customize barplots for the oncoPrint</title>
-<link>http://zuguang.de/blog/html/Customize_barplots_for_the_oncoPrint.html</link>
-<pubDate>Mon, 21 Nov 2016 19:11:01 CET</pubDate>
+<title>Reverse x-axis in the circular layout</title>
+<link>http://zuguang.de/blog/html/reverse_xaxis.html</link>
+<pubDate>Tue, 22 Nov 2016 17:25:12 CET</pubDate>
 <description>
 
 
-&lt;p&gt;For the &lt;code&gt;oncoPrint()&lt;/code&gt; function in the &lt;strong&gt;circlize&lt;/strong&gt; package, by default, there are barplots
-on top which visualize occurance of different types of genomic mutations in patients and 
-barplots in the right which visualize occurance of mutations in genes. Since it is common
-that each gene may have more than one type of mutations in a patients, the height of bars sometimes
-is larger than the number of genes or patients that are mutated.&lt;/p&gt;
+&lt;p&gt;In &lt;strong&gt;circlize&lt;/strong&gt; package, x-axis in always clockwise in each sector, no matter it
+is on the top of the circle or at the bottom. However, you can manually reverse
+the original positions on x-axis to pretend you have a reversed x-axis. Take following example:&lt;/p&gt;
 
-&lt;p&gt;If the aim is only to look at the number of mutated genes and patients regardless of different
-types of mutations, it is easy to customize the column barplots and row barplots for the 
-oncoPrint.&lt;/p&gt;
-
-&lt;p&gt;First, we plot a oncoPrint with default style:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="r"&gt;mat = read.table(textConnection(
-&amp;quot;,s1,s2,s3
-g1,snv;indel,snv,indel
-g2,,snv;indel,snv
-g3,snv,,indel;snv&amp;quot;), row.names = 1, header = TRUE, sep = &amp;quot;,&amp;quot;, stringsAsFactors = FALSE)
-mat = as.matrix(mat)
-
-col = c(snv = &amp;quot;red&amp;quot;, indel = &amp;quot;blue&amp;quot;)
-
-library(ComplexHeatmap)
-oncoPrint(mat, get_type = function(x) strsplit(x, &amp;quot;;&amp;quot;)[[1]],
-    alter_fun = list(
-        snv = function(x, y, w, h) grid.rect(x, y, w*0.9, h*0.9, gp = gpar(fill = col[&amp;quot;snv&amp;quot;], col = NA)),
-        indel = function(x, y, w, h) grid.rect(x, y, w*0.9, h*0.4, gp = gpar(fill = col[&amp;quot;indel&amp;quot;], col = NA))
-    ), col = col)
+&lt;pre&gt;&lt;code class="r"&gt;library(circlize)
+circos.par(gap.degree = c(10, 10), start.degree = -5)
+circos.initialize(factors = c(&amp;quot;a&amp;quot;, &amp;quot;b&amp;quot;), xlim = c(0, 1))
+circos.trackPlotRegion(ylim = c(0, 1), panel.fun = function(x, y) {
+    circos.axis(major.at = seq(0, 1, by = 0.1))
+})
+circos.rect(0.2, 0.2, 0.4, 0.4, col = &amp;quot;red&amp;quot;, sector.index = &amp;quot;a&amp;quot;)
+circos.link(&amp;quot;a&amp;quot;, 0.3, &amp;quot;b&amp;quot;, 0.7)
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;&lt;strong&gt;Please see the figure in the original post.&lt;/strong&gt;&lt;/p&gt;
 
-&lt;p&gt;The method is rather simple, we first suppress the default column barplots and row barplots,
-then define new column barplots and row barplots, assign to &lt;code&gt;top_annotation&lt;/code&gt; and by using
-&lt;code&gt;rowAnnotation()&lt;/code&gt; separately.&lt;/p&gt;
-
-&lt;p&gt;How many geness are mutated and how many patients are mutated.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="r"&gt;n_mutated_patients = apply(mat, 1, function(x) sum(x != &amp;quot;&amp;quot;))
-n_mutated_genes = apply(mat, 2, function(x) sum(x != &amp;quot;&amp;quot;))
+&lt;pre&gt;&lt;code class="r"&gt;circos.clear()
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;Default column barplots are replaced by a new &lt;code&gt;HeatmapAnnotation&lt;/code&gt; object and 
-and row barplots are turned off by setting &lt;code&gt;show_row_barplot = FALSE&lt;/code&gt;, then
-a new row annotation is added by &lt;code&gt;rowAnnotation()&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;In the bottom sector, the order of x-axis seems not very convinient to read.
+Actually we can make some transformation on the original coordinates on x-axis.
+In following we defined &lt;code&gt;reverse_xaxis()&lt;/code&gt; which flips the x-axis.&lt;/p&gt;
 
-&lt;pre&gt;&lt;code class="r"&gt;oncoPrint(mat, get_type = function(x) strsplit(x, &amp;quot;;&amp;quot;)[[1]],
-    alter_fun = list(
-        snv = function(x, y, w, h) grid.rect(x, y, w*0.9, h*0.9, gp = gpar(fill = col[&amp;quot;snv&amp;quot;], col = NA)),
-        indel = function(x, y, w, h) grid.rect(x, y, w*0.9, h*0.4, gp = gpar(fill = col[&amp;quot;indel&amp;quot;], col = NA))
-    ), col = col, show_row_barplot = FALSE, 
-    top_annotation = HeatmapAnnotation(column_barplot = anno_barplot(n_mutated_genes, 
-        axis = TRUE, ylim = c(0, max(n_mutated_genes)))),
-    top_annotation_height = unit(2, &amp;quot;cm&amp;quot;)) +
-rowAnnotation(row_barplot = row_anno_barplot(n_mutated_patients, ylim = c(0, max(n_mutated_patients)), 
-    axis = TRUE, axis_side = &amp;quot;top&amp;quot;), width = unit(2, &amp;quot;cm&amp;quot;))
+&lt;pre&gt;&lt;code class="r"&gt;reverse_xaxis = function(x, xlim = get.cell.meta.data(&amp;quot;xlim&amp;quot;)) {
+    (xlim[2] - xlim[1]) - (x - xlim[1]) + xlim[1]
+}
+reverse_xaxis(seq(0, 1, by = 0.1), xlim = c(0, 1))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code&gt;##  [1] 1.0 0.9 0.8 0.7 0.6 0.5 0.4 0.3 0.2 0.1 0.0
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;In the arguments of &lt;code&gt;reverse_xaxis()&lt;/code&gt;, the default value for &lt;code&gt;xlim&lt;/code&gt; is &lt;code&gt;get.cell.meta.data(&amp;quot;xlim&amp;quot;)&lt;/code&gt; 
+so that it can automatically get the ranges on x-axis if &lt;code&gt;reverse_xaxis()&lt;/code&gt; is called inside &lt;code&gt;panel.fun()&lt;/code&gt;.
+If it is called somewhere else, &lt;code&gt;xlim&lt;/code&gt; should be defined explicitly.&lt;/p&gt;
+
+&lt;p&gt;Now we apply &lt;code&gt;reverse_xaxis()&lt;/code&gt; to all the coordinates in the sectors we want to
+flip.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="r"&gt;circos.par(gap.degree = c(10, 10), start.degree = -5)
+circos.initialize(factors = c(&amp;quot;a&amp;quot;, &amp;quot;b&amp;quot;), xlim = c(0, 1))
+circos.trackPlotRegion(ylim = c(0, 1), panel.fun = function(x, y) {
+    sector.index = get.cell.meta.data(&amp;quot;sector.index&amp;quot;)
+    if(sector.index == &amp;quot;a&amp;quot;) {
+        at = seq(0, 1, by = 0.1)
+        circos.axis(major.at = at, labels = reverse_xaxis(at))
+        circos.rect(reverse_xaxis(0.2), 0.2, reverse_xaxis(0.4), 0.4, 
+            col = &amp;quot;red&amp;quot;, sector.index = &amp;quot;a&amp;quot;)
+    } else {
+        circos.axis(major.at = at)
+    }
+})
+xlim = get.cell.meta.data(&amp;quot;xlim&amp;quot;, sector.index = &amp;quot;a&amp;quot;)
+circos.link(&amp;quot;a&amp;quot;, reverse_xaxis(0.3, xlim), &amp;quot;b&amp;quot;, 0.7)
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;&lt;strong&gt;Please see the figure in the original post.&lt;/strong&gt;&lt;/p&gt;
 
-&lt;h2&gt;Session Info&lt;/h2&gt;
-
-&lt;pre&gt;&lt;code class="r"&gt;sessionInfo()
+&lt;pre&gt;&lt;code class="r"&gt;circos.clear()
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;pre&gt;&lt;code&gt;## R version 3.2.3 (2015-12-10)
-## Platform: x86_64-apple-darwin13.4.0 (64-bit)
-## Running under: OS X 10.12.1 (unknown)
-## 
-## locale:
-## [1] C/en_US.UTF-8/C/C/C/C
-## 
-## attached base packages:
-## [1] methods   grid      stats     graphics  grDevices utils     datasets 
-## [8] base     
-## 
-## other attached packages:
-## [1] ComplexHeatmap_1.11.8 digest_0.6.10         htmltools_0.3.5      
-## [4] GetoptLong_0.1.6      markdown_0.7.7        knitr_1.14           
-## 
-## loaded via a namespace (and not attached):
-##  [1] Rcpp_0.12.6          formatR_1.4          DEoptimR_1.0-6      
-##  [4] RColorBrewer_1.1-2   plyr_1.8.4           class_7.3-14        
-##  [7] tools_3.2.3          prabclus_2.2-6       dendextend_1.2.0    
-## [10] mclust_5.2           evaluate_0.9         gtable_0.2.0        
-## [13] lattice_0.20-33      mvtnorm_1.0-5        trimcluster_0.1-2   
-## [16] stringr_1.1.0        cluster_2.0.4        GlobalOptions_0.0.10
-## [19] fpc_2.1-10           stats4_3.2.3         diptest_0.75-7      
-## [22] nnet_7.3-12          robustbase_0.92-6    flexmix_2.3-13      
-## [25] kernlab_0.9-24       ggplot2_2.1.0        magrittr_1.5        
-## [28] whisker_0.3-2        scales_0.4.0         modeltools_0.2-21   
-## [31] MASS_7.3-45          mime_0.5             shape_1.4.2         
-## [34] circlize_0.3.9       colorspace_1.2-6     stringi_1.1.1       
-## [37] munsell_0.4.3        rjson_0.2.15
-&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;In the end, I want to say that users should be very careful with reversing the x-axes. The default
+design that all x-axes are clockwise actually makes it easy and straightforward to compare between sectors,
+especially when you have many sectors in the circle.&lt;/p&gt;
 
-&lt;!-- uid=Customize_barplots_for_the_oncoPrint --&gt;
+&lt;!-- uid=reverse_xaxis --&gt;
 
 
 </description>
 </item>
 
 <item>
-<title>Add column names below bottom annotations</title>
+<title>Add column names below bottom annotations in the heatmap</title>
 <link>http://zuguang.de/blog/html/Add_Column_names_below_Bottom_Annotations.html</link>
-<pubDate>Mon, 21 Nov 2016 19:10:57 CET</pubDate>
+<pubDate>Tue, 22 Nov 2016 17:06:21 CET</pubDate>
 <description>
 
 
-&lt;p&gt;Column names are drawn just below the heatmap body. If column annotations are put
-at the bottom of the heatmap, the annotations will be put below the column names.&lt;/p&gt;
+&lt;p&gt;In the heamtap generated by &lt;a href="https://github.com/jokergoo/ComplexHeatmap"&gt;&lt;strong&gt;ComplexHeatmap&lt;/strong&gt;&lt;/a&gt; package, 
+column names are drawn just below the heatmap body. If column annotations are put
+at the bottom of the heatmap as well, the annotations will be put below the column names.
+See following example:&lt;/p&gt;
 
 &lt;pre&gt;&lt;code class="r"&gt;library(ComplexHeatmap)
 &lt;/code&gt;&lt;/pre&gt;
@@ -1906,24 +1411,111 @@ Heatmap(mat, bottom_annotation = ha)
 
 &lt;p&gt;&lt;strong&gt;Please see the figure in the original post.&lt;/strong&gt;&lt;/p&gt;
 
-&lt;p&gt;In order to put the column names below bottom annotation, you can:&lt;/p&gt;
+&lt;p&gt;In order to put the column names below bottom annotations, you can do as follows:&lt;/p&gt;
 
 &lt;ol&gt;
 &lt;li&gt;suppress column names&lt;/li&gt;
-&lt;li&gt;add a text annotation which contains column names&lt;/li&gt;
+&lt;li&gt;add a text annotation which contains column names and put it as the last bottom annotation.&lt;/li&gt;
 &lt;/ol&gt;
+
+&lt;p&gt;To correctly calcualte the height of column names, you need to use &lt;code&gt;max_text_width()&lt;/code&gt; function.&lt;/p&gt;
 
 &lt;pre&gt;&lt;code class="r"&gt;cn = colnames(mat)
 ha2 = HeatmapAnnotation(foo = foo,
     cn = anno_text(cn, rot = 90, offset = unit(1, &amp;quot;npc&amp;quot;) - unit(2, &amp;quot;mm&amp;quot;), just = &amp;quot;right&amp;quot;),
-    annotation_height = unit.c(unit(5, &amp;quot;mm&amp;quot;),
-        max_text_width(cn)))
+    annotation_height = unit.c(unit(5, &amp;quot;mm&amp;quot;), max_text_width(cn)))
 Heatmap(mat, show_column_names = FALSE, bottom_annotation = ha2)
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;&lt;strong&gt;Please see the figure in the original post.&lt;/strong&gt;&lt;/p&gt;
 
 &lt;!-- uid=Add_Column_names_below_Bottom_Annotations --&gt;
+
+
+</description>
+</item>
+
+<item>
+<title>Build a static website and blog by knitr and rmarkdown</title>
+<link>http://zuguang.de/blog/html/website_knitr.html</link>
+<pubDate>Mon, 21 Nov 2016 19:16:50 CET</pubDate>
+<description>
+
+
+&lt;p&gt;There is already very nice solutions to build a static website and blog
+based on &lt;a href="https://help.github.com/articles/using-jekyll-with-pages/"&gt;Jekyll&lt;/a&gt; and host on &lt;a href="http://github.com"&gt;GitHub&lt;/a&gt;.
+However, I still have problems to make a real functional website by learning those online tutorials. Actually
+it is not that difficult to write my own scripts to generate static HTML pages.
+Also it is easy to support &lt;strong&gt;knitr&lt;/strong&gt; package to automatically generate a HTML document with
+executing R code on the fly.&lt;/p&gt;
+
+&lt;p&gt;Take my website for example, there are &lt;code&gt;index.html&lt;/code&gt;, &lt;code&gt;software.html&lt;/code&gt;, &lt;code&gt;publications.html&lt;/code&gt; which
+are converted from &lt;a href="https://raw.githubusercontent.com/jokergoo/jokergoo.github.io/master/index.md"&gt;&lt;code&gt;index.md&lt;/code&gt;&lt;/a&gt;, 
+&lt;a href="https://raw.githubusercontent.com/jokergoo/jokergoo.github.io/master/software.md"&gt;&lt;code&gt;software.md&lt;/code&gt;&lt;/a&gt;, 
+&lt;a href="https://raw.githubusercontent.com/jokergoo/jokergoo.github.io/master/publications.md"&gt;&lt;code&gt;publications.md&lt;/code&gt;&lt;/a&gt; respectively. 
+&lt;a href="https://github.com/jokergoo/jokergoo.github.io/blob/master/generate_website.R"&gt;A general script&lt;/a&gt; takes
+care of the common HTML head and foot for each HTML document, reads the &lt;code&gt;.md&lt;/code&gt; files and convert to the HTML fragment.&lt;/p&gt;
+
+&lt;p&gt;For the blog part, there is a sub-folder called &lt;code&gt;blog/&lt;/code&gt; and posts in &lt;code&gt;.md&lt;/code&gt; or &lt;code&gt;.Rmd&lt;/code&gt; format are put in.
+If the file name of the post ends with &lt;code&gt;.Rmd&lt;/code&gt;, &lt;code&gt;knit()&lt;/code&gt; is first called and converts into HTML fragment by &lt;code&gt;markdownToHTML()&lt;/code&gt;
+afterwards, while if the file name of the post ends with &lt;code&gt;.md&lt;/code&gt;, &lt;code&gt;markdownToHTML()&lt;/code&gt; is simply called to convert
+to HTML fragment.&lt;/p&gt;
+
+&lt;p&gt;There is a tiny &amp;ldquo;database&amp;rdquo; (&lt;code&gt;post_info&lt;/code&gt;) which records some basic information for a post, e.g. create time, last
+modified time so that post without changes does not need to be re-generated. &lt;/p&gt;
+
+&lt;p&gt;&lt;a href="https://en.wikipedia.org/wiki/Inode"&gt;Inode&lt;/a&gt; is used as the unique identifier of files. The drawback is 
+the HTML pages can only be generated in a same computer.&lt;/p&gt;
+
+&lt;p&gt;After all posts are generated, title for each post is extracted as well as the creating time,
+which will be used to generate &lt;code&gt;blog.html&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;If comments system is to be supported, after the HTML generation of each post, the Javascript fragment of &lt;a href="https://disqus.com/home/"&gt;Disqus&lt;/a&gt;
+can be inserted before &lt;code&gt;&amp;lt;/body&amp;gt;&lt;/code&gt;.&lt;/p&gt;
+
+&lt;!-- uid=website_knitr --&gt;
+
+
+</description>
+</item>
+
+<item>
+<title>Circular scan</title>
+<link>http://zuguang.de/blog/html/circular_scan.html</link>
+<pubDate>Mon, 21 Nov 2016 19:13:20 CET</pubDate>
+<description>
+
+
+&lt;pre&gt;&lt;code class="r"&gt;library(circlize)
+circular_scan = function(theta, width, r, x, y) {
+    theta1 = theta %% 360  # enforce theta in [0, 360)
+    theta2 = (theta + width) %% 360
+    theta_p = circlize:::as.degree(atan(y/x)) # ranging [-90, 90]
+    theta_p = ifelse(x &amp;lt; 0, theta_p + 180, theta_p)
+    theta_p = theta_p %% 360
+    r_p = sqrt(x^2 + y^2)
+    # rotate to put bottom edge at x-axis
+    offset = 360 - theta1
+    l = (theta_p + offset) %% 360 &amp;gt;= (theta1 + offset) %% 360 &amp;amp;
+        (theta_p + offset) %% 360 &amp;lt;= (theta2 + offset) %% 360 &amp;amp;
+        r_p &amp;lt;= r
+
+    par(mar = c(1, 1, 1, 1))
+    plot(NULL, xlim = c(-r, r), ylim = c(-r, r), axes = FALSE, ann = FALSE)
+    draw.sector(start.degree = theta, end.degree = theta + width, rou1 = r, clock.wise = FALSE, col = &amp;quot;grey&amp;quot;)
+    points(x, y, col = ifelse(l, &amp;quot;red&amp;quot;, &amp;quot;grey&amp;quot;), pch = 16)
+}
+
+x = runif(40, -2, 2)
+y = runif(40, -2, 2)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code class="r"&gt;for(d in 0:360) circular_scan(d, 30, 2, x + runif(40, -0.05, 0.05), y + runif(40, -0.05, 0.05))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;video   loop&gt;&lt;source src="figure/unnamed-chunk-3-.webm" /&gt;&lt;p&gt;video of chunk unnamed-chunk-3&lt;/p&gt;&lt;/video&gt;&lt;/p&gt;
+
+&lt;!-- uid=circular_scan --&gt;
 
 
 </description>
