@@ -18,7 +18,6 @@ suppressWarnings(suppressPackageStartupMessages(library(EnrichedHeatmap)))
 library(EnrichedHeatmap)
 library(circlize)
 load(paste0(system.file("extdata", "H3K4me1_corr_normalize_to_tss.RData", package = "EnrichedHeatmap")))
-mat_H3K4me1
 quantile(mat_H3K4me1)
 ```
 

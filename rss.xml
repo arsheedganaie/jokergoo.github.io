@@ -27,17 +27,7 @@ expression of corresponding genes in (-5kb, 10kb)of the gene TSS.&lt;/p&gt;
 &lt;pre&gt;&lt;code class="r"&gt;library(EnrichedHeatmap)
 library(circlize)
 load(paste0(system.file(&amp;quot;extdata&amp;quot;, &amp;quot;H3K4me1_corr_normalize_to_tss.RData&amp;quot;, package = &amp;quot;EnrichedHeatmap&amp;quot;)))
-mat_H3K4me1
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;pre&gt;&lt;code&gt;## Normalize  to target:
-##   Upstream 5000 bp (100 windows)
-##   Downstream 10000 bp (200 windows)
-##   Not include target regions
-##   677 signal regions
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;pre&gt;&lt;code class="r"&gt;quantile(mat_H3K4me1)
+quantile(mat_H3K4me1)
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;pre&gt;&lt;code&gt;##          0%         25%         50%         75%        100% 
