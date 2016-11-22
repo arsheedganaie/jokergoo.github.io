@@ -24,6 +24,18 @@ negative signals separatedly. &lt;/p&gt;
 &lt;p&gt;In following example, variable &lt;code&gt;mat_H3K4me1&lt;/code&gt; contains correlation between H3K4me1 signal and 
 expression of corresponding genes in (-5kb, 10kb)of the gene TSS.&lt;/p&gt;
 
+&lt;pre&gt;&lt;code&gt;## Error in eval(expr, envir, enclos): could not find function &amp;quot;supressWarnings&amp;quot;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code class="r"&gt;library(EnrichedHeatmap)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code&gt;## Loading required package: grid
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code&gt;## Loading required package: ComplexHeatmap
+&lt;/code&gt;&lt;/pre&gt;
+
 &lt;pre&gt;&lt;code&gt;## Warning in .doLoadActions(where, attach): trying to execute load actions
 ## without &amp;#39;methods&amp;#39; package
 &lt;/code&gt;&lt;/pre&gt;
@@ -32,10 +44,72 @@ expression of corresponding genes in (-5kb, 10kb)of the gene TSS.&lt;/p&gt;
 ## &amp;#39;dendextend&amp;#39;
 &lt;/code&gt;&lt;/pre&gt;
 
+&lt;pre&gt;&lt;code&gt;## Loading required package: GenomicRanges
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code&gt;## Loading required package: BiocGenerics
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code&gt;## Loading required package: parallel
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code&gt;## 
+## Attaching package: &amp;#39;BiocGenerics&amp;#39;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code&gt;## The following objects are masked from &amp;#39;package:parallel&amp;#39;:
+## 
+##     clusterApply, clusterApplyLB, clusterCall, clusterEvalQ,
+##     clusterExport, clusterMap, parApply, parCapply, parLapply,
+##     parLapplyLB, parRapply, parSapply, parSapplyLB
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code&gt;## The following object is masked from &amp;#39;package:stats&amp;#39;:
+## 
+##     xtabs
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code&gt;## The following objects are masked from &amp;#39;package:base&amp;#39;:
+## 
+##     Filter, Find, Map, Position, Reduce, anyDuplicated, append,
+##     as.data.frame, as.vector, cbind, colnames, do.call,
+##     duplicated, eval, evalq, get, intersect, is.unsorted, lapply,
+##     mapply, match, mget, order, paste, pmax, pmax.int, pmin,
+##     pmin.int, rank, rbind, rep.int, rownames, sapply, setdiff,
+##     sort, table, tapply, union, unique, unlist, unsplit
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code&gt;## Loading required package: S4Vectors
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code&gt;## Loading required package: stats4
+&lt;/code&gt;&lt;/pre&gt;
+
 &lt;pre&gt;&lt;code&gt;## Creating a generic function for &amp;#39;nchar&amp;#39; from package &amp;#39;base&amp;#39; in package &amp;#39;S4Vectors&amp;#39;
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;pre&gt;&lt;code class="r"&gt;library(EnrichedHeatmap)
+&lt;pre&gt;&lt;code&gt;## Loading required package: IRanges
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code&gt;## Loading required package: GenomeInfoDb
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code&gt;## Loading required package: locfit
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code&gt;## locfit 1.5-9.1    2013-03-22
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code&gt;## 
+## Attaching package: &amp;#39;EnrichedHeatmap&amp;#39;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code&gt;## The following object is masked from &amp;#39;package:ComplexHeatmap&amp;#39;:
+## 
+##     +.AdditiveUnit
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code class="r"&gt;library(circlize)
 load(paste0(system.file(&amp;quot;extdata&amp;quot;, &amp;quot;H3K4me1_corr_normalize_to_tss.RData&amp;quot;, package = &amp;quot;EnrichedHeatmap&amp;quot;)))
 mat_H3K4me1
 &lt;/code&gt;&lt;/pre&gt;
@@ -63,12 +137,7 @@ mat_neg = mat_H3K4me1
 mat_neg[mat_neg &amp;gt; 0] = 0
 
 cor_col_fun = colorRamp2(c(-1, 0, 1), c(&amp;quot;darkgreen&amp;quot;, &amp;quot;white&amp;quot;, &amp;quot;red&amp;quot;))
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;pre&gt;&lt;code&gt;## Error in eval(expr, envir, enclos): could not find function &amp;quot;colorRamp2&amp;quot;
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;pre&gt;&lt;code class="r"&gt;ylim = range(c(colMeans(mat_pos), colMeans(abs(mat_neg))))
+ylim = range(c(colMeans(mat_pos), colMeans(abs(mat_neg))))
 EnrichedHeatmap(mat_pos, col = cor_col_fun, name = &amp;quot;pos_corr&amp;quot;,
     top_annotation = HeatmapAnnotation(pos_line = anno_enriched(gp = gpar(col = &amp;quot;red&amp;quot;), 
         ylim = ylim)),
@@ -81,8 +150,7 @@ EnrichedHeatmap(mat_neg, col = cor_col_fun, name = &amp;quot;neg_corr&amp;quot;,
     column_title = &amp;quot;neg_corr&amp;quot;)
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;pre&gt;&lt;code&gt;## Error in Heatmap(mat, row_order = od, cluster_columns = FALSE, cluster_rows = cluster_rows, : object &amp;#39;cor_col_fun&amp;#39; not found
-&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;strong&gt;Please see the figure in the original post.&lt;/strong&gt;&lt;/p&gt;
 
 &lt;p&gt;From version 1.5.1 of &lt;strong&gt;EnrichedHeatmap&lt;/strong&gt; package, in &lt;code&gt;anno_enriched()&lt;/code&gt;, there are two non-standard 
 parameters &lt;code&gt;neg_col&lt;/code&gt; and &lt;code&gt;pos_col&lt;/code&gt; for &lt;code&gt;gp&lt;/code&gt;. If these two are set, the enrichment lines are drawn 
@@ -95,8 +163,18 @@ two matrix.&lt;/p&gt;
     column_title = &amp;quot;correlation&amp;quot;)
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;pre&gt;&lt;code&gt;## Error in Heatmap(mat, row_order = od, cluster_columns = FALSE, cluster_rows = cluster_rows, : object &amp;#39;cor_col_fun&amp;#39; not found
+&lt;p&gt;&lt;strong&gt;Please see the figure in the original post.&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;If you split the rows in the heatmap, graphic parameters can still be set as a vector.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="r"&gt;EnrichedHeatmap(mat_H3K4me1, col = cor_col_fun, name = &amp;quot;corr_H3K4me1&amp;quot;,
+    top_annotation = HeatmapAnnotation(line = anno_enriched(gp = gpar(neg_col = &amp;quot;darkgreen&amp;quot;, pos_col = &amp;quot;red&amp;quot;, 
+        lty = 1:2))),
+    top_annotation_height = unit(2, &amp;quot;cm&amp;quot;),
+    column_title = &amp;quot;correlation&amp;quot;, km = 2)
 &lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;strong&gt;Please see the figure in the original post.&lt;/strong&gt;&lt;/p&gt;
 
 &lt;!-- uid=visualize_signals_by_sign_in_enrichedheatmap --&gt;
 
