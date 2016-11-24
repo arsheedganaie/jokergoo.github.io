@@ -169,13 +169,13 @@ for(k in 1:4) {
 </item>
 
 <item>
-<title>Adjust order to add links to the Chord diagram</title>
+<title>Adjust orders of links added to the Chord diagram</title>
 <link>http://zuguang.de/blog/html/adjust_orders_of_adding_links.html</link>
 <pubDate>Tue, 22 Nov 2016 18:27:33 CET</pubDate>
 <description>
 
 
-&lt;p&gt;Assuming following matrix:&lt;/p&gt;
+&lt;p&gt;Assuming following matrix for the Chord diagram:&lt;/p&gt;
 
 &lt;pre&gt;&lt;code class="r"&gt;set.seed(123)
 mat = matrix(sample(16, 16), 4, byrow = TRUE)
@@ -202,7 +202,7 @@ R1 -&amp;gt; C2
 R4 -&amp;gt; C4
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;Actually if the input is a matrix, the matrix will be converted to a data frame:&lt;/p&gt;
+&lt;p&gt;Internally if the input is a matrix, the matrix will be converted to a data frame:&lt;/p&gt;
 
 &lt;pre&gt;&lt;code&gt;##    Var1 Var2 value
 ## 1    R1   C1     5
@@ -223,7 +223,7 @@ R4 -&amp;gt; C4
 ## 16   R4   C4     7
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;and add links for the first record to the last.&lt;/p&gt;
+&lt;p&gt;and the links are added from the first row to the last.&lt;/p&gt;
 
 &lt;p&gt;There are several scenarios that we need to adjust the default order:&lt;/p&gt;
 
@@ -233,7 +233,7 @@ R4 -&amp;gt; C4
 &lt;/ol&gt;
 
 &lt;p&gt;These two scenarios are all for emphasizing certain links. If we have the data frame which
-contains the interactions, we can adjust the order of rows to adjust the order of adding links
+contains the interactions, we can adjust the order of rows to adjust the order of links which are added
 to the Chord diagram.&lt;/p&gt;
 
 &lt;p&gt;If it is a matrix, we can use &lt;code&gt;melt()&lt;/code&gt; from &lt;strong&gt;reshape2&lt;/strong&gt; package to convert it to a data frame:&lt;/p&gt;
@@ -254,7 +254,10 @@ grid.col
 ##    &amp;quot;yellow&amp;quot;      &amp;quot;grey&amp;quot;
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;Following is the default Chord diagram. As you can see links from &amp;ldquo;R2&amp;rdquo; are complete red, it is
+&lt;p&gt;For the &lt;code&gt;chordDiagram()&lt;/code&gt; function, if there is no color defined for the links, the links will
+have same color as the sectors where the interactions come from (here is the &amp;ldquo;R*&amp;rdquo; sectors). &lt;/p&gt;
+
+&lt;p&gt;Following is the default Chord diagram. As you can see links from &amp;ldquo;R2&amp;rdquo; are completely red, it is
 covered by links from &amp;ldquo;R3&amp;rdquo; and &amp;ldquo;R4&amp;rdquo; because &amp;ldquo;R3&amp;rdquo; and &amp;ldquo;R4&amp;rdquo; links are drawn later than &amp;ldquo;R2&amp;rdquo; links.&lt;/p&gt;
 
 &lt;pre&gt;&lt;code class="r"&gt;library(circlize)
@@ -293,7 +296,7 @@ can see in above plot, the order of links on a sector is not very optimized that
 the left second red link to be moved to the most right on sector &amp;ldquo;R2&amp;rdquo;.&lt;/p&gt;
 
 &lt;p&gt;From version 0.3.9, if the input is a data frame, the &lt;code&gt;chordDiagram()&lt;/code&gt; recognizes a &lt;code&gt;rank&lt;/code&gt; column which defines the 
-order of adding links (so here rank == 1 means draw first).&lt;/p&gt;
+order for adding links (so here rank == 1 means draw first).&lt;/p&gt;
 
 &lt;pre&gt;&lt;code class="r"&gt;df$rank = rank(abs(df[[3]]))
 chordDiagram(df, grid.col = grid.col)
@@ -301,7 +304,8 @@ chordDiagram(df, grid.col = grid.col)
 
 &lt;p&gt;&lt;strong&gt;Please see the figure in the original post.&lt;/strong&gt;&lt;/p&gt;
 
-&lt;p&gt;Or to put non-transparent links on the top:&lt;/p&gt;
+&lt;p&gt;Or to put non-transparent links on the top, note the values for the rank column 
+can be duplicated.&lt;/p&gt;
 
 &lt;pre&gt;&lt;code class="r"&gt;df$rank = ifelse(df[[1]] == &amp;quot;R2&amp;quot;, 2, 1)
 chordDiagram(df, grid.col = grid.col)
@@ -309,7 +313,7 @@ chordDiagram(df, grid.col = grid.col)
 
 &lt;p&gt;&lt;strong&gt;Please see the figure in the original post.&lt;/strong&gt;&lt;/p&gt;
 
-&lt;p&gt;I am happy that you can control the order of adding link while not change the structure of the diagram.&lt;/p&gt;
+&lt;p&gt;I am happy that now you can control the order of adding links while not change the structure of the diagram.&lt;/p&gt;
 
 &lt;!-- uid=adjust_orders_of_adding_links --&gt;
 

@@ -1,11 +1,11 @@
-Adjust order to add links to the Chord diagram
+Adjust orders of links added to the Chord diagram
 ===================================================
 
 ```{r, echo = FALSE}
 suppressWarnings(suppressPackageStartupMessages(library(circlize)))
 ```
 
-Assuming following matrix:
+Assuming following matrix for the Chord diagram:
 
 ```{r}
 set.seed(123)
@@ -27,13 +27,13 @@ R1 -> C2
 R4 -> C4
 ```
 
-Actually if the input is a matrix, the matrix will be converted to a data frame:
+Internally if the input is a matrix, the matrix will be converted to a data frame:
 
 ```{r, echo = FALSE}
 reshape2::melt(mat)
 ```
 
-and add links for the first record to the last.
+and the links are added from the first row to the last.
 
 There are several scenarios that we need to adjust the default order:
 
@@ -41,7 +41,7 @@ There are several scenarios that we need to adjust the default order:
 2. we want to put the non-transparent links on the top.
 
 These two scenarios are all for emphasizing certain links. If we have the data frame which
-contains the interactions, we can adjust the order of rows to adjust the order of adding links
+contains the interactions, we can adjust the order of rows to adjust the order of links which are added
 to the Chord diagram.
 
 If it is a matrix, we can use `melt()` from **reshape2** package to convert it to a data frame:
@@ -58,7 +58,10 @@ names(grid.col) = c(rownames(mat), colnames(mat))
 grid.col
 ```
 
-Following is the default Chord diagram. As you can see links from "R2" are complete red, it is
+For the `chordDiagram()` function, if there is no color defined for the links, the links will
+have same color as the sectors where the interactions come from (here is the "R*" sectors). 
+
+Following is the default Chord diagram. As you can see links from "R2" are completely red, it is
 covered by links from "R3" and "R4" because "R3" and "R4" links are drawn later than "R2" links.
 
 ```{r}
@@ -93,21 +96,22 @@ can see in above plot, the order of links on a sector is not very optimized that
 the left second red link to be moved to the most right on sector "R2".
 
 From version 0.3.9, if the input is a data frame, the `chordDiagram()` recognizes a `rank` column which defines the 
-order of adding links (so here rank == 1 means draw first).
+order for adding links (so here rank == 1 means draw first).
 
 ```{r}
 df$rank = rank(abs(df[[3]]))
 chordDiagram(df, grid.col = grid.col)
 ```
 
-Or to put non-transparent links on the top:
+Or to put non-transparent links on the top, note the values for the rank column 
+can be duplicated.
 
 ```{r}
 df$rank = ifelse(df[[1]] == "R2", 2, 1)
 chordDiagram(df, grid.col = grid.col)
 ```
 
-I am happy that you can control the order of adding link while not change the structure of the diagram.
+I am happy that now you can control the order of adding links while not change the structure of the diagram.
 
 
 <!-- uid=adjust_orders_of_adding_links -->
