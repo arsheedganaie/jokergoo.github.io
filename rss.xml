@@ -169,7 +169,7 @@ for(k in 1:4) {
 </item>
 
 <item>
-<title>Adjust order or adding links to the Chord diagram</title>
+<title>Adjust order to add links to the Chord diagram</title>
 <link>http://zuguang.de/blog/html/adjust_orders_of_adding_links.html</link>
 <pubDate>Tue, 22 Nov 2016 18:27:33 CET</pubDate>
 <description>
@@ -191,7 +191,7 @@ mat
 ## R4  8  2 11  7
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;The order of adding links is:&lt;/p&gt;
+&lt;p&gt;The order to add links is:&lt;/p&gt;
 
 &lt;pre&gt;&lt;code&gt;R1 -&amp;gt; C1
 R2 -&amp;gt; C1

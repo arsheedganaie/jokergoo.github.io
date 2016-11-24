@@ -1,4 +1,4 @@
-Adjust order or adding links to the Chord diagram
+Adjust order to add links to the Chord diagram
 ===================================================
 
 ```{r, echo = FALSE}
@@ -15,7 +15,7 @@ colnames(mat) = paste0("C", 1:4)
 mat
 ```
 
-The order of adding links is:
+The order to add links is:
 
 ```
 R1 -> C1
