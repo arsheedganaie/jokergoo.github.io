@@ -6,6 +6,195 @@
   <description>Zuguang Gu's blog</description>
 
 <item>
+<title>Visualize big correlation matrix</title>
+<link>http://zuguang.de/blog/html/large_matrix_circular.html</link>
+<pubDate>Wed, 14 Dec 2016 10:20:47 CET</pubDate>
+<description>
+
+
+&lt;p&gt;In this post we are going to visualize correlation matrix in which most
+of the correlations are small while only a few individual correlations have
+high values. In reality, this highlights significant correlations between
+entities.&lt;/p&gt;
+
+&lt;p&gt;In following example, we simulate one such matrix. In this matrix, we only simulate
+random values for the upper triangular matrix.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="r"&gt;set.seed(123)
+mat = matrix(nrow = 100, ncol = 100)
+diag(mat) = 0
+mat[lower.tri(mat)] = 0
+mat[upper.tri(mat)] = rnorm(99*50, sd = 0.1)
+ind = sample(99*50, 30)
+mat[upper.tri(mat)][ind] = runif(30, min = -1, max = 1)
+rownames(mat) = paste0(&amp;quot;R&amp;quot;, 1:100)
+colnames(mat) = rownames(mat)
+n = nrow(mat)
+rn = rownames(mat)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;In most cases, since there are so many, say, entities in the matrix, they are normally grouped and 
+we also want to see correlations between groups.&lt;/p&gt;
+
+&lt;p&gt;Following simulates the groupings as a list.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="r"&gt;group_size = c(12, 8, 7, 16, 6, 2, 16, 13, 20)
+gl = lapply(1:9, function(i) {
+    rownames(mat)[sum(group_size[seq_len(i-1)]) + 1:group_size[i]]
+})
+names(gl) = paste0(&amp;quot;G&amp;quot;, 1:9) 
+gl[1:2]
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code&gt;## $G1
+##  [1] &amp;quot;R1&amp;quot;  &amp;quot;R2&amp;quot;  &amp;quot;R3&amp;quot;  &amp;quot;R4&amp;quot;  &amp;quot;R5&amp;quot;  &amp;quot;R6&amp;quot;  &amp;quot;R7&amp;quot;  &amp;quot;R8&amp;quot;  &amp;quot;R9&amp;quot;  &amp;quot;R10&amp;quot; &amp;quot;R11&amp;quot;
+## [12] &amp;quot;R12&amp;quot;
+## 
+## $G2
+## [1] &amp;quot;R13&amp;quot; &amp;quot;R14&amp;quot; &amp;quot;R15&amp;quot; &amp;quot;R16&amp;quot; &amp;quot;R17&amp;quot; &amp;quot;R18&amp;quot; &amp;quot;R19&amp;quot; &amp;quot;R20&amp;quot;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;We convert &lt;code&gt;gl&lt;/code&gt; to &lt;code&gt;gd&lt;/code&gt; so that it is easy to know the groups given the names of the entity.
+We also generate the colors which correspond to the groups.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="r"&gt;gd = structure(rep(names(gl), times = sapply(gl, length)), names = unlist(gl))
+group_color = structure(circlize::rand_color(9), names = names(gl))
+n_group = length(gl)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;The most straightforward way is to visualize the correlation matrix as a heamtap.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="r"&gt;library(ComplexHeatmap)
+library(circlize)
+col_fun = colorRamp2(c(-1, 0, 1), c(&amp;quot;darkgreen&amp;quot;, &amp;quot;white&amp;quot;, &amp;quot;red&amp;quot;), transparency = 0.5)
+Heatmap(mat, name = &amp;quot;corr&amp;quot;, col = col_fun, cluster_rows = FALSE, cluster_columns = FALSE, 
+    show_row_names = FALSE, show_column_names = FALSE,
+    top_annotation = HeatmapAnnotation(group = gd, col = list(group = group_color), show_legend = FALSE)) +
+rowAnnotation(group = gd, col = list(group = group_color), width = unit(0.5, &amp;quot;cm&amp;quot;))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;strong&gt;Please see the figure in the original post.&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;It is easy to find there are grids with deep colors which represent high correlations. However, 
+there are several disadvantages. First, when there are many entities in the matrix, normally the row
+names/column names in the heatmap are turned off which makes it impossible to know where the correlation
+comes from. Second, it is not easy to correspond the significant grids to the groups neither. 
+Third, when you have more than one correlation matrix to compare, actually comparison between matrix
+is difficult (e.g. a significant correlation between R10 and R20 in the first matrix while between R10 and R21
+in the second matrix).&lt;/p&gt;
+
+&lt;p&gt;To partially solve these problems, next we visualize it by Chord diagram. In following circular plot,
+there are circular lines on the outside of the circle which represent groups and the highest correlations
+are drawn on the very top.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="r"&gt;chordDiagram(mat, col = col_fun(mat), grid.col = NA, grid.border = &amp;quot;black&amp;quot;, 
+    annotationTrack = &amp;quot;grid&amp;quot;, link.largest.ontop = TRUE,
+    preAllocateTracks = list(
+        list(track.height = 0.02)
+    )
+)
+
+circos.trackPlotRegion(track.index = 2, panel.fun = function(x, y) {
+    xlim = get.cell.meta.data(&amp;quot;xlim&amp;quot;)
+    ylim = get.cell.meta.data(&amp;quot;ylim&amp;quot;)
+    sector.index = get.cell.meta.data(&amp;quot;sector.index&amp;quot;)
+    circos.text(mean(xlim), mean(ylim), sector.index, col = &amp;quot;black&amp;quot;, cex = 0.6, 
+        facing = &amp;quot;clockwise&amp;quot;, niceFacing = TRUE)
+}, bg.border = NA)
+
+for(nm in names(gl)) {
+    r = gl[[nm]]
+    highlight.sector(sector.index = r, track.index = 1, col = group_color[nm], 
+        text = nm, text.vjust = -1, niceFacing = TRUE)
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;strong&gt;Please see the figure in the original post.&lt;/strong&gt;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="r"&gt;circos.clear()
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Now it is quite clear to see the two entities of every correlation as well as their
+groups.&lt;/p&gt;
+
+&lt;p&gt;In the Chord diagram, the width of each entity (e.g. R1) corresponds to the sum of absolute
+correlations to all the other entities so that it helps to know which entity correlates to others
+most.&lt;/p&gt;
+
+&lt;p&gt;In some cases, users prefer all entities to have the same width on the plot and all the links start from
+the middle of each entity. This can be done by the basic circlize functions.&lt;/p&gt;
+
+&lt;p&gt;In following code, groups are treated as sectors and the width of sectors are proportional to the number
+of entities in them.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="r"&gt;circos.initialize(names(gl), xlim = cbind(rep(0, n_group), group_size))
+circos.trackPlotRegion(ylim = c(0, 1), panel.fun = function(x, y) {
+    nm = get.cell.meta.data(&amp;quot;sector.index&amp;quot;)
+    r = gl[[nm]]
+    n = length(r)
+    circos.rect(seq(0, n-1), rep(0, n), 1:n, rep(1, n), col = group_color[nm])
+    circos.text(1:n - 0.5, rep(0.5, n), r, facing = &amp;quot;clockwise&amp;quot;, niceFacing = TRUE, cex = 0.6)
+    circos.text(n/2, 1.2, nm, adj = c(0.5, 0), niceFacing = TRUE)
+}, bg.border = NA, track.height = 0.1)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;When all the groups as well as all the entities are put on the circle, we can calculate the position
+of each link. In following code, we put the positions of links as well as which groups the two corresponding
+entities are in, later we adjust the order of rows in the data frame and draw the highest correlation last.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="r"&gt;v_i = NULL
+v_j = NULL
+v_g1 = NULL
+v_g2 = NULL
+v_k1 = NULL
+v_k2 = NULL
+v = NULL
+for(i in 1:(n-1)) {
+    for(j in seq(i+1, n)) {
+        g1 = gd[rn[i]]
+        g2 = gd[rn[j]]
+        r1 = gd[gd == g1]
+        k1 = which(names(r1) == rn[i]) - 0.5
+        r2 = gd[gd == g2]
+        k2 = which(names(r2) == rn[j]) - 0.5
+
+        v_i = c(v_i, i)
+        v_j = c(v_j, j)
+        v_g1 = c(v_g1, g1)
+        v_g2 = c(v_g2, g2)
+        v_k1 = c(v_k1, k1)
+        v_k2 = c(v_k2, k2)
+        v = c(v, mat[i, j])
+    }
+}
+df = data.frame(i = v_i, j = v_j, g1 = v_g1, g2 = v_g2, k1 = v_k1, k2 = v_k2, v = v)
+df = df[order(abs(df$v)), ]
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code class="r"&gt;for(i in seq_len(nrow(df))) {
+    circos.link(df$g1[i], df$k1[i], df$g2[i], df$k2[i], col = col_fun(df$v[i]))
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;strong&gt;Please see the figure in the original post.&lt;/strong&gt;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="r"&gt;circos.clear()
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;You can see the colors for weak correltion is deeper than the first circular plot, this is because in the second
+one, all links come from the middle of each entity which increases the overlapping of links, and that is why we 
+draw the highest correlation last.&lt;/p&gt;
+
+&lt;p&gt;Basically the second circular plot is similar as the first circular one, but it is good at visualizing
+even larger matrix.&lt;/p&gt;
+
+&lt;!-- uid=large_matrix_circular --&gt;
+
+
+</description>
+</item>
+
+<item>
 <title>Visualize positive and negative signals in the enriched heatmap</title>
 <link>http://zuguang.de/blog/html/visualize_signals_by_sign_in_enrichedheatmap.html</link>
 <pubDate>Tue, 22 Nov 2016 23:42:18 CET</pubDate>
