@@ -136,8 +136,7 @@ lgd_lines = Legend(at = c("label3", "label4"), type = "lines", legend_gp = gpar(
 lgd_links = Legend(at = c(-1, -0.5, 0, 0.5, 1), col_fun = col_fun, title_position = "topleft",
 	title = "Links", direction = "horizontal")
 
-lgd_list_horizontal = packLegend(lgd_points, lgd_lines, lgd_links, gap = unit(4, "mm"), 
-	direction = "horizontal")
+lgd_list_horizontal = packLegend(lgd_points, lgd_lines, lgd_links, direction = "horizontal")
 
 plot.new()
 pushViewport(viewport(x = 0.5, y = 1, width = circle_size, height = circle_size,

@@ -141,8 +141,7 @@ lgd_lines = Legend(at = c(&amp;quot;label3&amp;quot;, &amp;quot;label4&amp;quot;
 lgd_links = Legend(at = c(-1, -0.5, 0, 0.5, 1), col_fun = col_fun, title_position = &amp;quot;topleft&amp;quot;,
     title = &amp;quot;Links&amp;quot;, direction = &amp;quot;horizontal&amp;quot;)
 
-lgd_list_horizontal = packLegend(lgd_points, lgd_lines, lgd_links, gap = unit(4, &amp;quot;mm&amp;quot;), 
-    direction = &amp;quot;horizontal&amp;quot;)
+lgd_list_horizontal = packLegend(lgd_points, lgd_lines, lgd_links, direction = &amp;quot;horizontal&amp;quot;)
 
 plot.new()
 pushViewport(viewport(x = 0.5, y = 1, width = circle_size, height = circle_size,
