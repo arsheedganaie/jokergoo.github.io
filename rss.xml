@@ -6,6 +6,79 @@
   <description>Zuguang Gu's blog</description>
 
 <item>
+<title>Put Chord diagram horizontally or vertically symmetric</title>
+<link>http://zuguang.de/blog/html/put_chord_diagram_symmetric.html</link>
+<pubDate>Fri, 17 Mar 2017 13:47:33 CET</pubDate>
+<description>
+
+
+&lt;pre&gt;&lt;code class="r"&gt;mat = matrix(rnorm(30), nrow = 10)
+nr = nrow(mat)
+nc = ncol(mat)
+n_sector = nr + nc
+row_sum = sum(rowSums(abs(mat)))
+col_sum = sum(colSums(abs(mat)))
+small_gap = 1
+big_gap = 20
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code class="r"&gt;row_sector_degree = (360 - small_gap*(n_sector - 2) - big_gap*2) * (row_sum/(row_sum + col_sum)) + small_gap*(nr-1)
+start_degree = 90 - (180 - row_sector_degree)/2
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code class="r"&gt;gaps = c(rep(small_gap, nrow(mat) - 1), big_gap, rep(small_gap, ncol(mat) - 1), big_gap)
+circos.par(gap.degree = gaps, start.degree = start_degree)
+chordDiagram(mat)
+circos.clear()
+abline(v = 0, lty = 2, col = &amp;quot;#00000080&amp;quot;)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;strong&gt;Please see the figure in the original post.&lt;/strong&gt;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="r"&gt;start_degree = 0 - (180 - row_sector_degree)/2
+gaps = c(rep(small_gap, nrow(mat) - 1), big_gap, rep(small_gap, ncol(mat) - 1), big_gap)
+circos.par(gap.degree = gaps, start.degree = start_degree)
+chordDiagram(mat)
+circos.clear()
+abline(h = 0, lty = 2, col = &amp;quot;#00000080&amp;quot;)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;strong&gt;Please see the figure in the original post.&lt;/strong&gt;&lt;/p&gt;
+
+&lt;h2&gt;Session info&lt;/h2&gt;
+
+&lt;pre&gt;&lt;code class="r"&gt;sessionInfo()
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code&gt;## R version 3.3.2 (2016-10-31)
+## Platform: x86_64-apple-darwin13.4.0 (64-bit)
+## Running under: macOS Sierra 10.12.3
+## 
+## locale:
+## [1] C/en_US.UTF-8/C/C/C/C
+## 
+## attached base packages:
+## [1] stats     graphics  grDevices utils     datasets  base     
+## 
+## other attached packages:
+## [1] circlize_0.3.11  digest_0.6.12    htmltools_0.3.5  GetoptLong_0.1.7
+## [5] markdown_0.7.7   knitr_1.15.1    
+## 
+## loaded via a namespace (and not attached):
+##  [1] Rcpp_0.12.9          grid_3.3.2           magrittr_1.5        
+##  [4] evaluate_0.10        highr_0.6            stringi_1.1.2       
+##  [7] GlobalOptions_0.0.11 rjson_0.2.15         tools_3.3.2         
+## [10] stringr_1.2.0        colorspace_1.3-2     shape_1.4.2         
+## [13] methods_3.3.2
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;!-- uid=put_chord_diagram_symmetric --&gt;
+
+
+</description>
+</item>
+
+<item>
 <title>Add legends to circlize plot</title>
 <link>http://zuguang.de/blog/html/add_legend_to_circlize.html</link>
 <pubDate>Sat, 11 Mar 2017 09:08:37 CET</pubDate>

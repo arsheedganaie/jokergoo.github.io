@@ -1,0 +1,47 @@
+Put Chord diagram horizontally or vertically symmetric
+========================================================
+
+```{r, echo = FALSE, warning = FALSE, results = "hide", message = FALSE, include = FALSE}
+suppressPackageStartupMessages(library(circlize))
+```
+
+```{r}
+mat = matrix(rnorm(30), nrow = 10)
+nr = nrow(mat)
+nc = ncol(mat)
+n_sector = nr + nc
+row_sum = sum(rowSums(abs(mat)))
+col_sum = sum(colSums(abs(mat)))
+small_gap = 1
+big_gap = 20
+```
+
+```{r}
+row_sector_degree = (360 - small_gap*(n_sector - 2) - big_gap*2) * (row_sum/(row_sum + col_sum)) + small_gap*(nr-1)
+start_degree = 90 - (180 - row_sector_degree)/2
+```
+
+```{r}
+gaps = c(rep(small_gap, nrow(mat) - 1), big_gap, rep(small_gap, ncol(mat) - 1), big_gap)
+circos.par(gap.degree = gaps, start.degree = start_degree)
+chordDiagram(mat)
+circos.clear()
+abline(v = 0, lty = 2, col = "#00000080")
+```
+
+```{r}
+start_degree = 0 - (180 - row_sector_degree)/2
+gaps = c(rep(small_gap, nrow(mat) - 1), big_gap, rep(small_gap, ncol(mat) - 1), big_gap)
+circos.par(gap.degree = gaps, start.degree = start_degree)
+chordDiagram(mat)
+circos.clear()
+abline(h = 0, lty = 2, col = "#00000080")
+```
+
+## Session info
+
+```{r}
+sessionInfo()
+```
+
+<!-- uid=put_chord_diagram_symmetric -->
