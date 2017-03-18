@@ -35,25 +35,18 @@ cites = sapply(titles, function(x) {
 	}
 })
 
-cites2 = qq(" <span class='cite'><a href='https://scholar.google.de/citations?user=zheH1qkAAAAJ'>cite@{ifelse(cites > 1, 's', '')}: @{cites}</a></span>", collapse = FALSE)
+# cites2 = qq(" <span class='cite'><a href='https://scholar.google.de/citations?user=zheH1qkAAAAJ'>cite@{ifelse(cites > 1, 's', '')}: @{cites}</a></span>", collapse = FALSE)
+
+cites2 = qq('
+<a href="https://scholar.google.de/citations?user=zheH1qkAAAAJ"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="70" height="16"><linearGradient id="b" x2="0" y2="100%"><stop offset="0" stop-color="#bbb" stop-opacity=".1"/><stop offset="1" stop-opacity=".1"/></linearGradient><clipPath id="a"><rect width="70" height="16" rx="3" fill="#fff"/></clipPath><g clip-path="url(#a)"><path fill="#555" d="M0 0h35v20H0z"/><path fill="#007ec6" d="M35 0h35v20H35z"/><path fill="url(#b)" d="M0 0h70v20H0z"/></g><g fill="#fff" text-anchor="middle" font-family="DejaVu Sans,Verdana,Geneva,sans-serif" font-size="10"><text x="17.5" y="12" fill="#010101" fill-opacity=".3">cites</text><text x="17.5" y="12">cites</text><text x="51.5" y="12" fill="#010101" fill-opacity=".3">@{cites}</text><text x="51.5" y="12">@{cites}</text></g></svg></a>', collapse = FALSE)
 cites2[cites == 0] = ""
 
 con = file("publications.md", "w")
 cat("
 <style>
-.cite {
-	padding:2px 10px;
-	text-align:center;
-	background-color:#1881c2;
-	border-radius: 4px;
-	-moz-border-radius: 4px;
-	-webkit-border-radius: 4px;
-}
-
-.cite a {
-	font-size: 10px;
-	color: white;
-	text-decoration: none;
+svg {
+    position: relative;
+    top: 3px;
 }
 </style>
 ", file = con)
