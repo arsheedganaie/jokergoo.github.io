@@ -29,4 +29,4 @@ img {
 
 ## Website and databases
 
-- [InterMitoBase](http://mcube.nju.edu.cn/cgi-bin/intermitobase/home.pl): InterMitoBase is an integrated platform providing high quality protein-protein interaction (PPI) data in human mitochondrion and useful tools to analysis PPI network. Visit here.
+- [InterMitoBase](http://mcube.nju.edu.cn/cgi-bin/intermitobase/home.pl): InterMitoBase is an integrated platform providing high quality protein-protein interaction (PPI) data in human mitochondrion and useful tools to analysis PPI network.
