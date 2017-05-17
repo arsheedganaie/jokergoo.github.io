@@ -1,0 +1,11 @@
+/* _GlobalPrefix_ */
+/* _Module_:nws */
+try{
+s_D("nws");var s_RNd=function(a){this.Aa=a};s_RNd.prototype.ka="&#43;";s_RNd.prototype.$="&#8722";s_RNd.prototype.va=function(){return this.Aa};var s_SNd=function(a){return s_vc(null,"esc-extension-container",a.va())[0]},s_TNd=function(a){return s_vc(null,"esc-extension-see-more",a.va())[0]},s_UNd=function(a){return s_vc(null,"esc-extension-see-less",a.va())[0]},s_VNd=function(a){return s_vc(null,"esc-extension-toggle-icon",a.va())[0]};
+var s_WNd=function(a,b){a=b.id;s_oa(a)&&(b=s_i("esc-video-"+a),s_Qc(b)&&s_Td(b)?(b=s_i("esc-video-"+a),a=s_i("video-expand-"+a),b&&a&&(s_t(b,!1),a.innerHTML="&#43;")):(b=s_i("esc-video-"+a),a=s_i("video-expand-"+a),b&&a&&(s_t(b,!0),a.innerHTML="&#8722")))},s_XNd=function(a,b){if(s_oa(b.id)&&(a=(a=s_i("esc-story-cluster-id-"+b.id))?new s_RNd(a):null))if(b=s_SNd(a),s_Qc(b)&&s_Td(b)){b=s_SNd(a);var c=s_TNd(a),d=s_UNd(a),e=s_VNd(a);b&&e&&(s_t(b,!1),s_t(c,!0),s_t(d,!1),e.innerHTML=a.ka,(a=e?s_y(e,"ved")||
+"":"")&&google.log("etcl","&ved="+a))}else b=s_SNd(a),c=s_TNd(a),d=s_UNd(a),e=s_VNd(a),b&&e&&(s_t(b,!0),s_t(c,!1),s_t(d,!0),e.innerHTML=a.$,(a=e?s_y(e,"ved")||"":"")&&google.log("etcm","&ved="+a))};s_hf("nws",{init:function(){s_Tea();s_Fh("nws",{tge:s_XNd,tgv:s_WNd})}});
+
+s_C("nws");s_E();
+}catch(e){_DumpException(e)}
+/* _GlobalSuffix_ */
+// Google Inc.
