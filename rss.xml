@@ -8,7 +8,7 @@
 <item>
 <title>Put Chord diagram horizontally or vertically symmetric</title>
 <link>http://zuguang.de/blog/html/put_chord_diagram_symmetric.html</link>
-<pubDate>Fri, 17 Mar 2017 13:47:33 CET</pubDate>
+<pubDate>Fri, 17 Mar 2017 20:47:33 CET</pubDate>
 <description>
 
 
@@ -115,7 +115,7 @@ abline(h = 0, lty = 2, col = &amp;quot;#00000080&amp;quot;)
 <item>
 <title>Add legends to circlize plot</title>
 <link>http://zuguang.de/blog/html/add_legend_to_circlize.html</link>
-<pubDate>Sat, 11 Mar 2017 09:08:37 CET</pubDate>
+<pubDate>Sat, 11 Mar 2017 16:08:37 CET</pubDate>
 <description>
 
 
@@ -312,7 +312,7 @@ upViewport()
 <item>
 <title>Visualize big correlation matrix</title>
 <link>http://zuguang.de/blog/html/large_matrix_circular.html</link>
-<pubDate>Wed, 14 Dec 2016 10:20:47 CET</pubDate>
+<pubDate>Wed, 14 Dec 2016 17:20:47 CET</pubDate>
 <description>
 
 
@@ -501,7 +501,7 @@ even larger matrix.&lt;/p&gt;
 <item>
 <title>Visualize positive and negative signals in the enriched heatmap</title>
 <link>http://zuguang.de/blog/html/visualize_signals_by_sign_in_enrichedheatmap.html</link>
-<pubDate>Tue, 22 Nov 2016 23:42:18 CET</pubDate>
+<pubDate>Wed, 23 Nov 2016 06:42:18 CET</pubDate>
 <description>
 
 
@@ -588,7 +588,7 @@ draw(ht, annotation_legend_list = list(lgd))
 <item>
 <title>Use closure to store variables locally</title>
 <link>http://zuguang.de/blog/html/use_closure_to_store_variables_locally.html</link>
-<pubDate>Tue, 22 Nov 2016 18:45:28 CET</pubDate>
+<pubDate>Wed, 23 Nov 2016 01:45:28 CET</pubDate>
 <description>
 
 
@@ -664,7 +664,7 @@ for(k in 1:4) {
 <item>
 <title>Adjust orders of links added to the Chord diagram</title>
 <link>http://zuguang.de/blog/html/adjust_orders_of_adding_links.html</link>
-<pubDate>Tue, 22 Nov 2016 18:27:33 CET</pubDate>
+<pubDate>Wed, 23 Nov 2016 01:27:33 CET</pubDate>
 <description>
 
 
@@ -817,7 +817,7 @@ chordDiagram(df, grid.col = grid.col)
 <item>
 <title>Visualize chromatin state transitions</title>
 <link>http://zuguang.de/blog/html/Visualize_chromatin_states_transtitions.html</link>
-<pubDate>Tue, 22 Nov 2016 18:27:29 CET</pubDate>
+<pubDate>Wed, 23 Nov 2016 01:27:29 CET</pubDate>
 <description>
 
 
@@ -1047,7 +1047,7 @@ circos.clear()
 <item>
 <title>Merge heatmap and annotation legends into a same column</title>
 <link>http://zuguang.de/blog/html/merge_heatmap_and_annotation_legend.html</link>
-<pubDate>Tue, 22 Nov 2016 18:19:20 CET</pubDate>
+<pubDate>Wed, 23 Nov 2016 01:19:20 CET</pubDate>
 <description>
 
 
@@ -1113,7 +1113,7 @@ heatmap_legend = color_mapping_legend(ht@matrix_color_mapping, plot = FALSE)
 <item>
 <title>Customize barplots for the oncoPrint</title>
 <link>http://zuguang.de/blog/html/Customize_barplots_for_the_oncoPrint.html</link>
-<pubDate>Tue, 22 Nov 2016 17:58:18 CET</pubDate>
+<pubDate>Wed, 23 Nov 2016 00:58:18 CET</pubDate>
 <description>
 
 
@@ -1186,7 +1186,7 @@ rowAnnotation(row_barplot = row_anno_barplot(n_mutated_patients, ylim = c(0, max
 <item>
 <title>Visualize mean signals in row clusters by ComplexHeatmap</title>
 <link>http://zuguang.de/blog/html/summarize_col_signals.html</link>
-<pubDate>Tue, 22 Nov 2016 17:53:49 CET</pubDate>
+<pubDate>Wed, 23 Nov 2016 00:53:49 CET</pubDate>
 <description>
 
 
@@ -1282,7 +1282,7 @@ decorate_annotation(&amp;quot;col_mean&amp;quot;, {
 <item>
 <title>ComplexHeatmap Supports More Types of Legends</title>
 <link>http://zuguang.de/blog/html/more_legends.html</link>
-<pubDate>Tue, 22 Nov 2016 17:46:53 CET</pubDate>
+<pubDate>Wed, 23 Nov 2016 00:46:53 CET</pubDate>
 <description>
 
 
@@ -1428,7 +1428,7 @@ draw(ht, annotation_legend_list = list(lgd))
 <item>
 <title>Circular visualization of DMRs from tagmentation-based WGBS</title>
 <link>http://zuguang.de/blog/html/segmentation_WGBS_dmr.html</link>
-<pubDate>Tue, 22 Nov 2016 17:45:17 CET</pubDate>
+<pubDate>Wed, 23 Nov 2016 00:45:17 CET</pubDate>
 <description>
 
 
@@ -1657,7 +1657,7 @@ par(new = FALSE)
 <item>
 <title>Support raster image in heatmaps</title>
 <link>http://zuguang.de/blog/html/raster_image_in_heatmaps.html</link>
-<pubDate>Tue, 22 Nov 2016 17:43:53 CET</pubDate>
+<pubDate>Wed, 23 Nov 2016 00:43:53 CET</pubDate>
 <description>
 
 
@@ -1742,7 +1742,7 @@ sapply(fs, function(x) paste(round(x/1024), &amp;quot;KB&amp;quot;))
 <item>
 <title>Add labels to a genomic Hilbert curve under pixel mode</title>
 <link>http://zuguang.de/blog/html/add_labels_to_hc.html</link>
-<pubDate>Tue, 22 Nov 2016 17:37:32 CET</pubDate>
+<pubDate>Wed, 23 Nov 2016 00:37:32 CET</pubDate>
 <description>
 
 
@@ -1803,7 +1803,7 @@ hc_map(hc, add = TRUE, fill = NA, border = NA)
 <item>
 <title>Multiple-group chord diagram</title>
 <link>http://zuguang.de/blog/html/Multiple_Groups_Chord_Diagram.html</link>
-<pubDate>Tue, 22 Nov 2016 17:28:21 CET</pubDate>
+<pubDate>Wed, 23 Nov 2016 00:28:21 CET</pubDate>
 <description>
 
 
@@ -1894,7 +1894,7 @@ highlight.sector(colnames(mat2), track.index = 1, col = &amp;quot;blue&amp;quot;
 <item>
 <title>Reverse x-axis in the circular layout</title>
 <link>http://zuguang.de/blog/html/reverse_xaxis.html</link>
-<pubDate>Tue, 22 Nov 2016 17:25:12 CET</pubDate>
+<pubDate>Wed, 23 Nov 2016 00:25:12 CET</pubDate>
 <description>
 
 
@@ -1972,7 +1972,7 @@ especially when you have many sectors in the circle.&lt;/p&gt;
 <item>
 <title>Add column names below bottom annotations in the heatmap</title>
 <link>http://zuguang.de/blog/html/Add_Column_names_below_Bottom_Annotations.html</link>
-<pubDate>Tue, 22 Nov 2016 17:06:21 CET</pubDate>
+<pubDate>Wed, 23 Nov 2016 00:06:21 CET</pubDate>
 <description>
 
 
@@ -2032,7 +2032,7 @@ Heatmap(mat, show_column_names = FALSE, bottom_annotation = ha2)
 <item>
 <title>Circular scan</title>
 <link>http://zuguang.de/blog/html/circular_scan.html</link>
-<pubDate>Mon, 21 Nov 2016 19:13:20 CET</pubDate>
+<pubDate>Tue, 22 Nov 2016 02:13:20 CET</pubDate>
 <description>
 
 
