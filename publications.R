@@ -26,7 +26,7 @@ publish_year = sapply(seq_len(length(journal)), function(i) {
 library(scholar)
 pub_info = get_publications("zheH1qkAAAAJ")
 cites = sapply(titles, function(x) {
-	dist = adist(pub_info[[1]], x)/nchar(x)
+	dist = adist(gsub("\\s+", " ", pub_info[[1]]), x)/nchar(x)
 	i = which.min(dist)
 	if(dist[i] < 0.2) {
 		pub_info[i, "cites"]
