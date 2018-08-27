@@ -9,10 +9,10 @@ GetoptLong(c("all", "whether refresh all"))
 
 list = "
 <p style='text-align:right'>
-<span><a href='http://zuguang.de/index.html'>Home</a></span> | 
-<span><a href='http://zuguang.de/blog.html'>Blog</a></span> | 
-<span><a href='http://zuguang.de/software.html'>Software</a></span> | 
-<span><a href='http://zuguang.de/publications.html'>Publications</a></span> |
+<span><a href='index.html'>Home</a></span> | 
+<span><a href='blog.html'>Blog</a></span> | 
+<span><a href='software.html'>Software</a></span> | 
+<span><a href='publications.html'>Publications</a></span> |
 <span><a href='https://github.com/jokergoo/'>GitHub</a></span>
 </p>
 <hr />
@@ -276,7 +276,7 @@ html = c(header,
 		i_rss = i_rss + 1
 
 		blog_body = htmlEscape(blog_body)
-		blog_body = qq("<item>\n<title>@{title}</title>\n<link>http://zuguang.de/blog/@{title_url}.html</link>\n<pubDate>@{format(post_info$create_time[i], \"%a, %d %h %Y %H:%M:%S CET\")}</pubDate>\n<description>@{blog_body}</description>\n</item>\n")
+		blog_body = qq("<item>\n<title>@{title}</title>\n<link>blog/@{title_url}.html</link>\n<pubDate>@{format(post_info$create_time[i], \"%a, %d %h %Y %H:%M:%S CET\")}</pubDate>\n<description>@{blog_body}</description>\n</item>\n")
 
 		blog_list = c(blog_list, blog_body)
 		
