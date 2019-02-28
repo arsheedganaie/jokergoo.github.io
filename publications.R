@@ -3,7 +3,7 @@ suppressPackageStartupMessages(library(easyPubMed))
 library(XML)
 
 pubmed <- easyPubMed::get_pubmed_ids("Zuguang Gu[AU]")
-papers <- easyPubMed::fetch_pubmed_data(pubmed)
+papers <- xmlParse(easyPubMed::fetch_pubmed_data(pubmed))
 author_list = xpathApply(papers, "//AuthorList", function(x) xmlParse(saveXML(x)))
 author_list = sapply(author_list, function(x) {
 	last_name = xpathApply(x, "//LastName", xmlValue)
