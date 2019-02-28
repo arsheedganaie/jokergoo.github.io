@@ -1,5 +1,6 @@
 suppressPackageStartupMessages(library(GetoptLong))
 suppressPackageStartupMessages(library(easyPubMed))
+library(XML)
 
 pubmed <- easyPubMed::get_pubmed_ids("Zuguang Gu[AU]")
 papers <- easyPubMed::fetch_pubmed_data(pubmed)
