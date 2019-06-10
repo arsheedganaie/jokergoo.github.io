@@ -57,9 +57,6 @@ var hljs=new function(){function m(p){return p.replace(/&/gm,"&amp;").replace(/<
 hljs.initHighlightingOnLoad();
 </script>
 
-<!-- MathJax scripts -->
-<script type="text/javascript" src="https://cdn.bootcss.com/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML">
-</script>
 
 
 <style type="text/css">
@@ -231,8 +228,8 @@ $txt =~s/([a|b|c])/$map{$1}/g;
 
 <p>Here <code>$map{$1}</code> is evaluated and <code>$txt</code> will be <code>one, two, three</code>.</p>
 
-<p>To be formal, the matched text \(s\) is replaced by \(f(s)\) where \(f()\) is a
-transformation to the text \(s\).</p>
+<p>To be formal, the matched text <em>s</em> is replaced by <em>f(s)</em> where <em>f()</em> is a
+transformation to the text <em>s</em>.</p>
 
 <p>In R, we use <code>gsub()</code> to perform substitution, however, the second argument
 <code>replacement</code> can only be a normal string that the matched text cannot be
@@ -246,7 +243,7 @@ gsub(&quot;([a|b|c])&quot;, &quot;_\\1_&quot;, txt)  # &quot;a&quot; is still &q
 <pre><code>## [1] &quot;_a_, _b_, _c_&quot;
 </code></pre>
 
-<p>But how can we also apply \(f(s)\) in R?</p>
+<p>But how can we also apply <em>f(s)</em> in R?</p>
 
 <p>If we go back to Perl, we can use the form <code>this is a $thing</code> to mix code
 (<code>$thing</code>) and normal text that <code>$thing</code> will be evaluated later and the value

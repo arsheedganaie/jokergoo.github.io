@@ -18,8 +18,8 @@ $txt =~s/([a|b|c])/$map{$1}/g;
 Here `$map{$1}` is evaluated and `$txt` will be `one, two, three`.
 
 
-To be formal, the matched text $s$ is replaced by $f(s)$ where $f()$ is a
-transformation to the text $s$.
+To be formal, the matched text _s_ is replaced by _f(s)_ where _f()_ is a
+transformation to the text _s_.
 
 In R, we use `gsub()` to perform substitution, however, the second argument
 `replacement` can only be a normal string that the matched text cannot be
@@ -31,7 +31,7 @@ txt = "a, b, c";
 gsub("([a|b|c])", "_\\1_", txt)  # "a" is still "a"
 ```
 
-But how can we also apply $f(s)$ in R?
+But how can we also apply _f(s)_ in R?
 
 If we go back to Perl, we can use the form `this is a $thing` to mix code
 (`$thing`) and normal text that `$thing` will be evaluated later and the value

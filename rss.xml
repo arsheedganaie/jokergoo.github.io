@@ -27,8 +27,8 @@ $txt =~s/([a|b|c])/$map{$1}/g;
 
 &lt;p&gt;Here &lt;code&gt;$map{$1}&lt;/code&gt; is evaluated and &lt;code&gt;$txt&lt;/code&gt; will be &lt;code&gt;one, two, three&lt;/code&gt;.&lt;/p&gt;
 
-&lt;p&gt;To be formal, the matched text \(s\) is replaced by \(f(s)\) where \(f()\) is a
-transformation to the text \(s\).&lt;/p&gt;
+&lt;p&gt;To be formal, the matched text &lt;em&gt;s&lt;/em&gt; is replaced by &lt;em&gt;f(s)&lt;/em&gt; where &lt;em&gt;f()&lt;/em&gt; is a
+transformation to the text &lt;em&gt;s&lt;/em&gt;.&lt;/p&gt;
 
 &lt;p&gt;In R, we use &lt;code&gt;gsub()&lt;/code&gt; to perform substitution, however, the second argument
 &lt;code&gt;replacement&lt;/code&gt; can only be a normal string that the matched text cannot be
@@ -42,7 +42,7 @@ gsub(&amp;quot;([a|b|c])&amp;quot;, &amp;quot;_\\1_&amp;quot;, txt)  # &amp;quot
 &lt;pre&gt;&lt;code&gt;## [1] &amp;quot;_a_, _b_, _c_&amp;quot;
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;But how can we also apply \(f(s)\) in R?&lt;/p&gt;
+&lt;p&gt;But how can we also apply &lt;em&gt;f(s)&lt;/em&gt; in R?&lt;/p&gt;
 
 &lt;p&gt;If we go back to Perl, we can use the form &lt;code&gt;this is a $thing&lt;/code&gt; to mix code
 (&lt;code&gt;$thing&lt;/code&gt;) and normal text that &lt;code&gt;$thing&lt;/code&gt; will be evaluated later and the value
