@@ -106,10 +106,10 @@ txt2
 &lt;p&gt;You can use any type of code in the template. Following is another example
 using &lt;code&gt;gsub_eval()&lt;/code&gt;:&lt;/p&gt;
 
-&lt;pre&gt;&lt;code class="r"&gt;gsub_eval(&amp;quot;(\\d),(\\d)&amp;quot;, &amp;quot;@{\\1 + \\2}&amp;quot;, c(&amp;quot;number 1,2&amp;quot;, &amp;quot;number 3,4&amp;quot;))
+&lt;pre&gt;&lt;code class="r"&gt;gsub_eval(&amp;quot;(\\d),(\\d)&amp;quot;, &amp;quot;sum=@{\\1 + \\2}&amp;quot;, c(&amp;quot;number 1,2&amp;quot;, &amp;quot;number 3,4&amp;quot;))
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;pre&gt;&lt;code&gt;## [1] &amp;quot;number 3&amp;quot; &amp;quot;number 7&amp;quot;
+&lt;pre&gt;&lt;code&gt;## [1] &amp;quot;number sum=3&amp;quot; &amp;quot;number sum=7&amp;quot;
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;!-- uid=Substitute_with_an_evaluated_expression_in_R --&gt;

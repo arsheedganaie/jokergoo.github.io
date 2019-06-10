@@ -4,7 +4,7 @@ Substitute with an evaluated expression in R
 In Perl, if we want to substitute with an evaluated expression with regular
 expression, we can do as follows. 
 
-```{perl}
+```{perl, eval = FALSE}
 %map = (
 	"a" => "one",
 	"b" => "two",
@@ -40,7 +40,7 @@ will be intepolated back to the text.
 This scenario is similar as in the text substitution. Actually we can modify
 the previous example a little bit:
 
-```{perl}
+```{perl, eval = FALSE}
 $txt =~s/([a|b|c])/_$map{$1}_/g;
 ```
 
@@ -92,7 +92,7 @@ You can use any type of code in the template. Following is another example
 using `gsub_eval()`:
 
 ```{r}
-gsub_eval("(\\d),(\\d)", "@{\\1 + \\2}", c("number 1,2", "number 3,4"))
+gsub_eval("(\\d),(\\d)", "sum=@{\\1 + \\2}", c("number 1,2", "number 3,4"))
 ```
 
 <!-- uid=Substitute_with_an_evaluated_expression_in_R -->

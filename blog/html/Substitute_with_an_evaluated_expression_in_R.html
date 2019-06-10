@@ -310,10 +310,10 @@ txt2
 <p>You can use any type of code in the template. Following is another example
 using <code>gsub_eval()</code>:</p>
 
-<pre><code class="r">gsub_eval(&quot;(\\d),(\\d)&quot;, &quot;@{\\1 + \\2}&quot;, c(&quot;number 1,2&quot;, &quot;number 3,4&quot;))
+<pre><code class="r">gsub_eval(&quot;(\\d),(\\d)&quot;, &quot;sum=@{\\1 + \\2}&quot;, c(&quot;number 1,2&quot;, &quot;number 3,4&quot;))
 </code></pre>
 
-<pre><code>## [1] &quot;number 3&quot; &quot;number 7&quot;
+<pre><code>## [1] &quot;number sum=3&quot; &quot;number sum=7&quot;
 </code></pre>
 
 <!-- uid=Substitute_with_an_evaluated_expression_in_R -->
