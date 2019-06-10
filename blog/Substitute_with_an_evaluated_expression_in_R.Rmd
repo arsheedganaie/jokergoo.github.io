@@ -1,0 +1,98 @@
+Substitute with an evaluated expression in R
+----------------------------------------------
+
+In Perl, if we want to substitute with an evaluated expression with regular
+expression, we can do as follows. 
+
+```{perl}
+%map = (
+	"a" => "one",
+	"b" => "two",
+	"c" => "three",
+);
+
+$txt = "a, b, c";
+$txt =~s/([a|b|c])/$map{$1}/g;
+```
+
+Here `$map{$1}` is evaluated and `$txt` will be `one, two, three`.
+
+
+To be formal, the matched text $s$ is replaced by $f(s)$ where $f()$ is a
+transformation to the text $s$.
+
+In R, we use `gsub()` to perform substitution, however, the second argument
+`replacement` can only be a normal string that the matched text cannot be
+changed. In following example, `\\1` can be not changed.
+
+```{r}
+map = c("a" = "one", "b" = "two", "c" = "three")
+txt = "a, b, c";
+gsub("([a|b|c])", "_\\1_", txt)  # "a" is still "a"
+```
+
+But how can we also apply $f(s)$ in R?
+
+If we go back to Perl, we can use the form `this is a $thing` to mix code
+(`$thing`) and normal text that `$thing` will be evaluated later and the value
+will be intepolated back to the text.
+
+This scenario is similar as in the text substitution. Actually we can modify
+the previous example a little bit:
+
+```{perl}
+$txt =~s/([a|b|c])/_$map{$1}_/g;
+```
+
+where in the replacement part `_$map{$1}_`, `$map{$1}` is the code and will be
+evaluated. The value of `$map{$1}` will be sent back to `_$map{$1}_` to
+perform the normal substitution.
+
+In R, there are also similar functions that do variable or code intepolation,
+such as `glue::glue()` or `GetoptLong::qq()`. Then we can do similar as in
+Perl to substitute with the evaluated expression.
+
+For the text `"a, b, c"`, to convert to `"one, two, three"`, we can first use `gsub()`
+to replace `a/b/c` to a template:
+
+```{r}
+txt2 = gsub("([a|b|c])", "@{map['\\1']}", txt)
+txt2
+```
+
+then evaluate the template by e.g. `GetoptLong:qq()`:
+
+```{r}
+qq(txt2)
+```
+
+In following, we defined a simple function `gsub_eval()` according to this thought:
+
+```{r}
+gsub_eval = function(pattern, replacement, x, ignore.case = FALSE, perl = FALSE,
+    fixed = FALSE, useBytes = FALSE, envir = parent.frame()) {
+	txt = gsub(
+		pattern = pattern, 
+		replacement = replacement, 
+		x = x, 
+		ignore.case = ignore.case, 
+		perl = perl,
+    	fixed = fixed, 
+    	useBytes = useBytes
+    )
+    unname(sapply(txt, function(x) GetoptLong::qq(x, envir = envir)))
+}
+```
+
+```{r}
+gsub_eval("([a|b|c])", "@{map['\\1']}", txt)
+```
+
+You can use any type of code in the template. Following is another example
+using `gsub_eval()`:
+
+```{r}
+gsub_eval("(\\d),(\\d)", "@{\\1 + \\2}", c("number 1,2", "number 3,4"))
+```
+
+<!-- uid=Substitute_with_an_evaluated_expression_in_R -->

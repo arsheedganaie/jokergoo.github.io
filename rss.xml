@@ -6,6 +6,119 @@
   <description>Zuguang Gu's blog</description>
 
 <item>
+<title>Substitute with an evaluated expression in R</title>
+<link>blog/html/Substitute_with_an_evaluated_expression_in_R.html</link>
+<pubDate>Mon, 10 Jun 2019 21:45:32 CET</pubDate>
+<description>
+&lt;h2&gt;Substitute with an evaluated expression in R&lt;/h2&gt;
+
+&lt;p&gt;In Perl, if we want to substitute with an evaluated expression with regular
+expression, we can do as follows. &lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="perl"&gt;%map = (
+    &amp;quot;a&amp;quot; =&amp;gt; &amp;quot;one&amp;quot;,
+    &amp;quot;b&amp;quot; =&amp;gt; &amp;quot;two&amp;quot;,
+    &amp;quot;c&amp;quot; =&amp;gt; &amp;quot;three&amp;quot;,
+);
+
+$txt = &amp;quot;a, b, c&amp;quot;;
+$txt =~s/([a|b|c])/$map{$1}/g;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Here &lt;code&gt;$map{$1}&lt;/code&gt; is evaluated and &lt;code&gt;$txt&lt;/code&gt; will be &lt;code&gt;one, two, three&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;To be formal, the matched text \(s\) is replaced by \(f(s)\) where \(f()\) is a
+transformation to the text \(s\).&lt;/p&gt;
+
+&lt;p&gt;In R, we use &lt;code&gt;gsub()&lt;/code&gt; to perform substitution, however, the second argument
+&lt;code&gt;replacement&lt;/code&gt; can only be a normal string that the matched text cannot be
+changed. In following example, &lt;code&gt;\\1&lt;/code&gt; can be not changed.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="r"&gt;map = c(&amp;quot;a&amp;quot; = &amp;quot;one&amp;quot;, &amp;quot;b&amp;quot; = &amp;quot;two&amp;quot;, &amp;quot;c&amp;quot; = &amp;quot;three&amp;quot;)
+txt = &amp;quot;a, b, c&amp;quot;;
+gsub(&amp;quot;([a|b|c])&amp;quot;, &amp;quot;_\\1_&amp;quot;, txt)  # &amp;quot;a&amp;quot; is still &amp;quot;a&amp;quot;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code&gt;## [1] &amp;quot;_a_, _b_, _c_&amp;quot;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;But how can we also apply \(f(s)\) in R?&lt;/p&gt;
+
+&lt;p&gt;If we go back to Perl, we can use the form &lt;code&gt;this is a $thing&lt;/code&gt; to mix code
+(&lt;code&gt;$thing&lt;/code&gt;) and normal text that &lt;code&gt;$thing&lt;/code&gt; will be evaluated later and the value
+will be intepolated back to the text.&lt;/p&gt;
+
+&lt;p&gt;This scenario is similar as in the text substitution. Actually we can modify
+the previous example a little bit:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="perl"&gt;$txt =~s/([a|b|c])/_$map{$1}_/g;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;where in the replacement part &lt;code&gt;_$map{$1}_&lt;/code&gt;, &lt;code&gt;$map{$1}&lt;/code&gt; is the code and will be
+evaluated. The value of &lt;code&gt;$map{$1}&lt;/code&gt; will be sent back to &lt;code&gt;_$map{$1}_&lt;/code&gt; to
+perform the normal substitution.&lt;/p&gt;
+
+&lt;p&gt;In R, there are also similar functions that do variable or code intepolation,
+such as &lt;code&gt;glue::glue()&lt;/code&gt; or &lt;code&gt;GetoptLong::qq()&lt;/code&gt;. Then we can do similar as in
+Perl to substitute with the evaluated expression.&lt;/p&gt;
+
+&lt;p&gt;For the text &lt;code&gt;&amp;quot;a, b, c&amp;quot;&lt;/code&gt;, to convert to &lt;code&gt;&amp;quot;one, two, three&amp;quot;&lt;/code&gt;, we can first use &lt;code&gt;gsub()&lt;/code&gt;
+to replace &lt;code&gt;a/b/c&lt;/code&gt; to a template:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="r"&gt;txt2 = gsub(&amp;quot;([a|b|c])&amp;quot;, &amp;quot;@{map[&amp;#39;\\1&amp;#39;]}&amp;quot;, txt)
+txt2
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code&gt;## [1] &amp;quot;@{map[&amp;#39;a&amp;#39;]}, @{map[&amp;#39;b&amp;#39;]}, @{map[&amp;#39;c&amp;#39;]}&amp;quot;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;then evaluate the template by e.g. &lt;code&gt;GetoptLong:qq()&lt;/code&gt;:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="r"&gt;qq(txt2)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code&gt;## [1] &amp;quot;one, two, three&amp;quot;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;In following, we defined a simple function &lt;code&gt;gsub_eval()&lt;/code&gt; according to this thought:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="r"&gt;gsub_eval = function(pattern, replacement, x, ignore.case = FALSE, perl = FALSE,
+    fixed = FALSE, useBytes = FALSE, envir = parent.frame()) {
+    txt = gsub(
+        pattern = pattern, 
+        replacement = replacement, 
+        x = x, 
+        ignore.case = ignore.case, 
+        perl = perl,
+        fixed = fixed, 
+        useBytes = useBytes
+    )
+    unname(sapply(txt, function(x) GetoptLong::qq(x, envir = envir)))
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code class="r"&gt;gsub_eval(&amp;quot;([a|b|c])&amp;quot;, &amp;quot;@{map[&amp;#39;\\1&amp;#39;]}&amp;quot;, txt)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code&gt;## [1] &amp;quot;one, two, three&amp;quot;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;You can use any type of code in the template. Following is another example
+using &lt;code&gt;gsub_eval()&lt;/code&gt;:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="r"&gt;gsub_eval(&amp;quot;(\\d),(\\d)&amp;quot;, &amp;quot;@{\\1 + \\2}&amp;quot;, c(&amp;quot;number 1,2&amp;quot;, &amp;quot;number 3,4&amp;quot;))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code&gt;## [1] &amp;quot;number 3&amp;quot; &amp;quot;number 7&amp;quot;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;!-- uid=Substitute_with_an_evaluated_expression_in_R --&gt;
+
+
+</description>
+</item>
+
+<item>
 <title>Put Chord diagram horizontally or vertically symmetric</title>
 <link>blog/html/put_chord_diagram_symmetric.html</link>
 <pubDate>Fri, 17 Mar 2017 13:47:33 CET</pubDate>
