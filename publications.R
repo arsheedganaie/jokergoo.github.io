@@ -55,7 +55,7 @@ qqcat("## Publications\n\n", file = con)
 
 for(y in sort(unique(publish_year), decreasing = TRUE)) {
 	l = publish_year == y
-	qqcat("### @{y}\n", file = con)
+	qqcat("\n### @{y}\n", file = con)
 	qqcat("@{seq_along(author_list)[l]}. @{author_list[l]}, @{titles[l]} <i>@{journal_title[l]}</i> @{y}. <a href='https://www.ncbi.nlm.nih.gov/pubmed/@{unlist(pubmed$IdList[l])}'>PubMed</a>@{cites2[l]}.</li>\n", file = con)
 }
 
