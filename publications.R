@@ -52,6 +52,11 @@ svg {
 </style>
 ", file = con)
 qqcat("## Publications\n\n", file = con)
-qqcat("@{seq_along(author_list)}. @{author_list}, @{titles} <i>@{journal_title}</i> @{publish_year}. <a href='https://www.ncbi.nlm.nih.gov/pubmed/@{unlist(pubmed$IdList)}'>PubMed</a>@{cites2}.</li>\n", file = con)
-qqcat("\n<p style='border-top:1px dotted #CCCCCC;text-align:right;margin-top:10px;color:#CCCCCC;font-style:normal;font-weight:normal;'>Recodes were automatically retrieved from PubMed by <a href='https://cran.r-project.org/web/packages/easyPubMed/index.html' style='color:#CCCCCC'>easyPubMed</a> and <a href='https://cran.r-project.org/web/packages/XML/index.html' style='color:#CCCCCC'>XML</a> packages.</p>\n", file = con)
+
+for(y in sort(unique(publish_year))) {
+	qqcat("### #{y}\n", file = con)
+	qqcat("@{seq_along(author_list)}. @{author_list}, @{titles} <i>@{journal_title}</i> @{y}. <a href='https://www.ncbi.nlm.nih.gov/pubmed/@{unlist(pubmed$IdList)}'>PubMed</a>@{cites2}.</li>\n", file = con)
+	qqcat("\n<p style='border-top:1px dotted #CCCCCC;text-align:right;margin-top:10px;color:#CCCCCC;font-style:normal;font-weight:normal;'>Recodes were automatically retrieved from PubMed by <a href='https://cran.r-project.org/web/packages/easyPubMed/index.html' style='color:#CCCCCC'>easyPubMed</a> and <a href='https://cran.r-project.org/web/packages/XML/index.html' style='color:#CCCCCC'>XML</a> packages.</p>\n", file = con)
+}
+
 close(con)
