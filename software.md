@@ -1,5 +1,5 @@
 <style>
-img {
+li img {
     height: 16px;
     vertical-align: middle;
 }
