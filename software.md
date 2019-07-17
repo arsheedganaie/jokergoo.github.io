@@ -8,6 +8,7 @@ img {
 
 ## R
 
+- [cola](http://bioconductor.org/packages/devel/bioc/html/cola.html): A Framework for Consensus and Hierarchical Partitioning. [![bioc](http://mcube.nju.edu.cn/cgi-bin/zuguanggu/bioc_download.pl?package=cola)](https://bioconductor.org/packages/stats/bioc/cola/) [![GitHub stars](https://img.shields.io/github/stars/jokergoo/cola.svg?style=social&label=Star)]()
 - [circlize](https://cran.r-project.org/web/packages/circlize/index.html): circular visualization in R. [[stackoverflow](http://stackoverflow.com/questions/tagged/circlize)] [![CRAN](https://cranlogs.r-pkg.org/badges/grand-total/circlize)](https://cran.r-project.org/web/packages/circlize/index.html) [![GitHub stars](https://img.shields.io/github/stars/jokergoo/circlize.svg?style=social&label=Star)]()
 - [ComplexHeatmap](http://bioconductor.org/packages/devel/bioc/html/ComplexHeatmap.html): Flexibly arranging multiple heatmaps and self define annotation graphics. [![bioc](http://mcube.nju.edu.cn/cgi-bin/zuguanggu/bioc_download.pl?package=ComplexHeatmap)](https://bioconductor.org/packages/stats/bioc/ComplexHeatmap/) [![GitHub stars](https://img.shields.io/github/stars/jokergoo/ComplexHeatmap.svg?style=social&label=Star)]()
 - [EnrichedHeatmap](http://bioconductor.org/packages/devel/bioc/html/EnrichedHeatmap.html): Visualizes the enrichment of genomic signals on specific target region. [![bioc](http://mcube.nju.edu.cn/cgi-bin/zuguanggu/bioc_download.pl?package=EnrichedHeatmap)](https://bioconductor.org/packages/stats/bioc/EnrichedHeatmap/) [![GitHub stars](https://img.shields.io/github/stars/jokergoo/EnrichedHeatmap.svg?style=social&label=Star)]()
@@ -30,3 +31,16 @@ img {
 ## Website and databases
 
 - [InterMitoBase](http://mcube.nju.edu.cn/cgi-bin/intermitobase/home.pl): InterMitoBase is an integrated platform providing high quality protein-protein interaction (PPI) data in human mitochondrion and useful tools to analysis PPI network.
+
+## Books
+
+- Circular Visualization in R
+
+<img src="https://camo.githubusercontent.com/73dcce96d7f1efac8c644bfe56e7b1987d12d3fd/68747470733a2f2f6a6f6b6572676f6f2e6769746875622e696f2f636972636c697a655f626f6f6b2f626f6f6b2f696d616765732f636972636c697a655f636f7665722e6a7067" width="400" style="border:2px solid black"/><br>
+
+- ComplexHeatmap Complete Reference
+
+<img src="https://camo.githubusercontent.com/be2e172a000f3c8e661c1efaa85ed43f6e70c3b1/68747470733a2f2f6a6f6b6572676f6f2e6769746875622e696f2f436f6d706c6578486561746d61702d7265666572656e63652f626f6f6b2f636f6d706c6578686561746d61702d636f7665722e6a7067" width="400" style="border:2px solid black"/><br>
+
+
+
