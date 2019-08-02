@@ -57,9 +57,19 @@ writeLines(html, "software.html", useBytes = TRUE)
 
 ## publication.html
 system("Rscript publications.R")
-html = c(header,
-markdownToHTML("publications.md", fragment.only = TRUE),
-footer)
+txt = markdownToHTML("publications.md", fragment.only = TRUE)
+txt = strsplit(txt, "\n")[[1]]
+k = 1
+for(i in seq_along(txt)) {
+	if(grepl("<ol>", txt[i])) {
+		txt[i] = qq("<ol start='@{k}'>")
+	}
+	if(grepl("<li>", txt[i])) {
+		k = k + 1
+	}
+}
+txt = paste(txt, collapse = "\n")
+html = c(header, txt, footer)
 
 cat("generate publications.html...\n")
 writeLines(html, "publications.html", useBytes = TRUE)
