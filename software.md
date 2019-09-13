@@ -37,7 +37,18 @@ li img {
 <img src="https://camo.githubusercontent.com/73dcce96d7f1efac8c644bfe56e7b1987d12d3fd/68747470733a2f2f6a6f6b6572676f6f2e6769746875622e696f2f636972636c697a655f626f6f6b2f626f6f6b2f696d616765732f636972636c697a655f636f7665722e6a7067" style="border:1px solid black; width:300px"/>
 <img src="https://camo.githubusercontent.com/be2e172a000f3c8e661c1efaa85ed43f6e70c3b1/68747470733a2f2f6a6f6b6572676f6f2e6769746875622e696f2f436f6d706c6578486561746d61702d7265666572656e63652f626f6f6b2f636f6d706c6578686561746d61702d636f7665722e6a7067" style="border:1px solid black; width:300px"/>
 
-<br>
+## Package status
 
+Package | travis-ci | bioc-devel | bioc-release
+------- | --------- | ---------- | ------------
+circlize | [![Build Status](https://travis-ci.org/jokergoo/circlize.svg)](https://travis-ci.org/jokergoo/circlize) | - | -
+GetoptLong | [![Build Status](https://travis-ci.org/jokergoo/GetoptLong.svg)](https://travis-ci.org/jokergoo/GetoptLong) | - | -
+GlobalOptions | [![Build Status](https://travis-ci.org/jokergoo/GlobalOptions.svg)](https://travis-ci.org/jokergoo/GlobalOptions) | - | -
+ComplexHeatmap | [![Build Status](https://travis-ci.org/jokergoo/ComplexHeatmap.svg)](https://travis-ci.org/jokergoo/ComplexHeatmap) | [![](http://bioconductor.org/shields/build/devel/bioc/ComplexHeatmap.svg)](http://bioconductor.org/checkResults/devel/bioc-LATEST/ComplexHeatmap/) | [![](http://bioconductor.org/shields/build/release/bioc/ComplexHeatmap.svg)](http://bioconductor.org/checkResults/release/bioc-LATEST/ComplexHeatmap/) 
+EnrichedHeatmap | [![Build Status](https://travis-ci.org/jokergoo/EnrichedHeatmap.svg)](https://travis-ci.org/jokergoo/EnrichedHeatmap) | [![](http://bioconductor.org/shields/build/devel/bioc/EnrichedHeatmap.svg)](http://bioconductor.org/checkResults/devel/bioc-LATEST/EnrichedHeatmap/) | [![](http://bioconductor.org/shields/build/release/bioc/EnrichedHeatmap.svg)](http://bioconductor.org/checkResults/release/bioc-LATEST/EnrichedHeatmap/) 
+HilbertCurve | [![Build Status](https://travis-ci.org/jokergoo/HilbertCurve.svg)](https://travis-ci.org/jokergoo/HilbertCurve) | [![](http://bioconductor.org/shields/build/devel/bioc/HilbertCurve.svg)](http://bioconductor.org/checkResults/devel/bioc-LATEST/HilbertCurve/) | [![](http://bioconductor.org/shields/build/release/bioc/HilbertCurve.svg)](http://bioconductor.org/checkResults/release/bioc-LATEST/HilbertCurve/) 
+gtrellis | [![Build Status](https://travis-ci.org/jokergoo/gtrellis.svg)](https://travis-ci.org/jokergoo/gtrellis) | [![](http://bioconductor.org/shields/build/devel/bioc/gtrellis.svg)](http://bioconductor.org/checkResults/devel/bioc-LATEST/gtrellis/) | [![](http://bioconductor.org/shields/build/release/bioc/gtrellis.svg)](http://bioconductor.org/checkResults/release/bioc-LATEST/gtrellis/) 
+rGREAT | [![Build Status](https://travis-ci.org/jokergoo/rGREAT.svg)](https://travis-ci.org/jokergoo/rGREAT) | [![](http://bioconductor.org/shields/build/devel/bioc/rGREAT.svg)](http://bioconductor.org/checkResults/devel/bioc-LATEST/rGREAT/) | [![](http://bioconductor.org/shields/build/release/bioc/rGREAT.svg)](http://bioconductor.org/checkResults/release/bioc-LATEST/rGREAT/) 
+cola | [![Build Status](https://travis-ci.org/jokergoo/cola.svg)](https://travis-ci.org/jokergoo/cola) | [![](http://bioconductor.org/shields/build/devel/bioc/cola.svg)](http://bioconductor.org/checkResults/devel/bioc-LATEST/cola/) | [![](http://bioconductor.org/shields/build/release/bioc/cola.svg)](http://bioconductor.org/checkResults/release/bioc-LATEST/cola/) 
 
 
