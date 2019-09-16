@@ -52,3 +52,11 @@ rGREAT | [![Build Status](https://travis-ci.org/jokergoo/rGREAT.svg)](https://tr
 cola | [![Build Status](https://travis-ci.org/jokergoo/cola.svg)](https://travis-ci.org/jokergoo/cola) | [![](http://bioconductor.org/shields/build/devel/bioc/cola.svg)](http://bioconductor.org/checkResults/devel/bioc-LATEST/cola/) | [![](http://bioconductor.org/shields/build/release/bioc/cola.svg)](http://bioconductor.org/checkResults/release/bioc-LATEST/cola/) 
 
 
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
