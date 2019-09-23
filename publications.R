@@ -23,6 +23,7 @@ publish_year = sapply(seq_len(length(journal)), function(i) {
 	x = xpathApply(journal[[i]], "//Year", xmlValue)[[1]]
 	if(length(x)) x[1] else ""
 })
+pm_id = unlist(xpathApply(papers, "//PMID", xmlValue))
 
 library(scholar)
 pub_info = get_publications("zheH1qkAAAAJ")
@@ -56,7 +57,7 @@ qqcat("## Publications\n\n", file = con)
 for(y in sort(unique(publish_year), decreasing = TRUE)) {
 	l = publish_year == y
 	qqcat("\n### @{y}\n", file = con)
-	qqcat("@{seq_along(author_list)[l]}. @{author_list[l]}, @{titles[l]} <i>@{journal_title[l]}</i> @{y}. <a href='https://www.ncbi.nlm.nih.gov/pubmed/@{unlist(pubmed$IdList[l])}'>PubMed</a>@{cites2[l]}.</li>\n", file = con)
+	qqcat("@{seq_along(author_list)[l]}. @{author_list[l]}, @{titles[l]} <i>@{journal_title[l]}</i> @{y}. <a href='https://www.ncbi.nlm.nih.gov/pubmed/@{pm_id[l]}'>PubMed</a>@{cites2[l]}.</li>\n", file = con)
 }
 
 qqcat("\n<p style='border-top:1px dotted #CCCCCC;text-align:right;margin-top:10px;color:#CCCCCC;font-style:normal;font-weight:normal;'>Recodes were automatically retrieved from PubMed by <a href='https://cran.r-project.org/web/packages/easyPubMed/index.html' style='color:#CCCCCC'>easyPubMed</a> and <a href='https://cran.r-project.org/web/packages/XML/index.html' style='color:#CCCCCC'>XML</a> packages.</p>\n", file = con)
